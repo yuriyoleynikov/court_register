@@ -4,32 +4,32 @@ import { connect } from 'react-redux';
 import { ApplicationState } from '../store';
 import Loading from '../Loading';
 
-const Auth = (props: any) => {
-    props.CheckAuth();
+import { store } from '../store2'
+import { observer } from 'mobx-react';
+
+const Auth = () => {
+    // props.CheckAuth();
 
     const login = () => {
-        props.requestLogIn();
+        store.auth.signIn();
     }
 
     const logout = () => {
-        props.requestLogOut();
+        store.auth.signOut();
     }
+    if (store.auth.loading)
+    return <Loading/>
 
-    if (!props.isLoading)
         return <div>
-            {!props.isAuth
+            {!store.auth.isSignedIn
                 ? <div>
                     <button onClick={login}>Log in</button>
                 </div>
-                : <div>Hello {props.email}
+                : <div>Hello {store.auth.currentUser!.name}
                     <button onClick={logout}>Log out</button>
                 </div>
             }
         </div>;
-    return <Loading />;
 };
 
-export default connect(
-    (state: ApplicationState) => state.authentication,
-    Authentication.actionCreators
-)(Auth as any);
+export default observer(Auth);

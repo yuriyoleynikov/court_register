@@ -6,10 +6,10 @@ import App from './App';
 import Loading from './Loading';
 
 const AppContainer = (props: any) => {
-    if (!props.isDownloadAuth2)
-        props.loadingAuth2();
-    if (props.isLoadingAuth2)
-        return <Loading />;
+    // if (!props.isDownloadAuth2)
+    //     props.loadingAuth2();
+    // if (props.isLoadingAuth2)
+    //     return <Loading />;
     return <App />;
 };
 

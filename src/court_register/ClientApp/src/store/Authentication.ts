@@ -113,5 +113,5 @@ export const reducer: Reducer<AuthenticationState> = (state: AuthenticationState
             break;
     }
 
-    return state;
+    return state as AuthenticationState;
 };
