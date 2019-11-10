@@ -25,7 +25,7 @@ namespace court_register.Controllers
             _logger = logger;
         }
 
-        [HttpGet, Authorize]
+        [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
             var rng = new Random();

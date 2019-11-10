@@ -1,35 +1,31 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace court_register
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, ILogger<Startup> logger)
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            Logger = logger;
         }
 
         public IConfiguration Configuration { get; }
-        public ILogger<Startup> Logger { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
 
-            services.AddAuthentication(o => {
-                o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme
-            })
+            services
+                .AddAuthentication(options => {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme
+                })
                 .AddJwtBearer(options =>
                 {
                     options.MetadataAddress = "https://accounts.google.com/.well-known/openid-configuration";
