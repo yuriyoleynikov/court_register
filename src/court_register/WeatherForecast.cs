@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace court_register
 {
@@ -11,5 +12,6 @@ namespace court_register
         public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 
         public string Summary { get; set; }
+        public IDictionary<string, string> Claims { get; set; }
     }
 }

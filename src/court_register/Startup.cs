@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -6,29 +7,36 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace court_register
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, ILogger<Startup> logger)
         {
             Configuration = configuration;
+            Logger = logger;
         }
 
         public IConfiguration Configuration { get; }
+        public ILogger<Startup> Logger { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
 
-            services.AddAuthentication()
-                .AddGoogle(options =>
+            services.AddAuthentication(o => {
+                o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme
+            })
+                .AddJwtBearer(options =>
                 {
-                    IConfigurationSection googleAuthNSection = Configuration.GetSection("Authentication:Google");
-                    options.ClientId = googleAuthNSection["ClientId"];
-                    options.ClientSecret = googleAuthNSection["ClientSecret"];
+                    options.MetadataAddress = "https://accounts.google.com/.well-known/openid-configuration";
+
+                    options.IncludeErrorDetails = true;
+                    options.TokenValidationParameters.ValidIssuer = "accounts.google.com";
+                    options.TokenValidationParameters.ValidAudience = "921481274837-sfba1gv0mdatog6iobno4spdrcnofsik.apps.googleusercontent.com";
                 });
 
             // In production, the React files will be served from this directory
@@ -36,6 +44,8 @@ namespace court_register
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            services.AddAuthorization();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,10 +66,10 @@ namespace court_register
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
+            app.UseRouting();
+
             app.UseAuthentication();
             app.UseAuthorization();
-
-            app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
