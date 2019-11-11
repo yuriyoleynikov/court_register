@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
-import { RouteComponentProps } from 'react-router';
-import { ApplicationState } from '../store';
-import * as CounterStore from '../store/Counter';
+import { observer } from 'mobx-react';
 
-type CounterProps =
-    CounterStore.CounterState &
-    typeof CounterStore.actionCreators &
-    RouteComponentProps<{}>;
+import { store } from '../store2'
+
+type CounterProps = {
+    count: number;
+    increment(): void;
+    decrement(): void;
+}
 
 class Counter extends React.PureComponent<CounterProps> {
     public render() {
@@ -29,7 +29,8 @@ class Counter extends React.PureComponent<CounterProps> {
     }
 };
 
-export default connect(
-    (state: ApplicationState) => state.counter,
-    CounterStore.actionCreators
-)(Counter);
+export default observer(() => <Counter
+    count={store.counter.count}
+    increment={store.counter.increment}
+    decrement={store.counter.decrement}
+/>);
