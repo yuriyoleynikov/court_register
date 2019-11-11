@@ -1,7 +1,6 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,12 +22,17 @@ namespace court_register
         {
             services.AddControllersWithViews();
 
-            services.AddAuthentication()
-                .AddGoogle(options =>
+            services
+                .AddAuthentication(options => {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme
+                })
+                .AddJwtBearer(options =>
                 {
-                    IConfigurationSection googleAuthNSection = Configuration.GetSection("Authentication:Google");
-                    options.ClientId = googleAuthNSection["ClientId"];
-                    options.ClientSecret = googleAuthNSection["ClientSecret"];
+                    options.MetadataAddress = "https://accounts.google.com/.well-known/openid-configuration";
+
+                    options.IncludeErrorDetails = true;
+                    options.TokenValidationParameters.ValidIssuer = "accounts.google.com";
+                    options.TokenValidationParameters.ValidAudience = "921481274837-sfba1gv0mdatog6iobno4spdrcnofsik.apps.googleusercontent.com";
                 });
 
             // In production, the React files will be served from this directory
@@ -36,6 +40,8 @@ namespace court_register
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            services.AddAuthorization();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,10 +62,10 @@ namespace court_register
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
+            app.UseRouting();
+
             app.UseAuthentication();
             app.UseAuthorization();
-
-            app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {

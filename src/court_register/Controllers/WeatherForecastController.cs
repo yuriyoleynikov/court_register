@@ -11,7 +11,7 @@ namespace court_register.Controllers
     [ApiController]
     [Route("[controller]")]
     [Authorize]
-    public class WeatherForecastController : ControllerBase
+    public class WeatherForecastController: ControllerBase
     {
         private static readonly string[] Summaries = new[]
         {
@@ -29,13 +29,22 @@ namespace court_register.Controllers
         public IEnumerable<WeatherForecast> Get()
         {
             var rng = new Random();
+            var claims = GetClaims();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),
                 TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
+                Summary = Summaries[rng.Next(Summaries.Length)],
+                Claims = claims
             })
             .ToArray();
+        }
+
+        IDictionary<string, string> GetClaims()
+        {
+            if (User?.Claims == null)
+                return null;
+            return new Dictionary<string, string>(User.Claims.Select(c => new KeyValuePair<string, string>(c.Type, c.Value)));
         }
     }
 }
