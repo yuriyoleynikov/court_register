@@ -14,7 +14,6 @@ namespace court_register.Controllers
     [Authorize]
     public class UserController: ControllerBase
     {
-        
         [HttpGet]
         public string Get()
         {
