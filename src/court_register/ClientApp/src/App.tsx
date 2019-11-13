@@ -5,14 +5,18 @@ import Home from './components/Home';
 import Admin from './components/Admin';
 import Counter from './components/Counter';
 import FetchData from './components/FetchData';
+import { ConnectedRouter } from 'connected-react-router';
+import { history } from "./router";
 
 import './custom.css'
 
 export default () => (
-    <Layout>
-        <Route exact path='/' component={Home} />
-        <Route path='/admin' component={Admin} />
-        <Route path='/counter' component={Counter} />
-        <Route path='/fetch-data/:startDateIndex?' component={FetchData} />
-    </Layout>
+    <ConnectedRouter history={history}>
+        <Layout>
+            <Route exact path='/' component={Home} />
+            <Route path='/admin' component={Admin} />
+            <Route path='/counter' component={Counter} />
+            <Route path='/fetch-data/:startDateIndex?' component={FetchData} />
+        </Layout>
+    </ConnectedRouter>
 );
