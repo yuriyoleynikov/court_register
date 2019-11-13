@@ -72,17 +72,14 @@ export class Auth {
             role: null
         }
 
-        let response2 = await fetch(`api/user`, {
+        let response2 = fetch(`api/user`, {
             credentials: 'include',
             headers: {
-                Authorization: 'Bearer ' + window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
+                Authorization: 'Bearer ' + (window as any).gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
             }
         });
-        console.log(response2);
 
-        let response3 = await response2.text();
-        console.log(response3);
-        
+        console.log(response);
         this.loading = false;
     }
 
