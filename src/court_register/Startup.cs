@@ -36,7 +36,6 @@ namespace court_register
                 .AddJwtBearer(options =>
                 {
                     options.MetadataAddress = "https://accounts.google.com/.well-known/openid-configuration";
-
                     options.IncludeErrorDetails = true;
                     options.TokenValidationParameters.ValidIssuer = "accounts.google.com";
                     options.TokenValidationParameters.ValidAudience = "921481274837-sfba1gv0mdatog6iobno4spdrcnofsik.apps.googleusercontent.com";

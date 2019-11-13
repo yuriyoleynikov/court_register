@@ -9,6 +9,7 @@ namespace court_register.Models
     {
         public string id { get; set; }
         public string email { get; set; }
-
+        public bool active { get; set; }
+        public bool admin { get; set; }
     }
 }

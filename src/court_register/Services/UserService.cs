@@ -22,8 +22,8 @@ namespace court_register.Services
         public List<User> Get() =>
             _users.Find(book => true).ToList();
 
-        public User Get(string id) =>
-            _users.Find<User>(book => book.id == id).FirstOrDefault();
+        public User Get(string email) =>
+            _users.Find<User>(book => book.email == email).FirstOrDefault();
 
         public User Create(User book)
         {

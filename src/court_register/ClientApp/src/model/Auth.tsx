@@ -1,23 +1,36 @@
 import { observable, action, computed } from "mobx"
+import { store } from "../store2";
 
 declare var window: any;
 
 export class User {
     @observable name = 'User name';
     @observable email = 'user@gmail.com';
-    @observable role: number | null = null;
+    @observable permissions: any | null = null;
 }
 
-function delay(ms: number) {
-    return new Promise<undefined>((resolve) => {
-        window.setTimeout(() => resolve(undefined), ms)
-    })
-}
+//function delay(ms: number) {
+//    return new Promise<undefined>((resolve) => {
+//        window.setTimeout(() => resolve(undefined), ms)
+//    })
+//}
 
-function loadAuth2() {
+const loadAuth2 = () => {
     return new Promise<undefined>((resolve) => {
         window.gapi.load('auth2', () => resolve(undefined));
     })
+}
+
+const getUserPermissions = async () => {
+    let response = await fetch(`api/UserPermissions`, {
+        credentials: 'include',
+        headers: {
+            Authorization: 'Bearer ' + window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
+        }
+    });
+
+    let data = await response.json();
+    return data;
 }
 
 export class Auth {
@@ -47,7 +60,7 @@ export class Auth {
             this.currentUser = {
                 name: googleAuth.currentUser.get().getBasicProfile().getEmail(),
                 email: googleAuth.currentUser.get().getBasicProfile().getEmail(),
-                role: null
+                permissions: null
             }
         }
     }
@@ -69,17 +82,24 @@ export class Auth {
         this.currentUser = {
             email: googleAuth.currentUser.get().getBasicProfile().getEmail(),
             name: googleAuth.currentUser.get().getBasicProfile().getEmail(),
-            role: null
+            permissions: null
         }
 
-        let response2 = fetch(`api/user`, {
-            credentials: 'include',
-            headers: {
-                Authorization: 'Bearer ' + (window as any).gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
-            }
-        });
+        let data = await getUserPermissions();
+        this.currentUser.permissions = data;
 
-        console.log(response);
+        //let response2 = await fetch(`api/user`, {
+        //    credentials: 'include',
+        //    headers: {
+        //        Authorization: 'Bearer ' + window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
+        //    }
+        //});
+
+        //console.log(response2);
+        //let response3 = await response2.text();
+        //console.log(response3);
+        //if (response3 != null)
+        //    this.currentUser.role = parseInt(response3);
         this.loading = false;
     }
 
