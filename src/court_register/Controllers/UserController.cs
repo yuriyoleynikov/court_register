@@ -15,20 +15,21 @@ namespace court_register.Controllers
     [Authorize]
     public class UserController: ControllerBase
     {
-        private readonly UserService _userService;
+        private readonly IUserRepositoryService _userRepositoryService;
 
-        public UserController(UserService userService)
+        public UserController(IUserRepositoryService userRepositoryService)
         {
-            _userService = userService;
+            _userRepositoryService = userRepositoryService;
         }
 
         [HttpGet]
-        public string Get()
+        public async Task<string> Get()
         {
             GetClaims().TryGetValue("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress", out var email);
             if (email != null)
             {
-                var user = _userService.Get(email);
+                var userList = await _userRepositoryService.GetAllUsersAsync();
+                var user = userList.Where(u=>u.email == email).SingleOrDefault();
                 if (user != null)
                     return user.active.ToString();
             }

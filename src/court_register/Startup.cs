@@ -24,9 +24,15 @@ namespace court_register
         {
             services.AddControllersWithViews();
 
-            services.Configure<DatabaseSettings>(Configuration.GetSection(nameof(DatabaseSettings)));
+            services.Configure<DatabaseSettings>(options =>
+            {
+                options.ConnectionString
+                    = Configuration.GetSection("DatabaseSettings:ConnectionString").Value;
+                options.DatabaseName
+                    = Configuration.GetSection("DatabaseSettings:DatabaseName").Value;
+            });
 
-            services.AddSingleton<IDatabaseSettings>(sp => sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);
+            services.AddTransient<IUserRepositoryService, UserMongoDbRepository>();
 
             services
                 .AddAuthentication(options =>

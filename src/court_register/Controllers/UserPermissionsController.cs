@@ -15,15 +15,15 @@ namespace court_register.Controllers
     [Authorize]
     public class UserPermissionsController : ControllerBase
     {
-        private readonly UserService _userService;
+        private readonly IUserRepositoryService _userRepositoryService;
 
-        public UserPermissionsController(UserService userService)
+        public UserPermissionsController(IUserRepositoryService userRepositoryService)
         {
-            _userService = userService;
+            _userRepositoryService = userRepositoryService;
         }
 
         [HttpGet]
-        public IDictionary<string, string> Get()
+        public async Task<IDictionary<string, string>> Get()
         {
             if (User?.Claims == null)
                 return null;
@@ -32,12 +32,13 @@ namespace court_register.Controllers
             temp.TryGetValue("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress", out var email);
             if (email != null)
             {
-                if (_userService.Get(email) == null)
+                var userList = await _userRepositoryService.GetAllUsersAsync();
+                if (!userList.Where(u=>u.email == email).Any())
                 {
-                    _userService.Create(new User { email = email, active = false, admin = false });
+                    await _userRepositoryService.AddUserAsync(new User { email = email, active = false, admin = false });
                 }
-
-                var user = _userService.Get(email);
+                userList = await _userRepositoryService.GetAllUsersAsync();
+                var user = userList.Where(u => u.email == email).SingleOrDefault();
 
                 var d = new Dictionary<string, string>();
 
