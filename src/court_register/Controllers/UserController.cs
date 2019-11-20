@@ -92,21 +92,32 @@ namespace court_register.Controllers
 
         [HttpGet]
         [Route("api/user/activateuser/{id}")]
-        public async Task ActivateUser(int id)
+        public async Task<bool> ActivateUser(int id)
         {
             var currentUserEmail = GetUserEmail(User?.Claims);
             if (currentUserEmail != null)
             {
                 var userList = await _userRepositoryService.GetAllUsersAsync();
                 var currentUser = userList.Where(u => u.email == currentUserEmail).SingleOrDefault();
-                
+
                 if (currentUser != null && currentUser.admin)
                 {
                     var userWillUpdate = userList.Where(u => u.id == id).SingleOrDefault();
                     userWillUpdate.active = true;
-                    await _userRepositoryService.UpdateUserAsync(id, userWillUpdate);
+
+                    var v = new User
+                    {
+                        id = userWillUpdate.id,
+                        active = true,
+                        admin = userWillUpdate.admin,
+                        email = userWillUpdate.email
+                    };
+
+                    return await _userRepositoryService.UpdateUserAsync(id, userWillUpdate);
                 }
             }
+
+            return false;
         }
 
         private string GetUserEmail(IEnumerable<Claim> claimsPrincinal)
