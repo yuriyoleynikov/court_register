@@ -9,9 +9,9 @@ namespace court_register.Services
     public interface IUserRepositoryService
     {
         Task<IEnumerable<User>> GetAllUsersAsync();
-        Task<User> GetUserAsync(string id);
+        Task<User> GetUserAsync(int id);
         Task AddUserAsync(User user);
-        Task<bool> RemoveUserAsync(string id);
-        Task<bool> UpdateUserAsync(string id, User user);
+        Task<bool> RemoveUserAsync(int id);
+        Task<bool> UpdateUserAsync(int id, User user);
     }
 }

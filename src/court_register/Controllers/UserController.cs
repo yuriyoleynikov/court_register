@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using court_register.Models;
 using court_register.Services;
@@ -11,9 +12,8 @@ using Microsoft.Extensions.Logging;
 namespace court_register.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
     [Authorize]
-    public class UserController: ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly IUserRepositoryService _userRepositoryService;
 
@@ -23,24 +23,64 @@ namespace court_register.Controllers
         }
 
         [HttpGet]
-        public async Task<string> Get()
+        [Route("api/user/getuserlist")]
+        public async Task<IEnumerable<User>> GetUserList()
         {
-            GetClaims().TryGetValue("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress", out var email);
+            var email = GetUserEmail(User?.Claims);
             if (email != null)
             {
                 var userList = await _userRepositoryService.GetAllUsersAsync();
-                var user = userList.Where(u=>u.email == email).SingleOrDefault();
-                if (user != null)
-                    return user.active.ToString();
+                var currentUser = userList.Where(u => u.email == email & u.admin).SingleOrDefault();
+                if (currentUser != null && currentUser.active && currentUser.admin)
+                {
+                    return userList;
+                }
             }
             return null;
         }
 
-        IDictionary<string, string> GetClaims()
+        [HttpGet]
+        [Route("api/user/getuser/{id}")]
+        public async Task<User> GetUser(int id)
         {
-            if (User?.Claims == null)
-                return null;
-            return new Dictionary<string, string>(User.Claims.Select(c => new KeyValuePair<string, string>(c.Type, c.Value)));
+            var email = GetUserEmail(User?.Claims);
+            if (email != null)
+            {
+                var userList = await _userRepositoryService.GetAllUsersAsync();
+                var currentUser = userList.Where(u => u.email == email & u.admin).SingleOrDefault();
+                if (currentUser != null && currentUser.active && currentUser.admin)
+                {
+                    var userWithId = userList.Where(u => u.id == id).SingleOrDefault();
+                    return userWithId;
+                }
+            }
+            return null;
+        }
+
+        [HttpGet]
+        [Route("api/user/getpermissions/{email}")]
+        public async Task<User> GetPermissions(string email)
+        {
+            if (email != null && email == GetUserEmail(User?.Claims))
+            {
+                var userList = await _userRepositoryService.GetAllUsersAsync();
+                var currentUser = userList.Where(u => u.email == email & u.admin).SingleOrDefault();
+                if (currentUser != null && currentUser.active && currentUser.admin)
+                {
+                    var userWithEmail = userList.Where(u => u.email == email).SingleOrDefault();
+                    return userWithEmail;
+                }
+            }
+            return null;
+        }
+
+        private string GetUserEmail(IEnumerable<Claim> claimsPrincinal)
+        {
+            var currentType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress";
+
+            var email = claimsPrincinal.Where(c => c.Type == currentType).SingleOrDefault().Value;
+
+            return email;
         }
     }
 }

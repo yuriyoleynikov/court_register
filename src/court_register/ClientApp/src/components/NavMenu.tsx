@@ -3,7 +3,7 @@ import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLi
 import { Link } from 'react-router-dom';
 import './NavMenu.css';
 import Auth from './Auth';
-import Admin from './Admin';
+import AdminLink from './AdminLink';
 import { store } from '../store2'
 import { observer, Observer } from 'mobx-react';
 
@@ -25,7 +25,10 @@ export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }
                                     <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
                                 </NavItem>
                                 <Observer>
-                                    {() => <div>{store.auth.currentUser?.permissions?.admin ?? <Admin />}</div>}
+                                    {() => <div>{store.auth.currentUser
+                                        ? store.auth.currentUser!.permissions
+                                            ? store.auth.currentUser!.permissions.admin
+                                                ? <AdminLink /> : null : null : null}</div>}
                                 </Observer>
                                 <NavItem>
                                     <NavLink tag={Link} className="text-dark" to="/counter">Counter</NavLink>

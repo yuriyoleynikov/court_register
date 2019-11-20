@@ -1,19 +1,12 @@
 import { observable, action, computed } from "mobx"
-import { store } from "../store2";
 
 declare var window: any;
 
 export class User {
-    @observable name = 'User name';
-    @observable email = 'user@gmail.com';
+    @observable name = '';
+    @observable email = '';
     @observable permissions: any | null = null;
 }
-
-//function delay(ms: number) {
-//    return new Promise<undefined>((resolve) => {
-//        window.setTimeout(() => resolve(undefined), ms)
-//    })
-//}
 
 const loadAuth2 = () => {
     return new Promise<undefined>((resolve) => {
@@ -21,8 +14,8 @@ const loadAuth2 = () => {
     })
 }
 
-const getUserPermissions = async () => {
-    let response = await fetch(`api/UserPermissions`, {
+const getUserPermissions = async (email: string) => {
+    let response = await fetch(`api/user/getpermissions/${email}`, {
         credentials: 'include',
         headers: {
             Authorization: 'Bearer ' + window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
@@ -53,59 +46,40 @@ export class Auth {
         this.getUser();
     }
 
-    @action.bound getUser() {
+    @action.bound async getUser() {
         let googleAuth = window.gapi.auth2.getAuthInstance();
         if (googleAuth.isSignedIn.get()) {
-            this.loading = false;
+            this.loading = true;
+            let data = await getUserPermissions(googleAuth.currentUser.get().getBasicProfile().getEmail());
+
             this.currentUser = {
-                name: googleAuth.currentUser.get().getBasicProfile().getEmail(),
                 email: googleAuth.currentUser.get().getBasicProfile().getEmail(),
-                permissions: null
+                name: googleAuth.currentUser.get().getBasicProfile().getEmail(),
+                permissions: { active: data.active, admin: data.admin }
             }
+            this.loading = false;
         }
     }
 
     @computed get isSignedIn() { return !!this.currentUser }
 
     @action.bound async signIn() {
-        //this.loading = true;
-        //await delay(2000)
-        //this.loading = false;
-        //this.currentUser = new User();
 
-        this.loading = true;
 
         let googleAuth = window.gapi.auth2.getAuthInstance();
-        let response = await googleAuth.signIn({
+
+        await googleAuth.signIn({
             scope: 'profile email'
         });
-        this.currentUser = {
-            email: googleAuth.currentUser.get().getBasicProfile().getEmail(),
-            name: googleAuth.currentUser.get().getBasicProfile().getEmail(),
-            permissions: null
-        }
 
-        let data = await getUserPermissions();
-        this.currentUser.permissions = data;
-
-        //let response2 = await fetch(`api/user`, {
-        //    credentials: 'include',
-        //    headers: {
-        //        Authorization: 'Bearer ' + window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
-        //    }
-        //});
-
-        //console.log(response2);
-        //let response3 = await response2.text();
-        //console.log(response3);
-        //if (response3 != null)
-        //    this.currentUser.role = parseInt(response3);
-        this.loading = false;
+        await this.getUser();
     }
 
     @action.bound async signOut() {
-        this.currentUser = null;
         let googleAuth = window.gapi.auth2.getAuthInstance();
-        let response = await googleAuth.signOut();
+        this.loading = true;
+        await googleAuth.signOut();
+        this.currentUser = null;
+        this.loading = false;
     }
 }

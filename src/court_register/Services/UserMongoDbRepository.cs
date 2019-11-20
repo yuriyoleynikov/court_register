@@ -30,28 +30,18 @@ namespace court_register.Services
                 throw ex;
             }
         }
-        public async Task<User> GetUserAsync(string id)
+        public async Task<User> GetUserAsync(int id)
         {
             try
             {
-                ObjectId internalId = GetInternalId(id);
                 return await _context.Users
-                                .Find(user => user.id == id
-                                        || user._id == internalId)
+                                .Find(user => user.id == id)
                                 .FirstOrDefaultAsync();
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-        }
-        private ObjectId GetInternalId(string id)
-        {
-            ObjectId internalId;
-            if (!ObjectId.TryParse(id, out internalId))
-                internalId = ObjectId.Empty;
-
-            return internalId;
         }
 
         public async Task AddUserAsync(User user)
@@ -66,7 +56,7 @@ namespace court_register.Services
             }
         }
 
-        public async Task<bool> RemoveUserAsync(string id)
+        public async Task<bool> RemoveUserAsync(int id)
         {
             try
             {
@@ -83,7 +73,7 @@ namespace court_register.Services
             }
         }
 
-        public async Task<bool> UpdateUserAsync(string id, User user)
+        public async Task<bool> UpdateUserAsync(int id, User user)
         {
             try
             {

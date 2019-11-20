@@ -11,7 +11,7 @@ namespace court_register.Models
     {
         [BsonId]
         public ObjectId _id { get; set; }
-        public string id { get; set; }
+        public int id { get; set; }
         public string email { get; set; }
         public bool active { get; set; }
         public bool admin { get; set; }
