@@ -58,20 +58,55 @@ namespace court_register.Controllers
         }
 
         [HttpGet]
-        [Route("api/user/getpermissions/{email}")]
-        public async Task<User> GetPermissions(string email)
+        [Route("api/user/getcurrentuser/{email}")]
+        public async Task<User> GetCurrentUser(string email)
         {
             if (email != null && email == GetUserEmail(User?.Claims))
             {
                 var userList = await _userRepositoryService.GetAllUsersAsync();
-                var currentUser = userList.Where(u => u.email == email & u.admin).SingleOrDefault();
-                if (currentUser != null && currentUser.active && currentUser.admin)
+                var currentUser = userList.Where(u => u.email == email).SingleOrDefault();
+                if (currentUser == null)
+                {
+                    var lastId = userList.Select(u => u.id).Max();
+                    await _userRepositoryService.AddUserAsync(
+                        new User
+                        {
+                            email = email,
+                            id = lastId + 1,
+                            active = false,
+                            admin = false
+                        });
+
+                    userList = await _userRepositoryService.GetAllUsersAsync();
+                    currentUser = userList.Where(u => u.email == email).SingleOrDefault();
+                }
+
+                if (currentUser != null && currentUser.email == email)
                 {
                     var userWithEmail = userList.Where(u => u.email == email).SingleOrDefault();
                     return userWithEmail;
                 }
             }
             return null;
+        }
+
+        [HttpGet]
+        [Route("api/user/activateuser/{id}")]
+        public async Task ActivateUser(int id)
+        {
+            var currentUserEmail = GetUserEmail(User?.Claims);
+            if (currentUserEmail != null)
+            {
+                var userList = await _userRepositoryService.GetAllUsersAsync();
+                var currentUser = userList.Where(u => u.email == currentUserEmail).SingleOrDefault();
+                
+                if (currentUser != null && currentUser.admin)
+                {
+                    var userWillUpdate = userList.Where(u => u.id == id).SingleOrDefault();
+                    userWillUpdate.active = true;
+                    await _userRepositoryService.UpdateUserAsync(id, userWillUpdate);
+                }
+            }
         }
 
         private string GetUserEmail(IEnumerable<Claim> claimsPrincinal)

@@ -57,6 +57,19 @@ export class Admin {
         //this.getUser();
     }
 
+    @action.bound async activateUser(id: number) {
+        this.loading = true;
+        let response = await fetch(`api/user/activateuser/${id}`, {
+            credentials: 'include',
+            headers: {
+                Authorization: 'Bearer ' + window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
+            }
+        });
+
+        await response.json();
+        this.loading = false;
+    }
+
     //@action.bound async getUser() {
     //    let googleAuth = window.gapi.auth2.getAuthInstance();
     //    if (googleAuth.isSignedIn.get()) {

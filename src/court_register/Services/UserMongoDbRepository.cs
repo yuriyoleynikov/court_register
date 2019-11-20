@@ -77,9 +77,13 @@ namespace court_register.Services
         {
             try
             {
+                var currentUser = await _context.Users
+                                .Find(user => user.id == id)
+                                .FirstOrDefaultAsync();
+
                 ReplaceOneResult actionResult
                     = await _context.Users
-                                    .ReplaceOneAsync(u => u.Equals(id)
+                                    .ReplaceOneAsync(u => u.Equals(currentUser._id)
                                             , user
                                             , new UpdateOptions { IsUpsert = true });
                 return actionResult.IsAcknowledged

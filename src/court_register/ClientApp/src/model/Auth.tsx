@@ -15,7 +15,7 @@ const loadAuth2 = () => {
 }
 
 const getUserPermissions = async (email: string) => {
-    let response = await fetch(`api/user/getpermissions/${email}`, {
+    let response = await fetch(`api/user/getcurrentuser/${email}`, {
         credentials: 'include',
         headers: {
             Authorization: 'Bearer ' + window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
