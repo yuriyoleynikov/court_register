@@ -33,6 +33,7 @@ namespace court_register
             });
 
             services.AddTransient<IUserRepositoryService, UserMongoDbRepository>();
+            services.AddTransient<IUnitRepositoryService, UnitMongoDbRepository>();
 
             services
                 .AddAuthentication(options =>

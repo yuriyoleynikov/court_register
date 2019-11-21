@@ -13,7 +13,7 @@ type AdminProps = {
 }
 
 const Admin = (props: AdminProps) => {
-    //React.useEffect(() => { props.loadUsers(); console.log('init 2 ok'); })
+    React.useEffect(() => { props.loadUsers(); console.log('loadUsers ok'); }, [])
     if (props.loading) {
         return <div>
             <button type="button"

@@ -9,33 +9,33 @@ using System.Threading.Tasks;
 
 namespace court_register.Services
 {
-    public class UserMongoDbRepository : IUserRepositoryService
+    public class UnitMongoDbRepository : IUnitRepositoryService
     {
         private readonly DbContext _context = null;
 
-        public UserMongoDbRepository(IOptions<DatabaseSettings> databaseSettings)
+        public UnitMongoDbRepository(IOptions<DatabaseSettings> databaseSettings)
         {
             _context = new DbContext(databaseSettings);
         }
 
-        public async Task<IEnumerable<User>> GetAllUsersAsync()
+        public async Task<IEnumerable<Unit>> GetAllUnitsAsync()
         {
             try
             {
-                return await _context.users
-                        .Find(user => true).ToListAsync();
+                return await _context.units
+                        .Find(unit => true).ToListAsync();
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
-        public async Task<User> GetUserAsync(int id)
+        public async Task<Unit> GetUnitAsync(int id)
         {
             try
             {
-                return await _context.users
-                                .Find(user => user.id == id)
+                return await _context.units
+                                .Find(unit => unit.id == id)
                                 .FirstOrDefaultAsync();
             }
             catch (Exception ex)
@@ -44,11 +44,11 @@ namespace court_register.Services
             }
         }
 
-        public async Task AddUserAsync(User user)
+        public async Task AddUnitAsync(Unit unit)
         {
             try
             {
-                await _context.users.InsertOneAsync(user);
+                await _context.units.InsertOneAsync(unit);
             }
             catch (Exception ex)
             {
@@ -56,13 +56,13 @@ namespace court_register.Services
             }
         }
 
-        public async Task<bool> RemoveUserAsync(int id)
+        public async Task<bool> RemoveUnitAsync(int id)
         {
             try
             {
                 DeleteResult actionResult
-                = await _context.users.DeleteOneAsync(
-                    Builders<User>.Filter.Eq("id", id));
+                = await _context.units.DeleteOneAsync(
+                    Builders<Unit>.Filter.Eq("id", id));
 
                 return actionResult.IsAcknowledged
                     && actionResult.DeletedCount > 0;
@@ -73,14 +73,14 @@ namespace court_register.Services
             }
         }
 
-        public async Task<bool> UpdateUserAsync(int id, User user)
+        public async Task<bool> UpdateUnitAsync(int id, Unit unit)
         {
             try
             {
                 ReplaceOneResult actionResult
-                    = await _context.users
-                                    .ReplaceOneAsync(u => u.id == id
-                                            , user
+                    = await _context.units
+                                    .ReplaceOneAsync(un => un.id == id
+                                            , unit
                                             , new UpdateOptions { IsUpsert = true });
                 return actionResult.IsAcknowledged
                     && actionResult.ModifiedCount > 0;
