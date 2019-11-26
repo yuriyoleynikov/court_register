@@ -83,7 +83,7 @@ namespace court_register.Controllers
         {
             var email = GetUserEmail(claimsPrincinal);
 
-            var userList = await _userRepositoryService.GetAllUsersAsync();
+            var userList = await _userRepositoryService.GetUsersAsync();
             var currentUser = userList.Where(u => u.email == email).SingleOrDefault();
             if (currentUser != null && currentUser.active && currentUser.admin)
             {
@@ -97,7 +97,7 @@ namespace court_register.Controllers
         {
             var email = GetUserEmail(claimsPrincinal);
 
-            var userList = await _userRepositoryService.GetAllUsersAsync();
+            var userList = await _userRepositoryService.GetUsersAsync();
             var currentUser = userList.Where(u => u.email == email).SingleOrDefault();
             if (currentUser != null && currentUser.active)
             {

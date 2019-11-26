@@ -13,8 +13,13 @@ const fields = [
         name: "email",
         label: "Email",
         placeholder: "Insert Email",
-        rules: "required|email|string|between:5,25",
-        value: store.auth.currentUser ? store.auth.currentUser.name : null
+        rules: "required|email|string|between:5,25"
+    },
+    {
+        name: "name",
+        label: "Name",
+        placeholder: "Insert Name",
+        rules: "required|string"
     },
     {
         name: "password",
@@ -44,4 +49,6 @@ const hooks = {
     }
 };
 
-export default new MobxReactForm({ fields }, { plugins, hooks });
+const form = new MobxReactForm({ fields }, { plugins, hooks });
+window.form = form;
+export default form;

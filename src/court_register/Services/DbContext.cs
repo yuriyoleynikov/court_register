@@ -20,19 +20,19 @@ namespace court_register.Services
             }            
         }
 
-        public IMongoCollection<User> users
+        public IMongoCollection<UserSystem> users
         {
             get
             {
-                return _database.GetCollection<User>("users");
+                return _database.GetCollection<UserSystem>("users");
             }
         }
 
-        public IMongoCollection<Unit> units
+        public IMongoCollection<UnitSystem> units
         {
             get
             {
-                return _database.GetCollection<Unit>("units");
+                return _database.GetCollection<UnitSystem>("units");
             }
         }
     }

@@ -10,9 +10,6 @@ import { store } from '../store2'
 import { observer } from 'mobx-react';
 
 const Auth = () => {
-    //if (store.auth.downloadedAuth2)
-    //    store.auth.getUser();
-
     const login = () => {
         store.auth.signIn();
     }

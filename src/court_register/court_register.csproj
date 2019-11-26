@@ -22,7 +22,13 @@
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
   <ItemGroup>
+    <Content Remove="example.json" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="ClientApp\src\components\inputs\SimpleInput.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="example.json" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\components\inputs\SimpleInput.js" />

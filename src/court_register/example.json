@@ -1,0 +1,41 @@
+//example for status
+
+{
+  "_id": "1234567890",
+  "id": 0,
+  "current_status": {
+    "name": "3 name",
+    "description": "3 description",
+    "deleted": false,
+    "information": {
+      "user": {
+        "id": "example@gmail.com"
+      },
+      "date": "2019.11.26"
+    }
+  },
+  "history_status": [
+    {
+      "name": "first name",
+      "description": "first description",
+      "deleted": false,
+      "information": {
+        "user": {
+          "id": "example@gmail.com"
+        },
+        "date": "2019.11.24"
+      }
+    },
+    {
+      "name": "second name",
+      "description": "second description",
+      "deleted": false,
+      "information": {
+        "user": {
+          "id": "example@gmail.com"
+        },
+        "date": "2019.11.25"
+      }
+    }
+  ]
+}

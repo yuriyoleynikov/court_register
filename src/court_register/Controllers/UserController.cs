@@ -16,20 +16,19 @@ namespace court_register.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserRepositoryService _userRepositoryService;
-
         public UserController(IUserRepositoryService userRepositoryService)
         {
             _userRepositoryService = userRepositoryService;
         }
 
         [HttpGet]
-        [Route("api/user/getuserlist")]
+        [Route("api/users")]
         public async Task<IEnumerable<User>> GetUserList()
         {
-            var email = GetUserEmail(User?.Claims);
+            var email = GetCurrentUserEmail();
             if (email != null)
             {
-                var userList = await _userRepositoryService.GetAllUsersAsync();
+                var userList = await _userRepositoryService.GetUsersAsync();
                 var currentUser = userList.Where(u => u.email == email & u.admin).SingleOrDefault();
                 if (currentUser != null && currentUser.active && currentUser.admin)
                 {
@@ -43,10 +42,10 @@ namespace court_register.Controllers
         [Route("api/user/getuser/{id}")]
         public async Task<User> GetUser(int id)
         {
-            var email = GetUserEmail(User?.Claims);
+            var email = GetCurrentUserEmail();
             if (email != null)
             {
-                var userList = await _userRepositoryService.GetAllUsersAsync();
+                var userList = await _userRepositoryService.GetUsersAsync();
                 var currentUser = userList.Where(u => u.email == email & u.admin).SingleOrDefault();
                 if (currentUser != null && currentUser.active && currentUser.admin)
                 {
@@ -59,11 +58,11 @@ namespace court_register.Controllers
 
         [HttpGet]
         [Route("api/user/getcurrentuser/{email}")]
-        public async Task<User> GetCurrentUser(string email)
+        public async Task<User> GetCurrentUser(string email)//api/user/profile  //api/admin/users/{id}/profilex
         {
-            if (email != null && email == GetUserEmail(User?.Claims))
+            if (email != null && email == GetCurrentUserEmail())
             {
-                var userList = await _userRepositoryService.GetAllUsersAsync();
+                var userList = await _userRepositoryService.GetUsersAsync();
                 var currentUser = userList.Where(u => u.email == email).SingleOrDefault();
                 if (currentUser == null)
                 {
@@ -77,7 +76,7 @@ namespace court_register.Controllers
                             admin = false
                         });
 
-                    userList = await _userRepositoryService.GetAllUsersAsync();
+                    userList = await _userRepositoryService.GetUsersAsync();
                     currentUser = userList.Where(u => u.email == email).SingleOrDefault();
                 }
 
@@ -94,10 +93,10 @@ namespace court_register.Controllers
         [Route("api/user/activateuser/{id}")]
         public async Task<bool> ActivateUser(int id)
         {
-            var currentUserEmail = GetUserEmail(User?.Claims);
+            var currentUserEmail = GetCurrentUserEmail();
             if (currentUserEmail != null)
             {
-                var userList = await _userRepositoryService.GetAllUsersAsync();
+                var userList = await _userRepositoryService.GetUsersAsync();
                 var currentUser = userList.Where(u => u.email == currentUserEmail).SingleOrDefault();
 
                 if (currentUser != null && currentUser.admin)
@@ -120,13 +119,40 @@ namespace court_register.Controllers
             return false;
         }
 
-        private string GetUserEmail(IEnumerable<Claim> claimsPrincinal)
+        private int GetCurrentUserId()
         {
-            var currentType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress";
+            var email = GetCurrentUserEmail();
 
-            var email = claimsPrincinal.Where(c => c.Type == currentType).SingleOrDefault().Value;
+            var id = 0;
 
-            return email;
+            
+
+            return id;
+        }
+
+        private string GetCurrentUserEmail()
+        {
+            if (User != null)
+            {
+                var currentType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress";
+                var email = User?.Claims.Where(c => c.Type == currentType).SingleOrDefault().Value;
+                return email;
+            }
+            return null;
+        }
+
+        private async Task<bool> GetCurrentUserIsActiveAdmin()
+        {
+            var email = GetCurrentUserEmail();
+
+            var userList = await _userRepositoryService.GetUsersAsync();
+            var currentUser = userList.Where(u => u.email == email & u.admin).SingleOrDefault();
+            if (currentUser != null && currentUser.active && currentUser.admin)
+            {
+                return userList;
+            }
+
+            return false;
         }
     }
 }

@@ -18,7 +18,7 @@ namespace court_register.Services
             _context = new DbContext(databaseSettings);
         }
 
-        public async Task<IEnumerable<User>> GetAllUsersAsync()
+        public async Task<IEnumerable<User>> GetUsersAsync()
         {
             try
             {
@@ -84,6 +84,25 @@ namespace court_register.Services
                                             , new UpdateOptions { IsUpsert = true });
                 return actionResult.IsAcknowledged
                     && actionResult.ModifiedCount > 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<int> GetUserIdByEmailAsync(string email)
+        {
+            try
+            {
+                var userSystem = await _context.users
+                                .Find(user => user.current.email == email)
+                                .FirstOrDefaultAsync();
+                if (userSystem == null)
+                {
+                    throw new Exception();
+                }
+                return userSystem.current.id;
             }
             catch (Exception ex)
             {
