@@ -25,7 +25,6 @@ namespace court_register.Models
         public string third_name { get; set; }
 
         public bool active { get; set; }
-        public bool in_system { get; set; }
         public Permission permission { get; set; }
         public Created created { get; set; }
     }

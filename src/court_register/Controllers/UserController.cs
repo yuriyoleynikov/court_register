@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using court_register.Models;
 using court_register.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace court_register.Controllers
 {
@@ -16,119 +14,66 @@ namespace court_register.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserRepositoryService _userRepositoryService;
+        private string _userExecutorEmail = null;
         public UserController(IUserRepositoryService userRepositoryService)
         {
             _userRepositoryService = userRepositoryService;
+            _userExecutorEmail = GetCurrentUserEmail();
         }
 
         [HttpGet]
         [Route("api/users")]
-        public async Task<IEnumerable<User>> GetUserList()
+        public async Task<IEnumerable<User>> GetUserListAsync()
         {
-            var email = GetCurrentUserEmail();
-            if (email != null)
-            {
-                var userList = await _userRepositoryService.GetUsersAsync();
-                var currentUser = userList.Where(u => u.email == email & u.admin).SingleOrDefault();
-                if (currentUser != null && currentUser.active && currentUser.admin)
-                {
-                    return userList;
-                }
-            }
-            return null;
+            var userList = await _userRepositoryService.GetUsersAsync(_userExecutorEmail);            
+            return userList;
         }
 
         [HttpGet]
-        [Route("api/user/getuser/{id}")]
-        public async Task<User> GetUser(int id)
+        [Route("api/user/{userEmail}")]
+        public async Task<UserSystem> GetUserByUserEmailAsync(string userEmail)
         {
-            var email = GetCurrentUserEmail();
-            if (email != null)
-            {
-                var userList = await _userRepositoryService.GetUsersAsync();
-                var currentUser = userList.Where(u => u.email == email & u.admin).SingleOrDefault();
-                if (currentUser != null && currentUser.active && currentUser.admin)
-                {
-                    var userWithId = userList.Where(u => u.id == id).SingleOrDefault();
-                    return userWithId;
-                }
-            }
-            return null;
+            var userSystem = await _userRepositoryService.GetUserSystemByUserEmailAsync(_userExecutorEmail, userEmail);
+            return userSystem;
         }
 
         [HttpGet]
-        [Route("api/user/getcurrentuser/{email}")]
-        public async Task<User> GetCurrentUser(string email)//api/user/profile  //api/admin/users/{id}/profilex
+        [Route("api/user")]
+        public async Task<UserSystem> GetCurrentUserSystemAsync()
         {
-            if (email != null && email == GetCurrentUserEmail())
-            {
-                var userList = await _userRepositoryService.GetUsersAsync();
-                var currentUser = userList.Where(u => u.email == email).SingleOrDefault();
-                if (currentUser == null)
-                {
-                    var lastId = userList.Select(u => u.id).Max();
-                    await _userRepositoryService.AddUserAsync(
-                        new User
-                        {
-                            email = email,
-                            id = lastId + 1,
-                            active = false,
-                            admin = false
-                        });
-
-                    userList = await _userRepositoryService.GetUsersAsync();
-                    currentUser = userList.Where(u => u.email == email).SingleOrDefault();
-                }
-
-                if (currentUser != null && currentUser.email == email)
-                {
-                    var userWithEmail = userList.Where(u => u.email == email).SingleOrDefault();
-                    return userWithEmail;
-                }
-            }
-            return null;
+            var userSystem = await _userRepositoryService.GetUserSystemByUserEmailAsync(_userExecutorEmail, _userExecutorEmail);
+            return userSystem;
         }
 
-        [HttpGet]
-        [Route("api/user/activateuser/{id}")]
-        public async Task<bool> ActivateUser(int id)
-        {
-            var currentUserEmail = GetCurrentUserEmail();
-            if (currentUserEmail != null)
-            {
-                var userList = await _userRepositoryService.GetUsersAsync();
-                var currentUser = userList.Where(u => u.email == currentUserEmail).SingleOrDefault();
+        //[HttpGet]
+        //[Route("api/user/activateuser/{id}")]
+        //public async Task<bool> ActivateUser(int id)
+        //{
+        //    var currentUserEmail = GetCurrentUserEmail();
+        //    if (currentUserEmail != null)
+        //    {
+        //        var userList = await _userRepositoryService.GetUsersAsync();
+        //        var currentUser = userList.Where(u => u.email == currentUserEmail).SingleOrDefault();
 
-                if (currentUser != null && currentUser.admin)
-                {
-                    var userWillUpdate = userList.Where(u => u.id == id).SingleOrDefault();
-                    userWillUpdate.active = true;
+        //        if (currentUser != null && currentUser.admin)
+        //        {
+        //            var userWillUpdate = userList.Where(u => u.id == id).SingleOrDefault();
+        //            userWillUpdate.active = true;
 
-                    var v = new User
-                    {
-                        id = userWillUpdate.id,
-                        active = true,
-                        admin = userWillUpdate.admin,
-                        email = userWillUpdate.email
-                    };
+        //            var v = new User
+        //            {
+        //                id = userWillUpdate.id,
+        //                active = true,
+        //                admin = userWillUpdate.admin,
+        //                email = userWillUpdate.email
+        //            };
 
-                    return await _userRepositoryService.UpdateUserAsync(id, userWillUpdate);
-                }
-            }
+        //            return await _userRepositoryService.UpdateUserAsync(id, userWillUpdate);
+        //        }
+        //    }
 
-            return false;
-        }
-
-        private int GetCurrentUserId()
-        {
-            var email = GetCurrentUserEmail();
-
-            var id = 0;
-
-            
-
-            return id;
-        }
+        //    return false;
+        //}
 
         private string GetCurrentUserEmail()
         {
@@ -138,21 +83,8 @@ namespace court_register.Controllers
                 var email = User?.Claims.Where(c => c.Type == currentType).SingleOrDefault().Value;
                 return email;
             }
-            return null;
-        }
 
-        private async Task<bool> GetCurrentUserIsActiveAdmin()
-        {
-            var email = GetCurrentUserEmail();
-
-            var userList = await _userRepositoryService.GetUsersAsync();
-            var currentUser = userList.Where(u => u.email == email & u.admin).SingleOrDefault();
-            if (currentUser != null && currentUser.active && currentUser.admin)
-            {
-                return userList;
-            }
-
-            return false;
+            throw new Exception();
         }
     }
 }

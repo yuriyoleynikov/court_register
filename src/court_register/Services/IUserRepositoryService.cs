@@ -8,12 +8,8 @@ namespace court_register.Services
 {
     public interface IUserRepositoryService
     {
-        Task<int> GetUserIdByEmailAsync(string email);
-        Task<IEnumerable<User>> GetUsersAsync();
-        Task<User> GetUserAsync(int id);
-        
-        Task AddUserAsync(User user);
-        Task<bool> RemoveUserAsync(int id);
-        Task<bool> UpdateUserAsync(int id, User user);
+        Task<IEnumerable<User>> GetUsersAsync(string userExecutorEmail);
+        Task<UserSystem> GetUserSystemByUserEmailAsync(string userExecutorEmail, string userEmail);
+        Task<bool> UpdateUserSystemByUserEmailAsync(string userExecutorEmail, string userEmail, User user);
     }
 }
