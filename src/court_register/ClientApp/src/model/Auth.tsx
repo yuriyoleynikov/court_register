@@ -15,7 +15,7 @@ const loadAuth2 = () => {
 }
 
 const getUserPermissions = async (email: string) => {
-    let response = await fetch(`api/user/getcurrentuser/${email}`, {
+    let response = await fetch(`api/user/${email}`, {
         credentials: 'include',
         headers: {
             Authorization: 'Bearer ' + window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
@@ -55,7 +55,7 @@ export class Auth {
             this.currentUser = {
                 email: googleAuth.currentUser.get().getBasicProfile().getEmail(),
                 name: googleAuth.currentUser.get().getBasicProfile().getEmail(),
-                permissions: { active: data.active, admin: data.admin }
+                permissions: { active: data.current.active, admin: data.current.permission.admin }
             }
             this.loading = false;
         }

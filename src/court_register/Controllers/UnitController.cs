@@ -81,28 +81,28 @@ namespace court_register.Controllers
 
         private async Task<bool> GetSelfIsAdmin(IEnumerable<Claim> claimsPrincinal)
         {
-            var email = GetUserEmail(claimsPrincinal);
+            //var email = GetUserEmail(claimsPrincinal);
 
-            var userList = await _userRepositoryService.GetUsersAsync();
-            var currentUser = userList.Where(u => u.email == email).SingleOrDefault();
-            if (currentUser != null && currentUser.active && currentUser.admin)
-            {
-                return true;
-            }
+            //var userList = await _userRepositoryService.GetUsersAsync();
+            //var currentUser = userList.Where(u => u.email == email).SingleOrDefault();
+            //if (currentUser != null && currentUser.active && currentUser.admin)
+            //{
+            //    return true;
+            //}
 
             return false;
         }
 
         private async Task<bool> GetSelfIsActive(IEnumerable<Claim> claimsPrincinal)
         {
-            var email = GetUserEmail(claimsPrincinal);
+            //var email = GetUserEmail(claimsPrincinal);
 
-            var userList = await _userRepositoryService.GetUsersAsync();
-            var currentUser = userList.Where(u => u.email == email).SingleOrDefault();
-            if (currentUser != null && currentUser.active)
-            {
-                return true;
-            }
+            //var userList = await _userRepositoryService.GetUsersAsync();
+            //var currentUser = userList.Where(u => u.email == email).SingleOrDefault();
+            //if (currentUser != null && currentUser.active)
+            //{
+            //    return true;
+            //}
 
             return false;
         }

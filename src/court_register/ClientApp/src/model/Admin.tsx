@@ -34,7 +34,7 @@ export class Admin {
 
     @action.bound async loadUsers() {
         this.loading = true;
-        let response = await fetch(`api/user/getuserlist`, {
+        let response = await fetch(`api/users`, {
             credentials: 'include',
             headers: {
                 Authorization: 'Bearer ' + window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
