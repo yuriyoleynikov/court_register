@@ -19,7 +19,7 @@ namespace court_register.Services
 
         private async Task CheckCurrentUserIsExistAsync(string userExecutorEmail)
         {
-            var userSystem = await _context.users.Find(uS => uS.current.email == userExecutorEmail).SingleOrDefaultAsync();
+            var userSystem = await _context.users.Find<UserSystem>(uS => uS.current.email == userExecutorEmail).SingleOrDefaultAsync();
 
             if (userSystem != null)
                 return;
@@ -53,12 +53,12 @@ namespace court_register.Services
         }
         private async Task<bool> GetCurrentUserIsActiveAsync(string userExecutorEmail)
         {
-            var userSystem = await _context.users.Find(uS => uS.current.email == userExecutorEmail).SingleOrDefaultAsync();
+            var userSystem = await _context.users.Find<UserSystem>(uS => uS.current.email == userExecutorEmail).SingleOrDefaultAsync();
             return userSystem.current.active;
         }
         private async Task<bool> GetCurrentUserIsAdminAsync(string userExecutorEmail)
         {
-            var userSystem = await _context.users.Find(uS => uS.current.email == userExecutorEmail).SingleOrDefaultAsync();
+            var userSystem = await _context.users.Find<UserSystem>(uS => uS.current.email == userExecutorEmail).SingleOrDefaultAsync();
             return userSystem.current.permission.admin;
         }
 
@@ -103,7 +103,7 @@ namespace court_register.Services
                     return null;
 
                 var userSystem = await _context.users
-                        .Find(userSystem => userSystem.current.email == userEmail).SingleOrDefaultAsync();
+                        .Find<UserSystem>(userSystem => userSystem.current.email == userEmail).SingleOrDefaultAsync();
 
                 return userSystem;
             }
@@ -127,7 +127,7 @@ namespace court_register.Services
                     return false;
 
                 var userSystem = await _context.users
-                        .Find(userSystem => userSystem.current.email == userEmail).SingleOrDefaultAsync();
+                        .Find<UserSystem>(userSystem => userSystem.current.email == userEmail).SingleOrDefaultAsync();
 
                 var newChanges = userSystem.changes.ToList();
                 newChanges.Add(userSystem.current);

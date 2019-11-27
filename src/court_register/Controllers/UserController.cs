@@ -14,18 +14,20 @@ namespace court_register.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserRepositoryService _userRepositoryService;
-        private string _userExecutorEmail = null;
+        //private string _userExecutorEmail = null;
         public UserController(IUserRepositoryService userRepositoryService)
         {
             _userRepositoryService = userRepositoryService;
-            _userExecutorEmail = GetCurrentUserEmail();
+            //_userExecutorEmail = GetCurrentUserEmail();
         }
 
         [HttpGet]
         [Route("api/users")]
         public async Task<IEnumerable<User>> GetUserListAsync()
         {
-            var userList = await _userRepositoryService.GetUsersAsync(_userExecutorEmail);            
+            string _userExecutorEmail = null;
+            _userExecutorEmail = GetCurrentUserEmail();
+            var userList = await _userRepositoryService.GetUsersAsync(_userExecutorEmail);
             return userList;
         }
 
@@ -33,6 +35,8 @@ namespace court_register.Controllers
         [Route("api/user/{userEmail}")]
         public async Task<UserSystem> GetUserByUserEmailAsync(string userEmail)
         {
+            string _userExecutorEmail = null;
+            _userExecutorEmail = GetCurrentUserEmail();
             var userSystem = await _userRepositoryService.GetUserSystemByUserEmailAsync(_userExecutorEmail, userEmail);
             return userSystem;
         }
@@ -41,6 +45,8 @@ namespace court_register.Controllers
         [Route("api/user")]
         public async Task<UserSystem> GetCurrentUserSystemAsync()
         {
+            string _userExecutorEmail = null;
+            _userExecutorEmail = GetCurrentUserEmail();
             var userSystem = await _userRepositoryService.GetUserSystemByUserEmailAsync(_userExecutorEmail, _userExecutorEmail);
             return userSystem;
         }
@@ -83,7 +89,7 @@ namespace court_register.Controllers
                 var email = User?.Claims.Where(c => c.Type == currentType).SingleOrDefault().Value;
                 return email;
             }
-
+            return null;
             throw new Exception();
         }
     }
