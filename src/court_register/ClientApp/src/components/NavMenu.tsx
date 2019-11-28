@@ -6,6 +6,7 @@ import Auth from './Auth';
 import AdminLink from './AdminLink';
 import { store } from '../store2'
 import { observer, Observer } from 'mobx-react';
+import Settings from './settings/Settings';
 
 export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }> {
     public state = {
@@ -22,10 +23,7 @@ export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }
                         <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={this.state.isOpen} navbar>
                             <ul className="navbar-nav flex-grow">
                                 <Observer>
-                                    {() => <div>{store.auth.currentUser
-                                        ? store.auth.currentUser!.permissions
-                                            ? store.auth.currentUser!.permissions.admin
-                                                ? <AdminLink /> : null : null : null}</div>}
+                                    {() => <div>{store.auth.isSignedIn ? <Settings /> : null}</div>}
                                 </Observer>
                                 <Auth />
                             </ul>
@@ -35,7 +33,12 @@ export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }
             </header>
         );
     }
-
+    //<Observer>
+    //    {() => <div>{store.auth.currentUser
+    //        ? store.auth.currentUser!.permissions
+    //            ? store.auth.currentUser!.permissions.admin
+    //                ? <AdminLink /> : null : null : null}</div>}
+    //</Observer>
     private toggle = () => {
         this.setState({
             isOpen: !this.state.isOpen

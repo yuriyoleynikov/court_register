@@ -1,18 +1,18 @@
-import * as React from 'react';
+﻿import * as React from 'react';
 import { observer } from 'mobx-react';
 
-import { store } from '../store2'
-import { User } from '../model/Auth';
-import Loading from '../Loading';
+import { store } from '../../../store2'
+import { User } from '../../../model/Auth';
+import Loading from '../../../Loading';
 
-type AdminProps = {
+type UsersProps = {
     users: User[] | null;
     loading: boolean;
     loadUsers(): void;
     activateUser(id: number): void;
 }
 
-const Admin = (props: AdminProps) => {
+const Users = (props: UsersProps) => {
     React.useEffect(() => { props.loadUsers(); console.log('loadUsers ok'); }, [])
     if (props.loading) {
         return <div>
@@ -66,7 +66,7 @@ const Admin = (props: AdminProps) => {
     );
 };
 
-export default observer(() => <Admin
+export default observer(() => <Users
     users={store.admin.users}
     loading={store.admin.loading}
     loadUsers={store.admin.loadUsers}
