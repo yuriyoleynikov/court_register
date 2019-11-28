@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 
 namespace court_register.Models
@@ -14,7 +15,7 @@ namespace court_register.Models
     public class User
     {
         public int version { get; set; }
-        public int id { get; set; }
+        public int _id { get; set; }
         public string email { get; set; }
 
         public string first_name { get; set; }
@@ -33,5 +34,10 @@ namespace court_register.Models
     public class Role
     {
         public string test_fild { get; set; }
+    }
+    public class Created
+    {
+        public User user { get; set; }
+        public DateTime date { get; set; }
     }
 }

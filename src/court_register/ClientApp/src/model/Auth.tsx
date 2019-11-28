@@ -14,8 +14,8 @@ const loadAuth2 = () => {
     })
 }
 
-const getUserPermissions = async (email: string) => {
-    let response = await fetch(`api/user/${email}`, {
+const getUserPermissions = async () => {
+    let response = await fetch(`api/user`, {
         credentials: 'include',
         headers: {
             Authorization: 'Bearer ' + window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
@@ -50,7 +50,7 @@ export class Auth {
         let googleAuth = window.gapi.auth2.getAuthInstance();
         if (googleAuth.isSignedIn.get()) {
             this.loading = true;
-            let data = await getUserPermissions(googleAuth.currentUser.get().getBasicProfile().getEmail());
+            let data = await getUserPermissions();
 
             this.currentUser = {
                 email: googleAuth.currentUser.get().getBasicProfile().getEmail(),

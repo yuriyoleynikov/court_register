@@ -10,6 +10,7 @@ namespace court_register.Services
     {
         Task<IEnumerable<User>> GetUsersAsync(string userExecutorEmail);
         Task<UserSystem> GetUserSystemByUserEmailAsync(string userExecutorEmail, string userEmail);
+        Task<UserSystem> GetUserSystemByUserEmailAsync(string userExecutorEmail);
         Task<bool> UpdateUserSystemByUserEmailAsync(string userExecutorEmail, string userEmail, User user);
     }
 }

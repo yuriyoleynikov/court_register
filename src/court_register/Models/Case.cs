@@ -125,11 +125,7 @@ namespace court_register.Models
         public Created created { get; set; }
 
     }
-    public class Created
-    {
-        public User user { get; set; }
-        public DateTime date { get; set; }
-    }
+    
     public class UnitSystem
     {
         [BsonId]

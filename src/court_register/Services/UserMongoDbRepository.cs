@@ -28,16 +28,26 @@ namespace court_register.Services
             {
                 var userList = await _context.users
                             .Find(user => true).ToListAsync();
+                var _idMax = userList.Max(us => us.current._id);
 
                 var newUser = new UserSystem
                 {
                     current = new User
                     {
                         active = false,
-                        created = new Created { date = DateTime.Now },
+                        created = new Created
+                        {
+                            date = DateTime.Now,
+                            user = new User
+                            {
+                                email = userExecutorEmail,
+                                _id = _idMax + 1
+                            }
+                        },
                         email = userExecutorEmail,
                         version = 0,
-                        permission = new Permission { admin = false }
+                        permission = new Permission { admin = false },
+                        _id = _idMax + 1
                     }
                 };
 
@@ -104,6 +114,22 @@ namespace court_register.Services
 
                 var userSystem = await _context.users
                         .Find<UserSystem>(userSystem => userSystem.current.email == userEmail).SingleOrDefaultAsync();
+
+                return userSystem;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<UserSystem> GetUserSystemByUserEmailAsync(string userExecutorEmail)
+        {
+            try
+            {
+                await CheckCurrentUserIsExistAsync(userExecutorEmail);
+
+                var userSystem = await _context.users
+                        .Find<UserSystem>(userSystem => userSystem.current.email == userExecutorEmail).SingleOrDefaultAsync();
 
                 return userSystem;
             }

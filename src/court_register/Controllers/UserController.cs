@@ -47,7 +47,7 @@ namespace court_register.Controllers
         {
             string _userExecutorEmail = null;
             _userExecutorEmail = GetCurrentUserEmail();
-            var userSystem = await _userRepositoryService.GetUserSystemByUserEmailAsync(_userExecutorEmail, _userExecutorEmail);
+            var userSystem = await _userRepositoryService.GetUserSystemByUserEmailAsync(_userExecutorEmail);
             return userSystem;
         }
 
