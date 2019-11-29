@@ -9,33 +9,27 @@ type UsersProps = {
     users: User[] | null;
     loading: boolean;
     loadUsers(): void;
-    activateUser(id: number): void;
+    activateUser(email: string): void;
+    deactivateUser(email: string): void;
 }
 
+const $btn = 'f6 link dim bn br2 ph3 pv2 mr2 dib white bg-dark-blue';
 const Users = (props: UsersProps) => {
     React.useEffect(() => { props.loadUsers(); console.log('loadUsers ok'); }, [])
+    const showUser = (email: string) => {
+        console.log('showUser ok' + email);
+    }
     if (props.loading) {
         return <div>
-            <button type="button"
-                className="btn btn-primary btn-lg"
-                onClick={() => { props.loadUsers() }}>
-                loadUsers
-                </button>
             <Loading />
         </div>;
     }
     return (
         <div>
-            <button type="button"
-                className="btn btn-primary btn-lg"
-                onClick={() => { props.loadUsers(); }}>
-                loadUsers
-                </button>
             <table className='table table-striped' aria-labelledby="tabelLabel">
                 <thead>
                     <tr>
-
-                        <th>id</th>
+                        <th>_id</th>
                         <th>email</th>
                         <th>name</th>
                         <th>active</th>
@@ -53,10 +47,28 @@ const Users = (props: UsersProps) => {
                                 <td>{user.admin ? <div>true</div> : <div>false</div>}</td>
                                 <td>
                                     <button type="button"
-                                        className="btn btn-primary btn-lg"
-                                        onClick={() => { props.activateUser(user.id) }}>
-                                        activate
+                                        //className="btn btn-primary btn-lg"
+                                        className={$btn}
+                                        onClick={() => { showUser(user.email) }}>
+                                        Открыть
                                         </button>
+                                </td>
+                                <td>
+                                    {user.active
+                                        ?
+                                        <button type="button"
+                                            //className="btn btn-primary btn-lg"
+                                            className={$btn}
+                                            onClick={() => { props.deactivateUser(user.email) }}>
+                                            deactivate
+                                        </button>
+                                        :
+                                        <button type="button"
+                                            //className="btn btn-primary btn-lg"
+                                            className={$btn}
+                                            onClick={() => { props.activateUser(user.email) }}>
+                                            activate
+                                        </button>}
                                 </td>
                             </tr>
                         ) : null}
@@ -71,4 +83,5 @@ export default observer(() => <Users
     loading={store.admin.loading}
     loadUsers={store.admin.loadUsers}
     activateUser={store.admin.activateUser}
+    deactivateUser={store.admin.deactivateUser}
 />);

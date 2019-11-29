@@ -37,7 +37,20 @@ namespace court_register.Models
     }
     public class Created
     {
-        public User user { get; set; }
+        public UserInfo userInfo { get; set; }
         public DateTime date { get; set; }
+    }
+
+    public class UserInfo
+    {
+        public int version { get; set; }
+        public int _id { get; set; }
+        public string email { get; set; }
+
+        public string first_name { get; set; }
+        public string second_name { get; set; }
+        public string third_name { get; set; }
+
+        public Permission permission { get; set; }
     }
 }

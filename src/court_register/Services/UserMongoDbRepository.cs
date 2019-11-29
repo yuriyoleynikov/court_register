@@ -19,7 +19,8 @@ namespace court_register.Services
 
         private async Task CheckCurrentUserIsExistAsync(string userExecutorEmail)
         {
-            var userSystem = await _context.users.Find<UserSystem>(uS => uS.current.email == userExecutorEmail).SingleOrDefaultAsync();
+            var userSystemList = await _context.users.Find<UserSystem>(uS => uS.current.email == userExecutorEmail).ToListAsync();
+            var userSystem = userSystemList.SingleOrDefault();
 
             if (userSystem != null)
                 return;
@@ -28,8 +29,12 @@ namespace court_register.Services
             {
                 var userList = await _context.users
                             .Find(user => true).ToListAsync();
-                var _idMax = userList.Max(us => us.current._id);
-
+                var newId = 0;
+                if (userList.Any())
+                {
+                    newId = userList.Max(us => us.current._id) + 1;
+                }
+                
                 var newUser = new UserSystem
                 {
                     current = new User
@@ -38,16 +43,17 @@ namespace court_register.Services
                         created = new Created
                         {
                             date = DateTime.Now,
-                            user = new User
+                            userInfo = new UserInfo
                             {
                                 email = userExecutorEmail,
-                                _id = _idMax + 1
+                                _id = newId,
+                                version = 0
                             }
                         },
                         email = userExecutorEmail,
                         version = 0,
                         permission = new Permission { admin = false },
-                        _id = _idMax + 1
+                        _id = newId
                     }
                 };
 
@@ -148,21 +154,38 @@ namespace court_register.Services
                 if (!isAvtive)
                     return false;
 
-                var isAdmin = await GetCurrentUserIsAdminAsync(userExecutorEmail);
-                if (!(isAdmin || userExecutorEmail == userEmail))
-                    return false;
+                //var isAdmin = await GetCurrentUserIsAdminAsync(userExecutorEmail);
+                //if (!(isAdmin || userExecutorEmail == userEmail))
+                //    return false;
 
                 var userSystem = await _context.users
                         .Find<UserSystem>(userSystem => userSystem.current.email == userEmail).SingleOrDefaultAsync();
+                var newChanges = new List<User> { };
+                if (userSystem.changes != null)
+                {
+                    newChanges = userSystem.changes.ToList();
+                }
 
-                var newChanges = userSystem.changes.ToList();
                 newChanges.Add(userSystem.current);
 
                 userSystem.changes = newChanges;
                 var newVersion = userSystem.current.version + 1;
                 userSystem.current = user;
-                var userExecutor = (await GetUserSystemByUserEmailAsync(userExecutorEmail, userEmail)).current;
-                userSystem.current.created = new Created { date = DateTime.Now, user = userExecutor };
+                var userExecutor = (await GetUserSystemByUserEmailAsync(userExecutorEmail)).current;
+                userSystem.current.created = new Created
+                {
+                    date = DateTime.Now,
+                    userInfo = new UserInfo
+                    {
+                        email = userExecutor.email,
+                        first_name = userExecutor.first_name,
+                        permission = userExecutor.permission,
+                        second_name = userExecutor.second_name,
+                        third_name = userExecutor.third_name,
+                        version = userExecutor.version,
+                        _id = userExecutor._id
+                    }
+                };
                 userSystem.current.version = newVersion;
 
                 ReplaceOneResult actionResult

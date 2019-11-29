@@ -12,15 +12,21 @@ import "tachyons";
 
 import './custom.css'
 import SettingsBlock from './components/settings/SettingsBlock';
+import Units from './components/settings/users/Units';
 
 export default () => (
     <ConnectedRouter history={history}>
         <Layout>
             <Route exact path='/' component={Home} />
+
             <Route path='/settings' component={SettingsBlock} />
+
             <Route path='/settings/users' component={Users} />
+            <Route path='/settings/units' component={Units} />
+
             <Route path='/counter' component={Counter} />
             <Route path='/fetch-data/:startDateIndex?' component={FetchData} />
+
             <Route path='/profile' component={ProfileContainer} />
         </Layout>
     </ConnectedRouter>

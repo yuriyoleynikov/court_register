@@ -51,35 +51,42 @@ namespace court_register.Controllers
             return userSystem;
         }
 
-        //[HttpGet]
-        //[Route("api/user/activateuser/{id}")]
-        //public async Task<bool> ActivateUser(int id)
-        //{
-        //    var currentUserEmail = GetCurrentUserEmail();
-        //    if (currentUserEmail != null)
-        //    {
-        //        var userList = await _userRepositoryService.GetUsersAsync();
-        //        var currentUser = userList.Where(u => u.email == currentUserEmail).SingleOrDefault();
+        [HttpPut]
+        [Route("api/user/{userEmail}")]
+        public async Task<bool> UpdateUserByUserEmailAsync(string userEmail, User user)
+        {
+            string _userExecutorEmail = null;
+            _userExecutorEmail = GetCurrentUserEmail();
 
-        //        if (currentUser != null && currentUser.admin)
-        //        {
-        //            var userWillUpdate = userList.Where(u => u.id == id).SingleOrDefault();
-        //            userWillUpdate.active = true;
+            var userSystem = await _userRepositoryService.UpdateUserSystemByUserEmailAsync(_userExecutorEmail, userEmail, user);
+            return true;
+        }
 
-        //            var v = new User
-        //            {
-        //                id = userWillUpdate.id,
-        //                active = true,
-        //                admin = userWillUpdate.admin,
-        //                email = userWillUpdate.email
-        //            };
+        [HttpGet]
+        [Route("api/user/activate/{userEmail}")]
+        public async Task<bool> ActivateUserByUserEmailAsync(string userEmail)
+        {
+            string _userExecutorEmail = null;
+            _userExecutorEmail = GetCurrentUserEmail();
 
-        //            return await _userRepositoryService.UpdateUserAsync(id, userWillUpdate);
-        //        }
-        //    }
+            var user = (await _userRepositoryService.GetUserSystemByUserEmailAsync(_userExecutorEmail, userEmail)).current;
+            user.active = true;
 
-        //    return false;
-        //}
+            return await UpdateUserByUserEmailAsync(userEmail, user);
+        }
+
+        [HttpGet]
+        [Route("api/user/deactivate/{userEmail}")]
+        public async Task<bool> DeactivateUserByUserEmailAsync(string userEmail)
+        {
+            string _userExecutorEmail = null;
+            _userExecutorEmail = GetCurrentUserEmail();
+
+            var user = (await _userRepositoryService.GetUserSystemByUserEmailAsync(_userExecutorEmail, userEmail)).current;
+            user.active = false;
+
+            return await UpdateUserByUserEmailAsync(userEmail, user);
+        }
 
         private string GetCurrentUserEmail()
         {

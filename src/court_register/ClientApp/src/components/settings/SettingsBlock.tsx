@@ -3,7 +3,10 @@ import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLi
 import { Link } from 'react-router-dom';
 
 const SettingsBlock = () => (
-    <NavLink tag={Link} className="text-dark" to="/settings/users">Пользователи</NavLink>
+    <div>
+        <NavLink tag={Link} className="text-dark" to="/settings/users">Пользователи</NavLink>
+        <NavLink tag={Link} className="text-dark" to="/settings/units">Подразделения</NavLink>
+    </div>
 );
 
 export default SettingsBlock;
