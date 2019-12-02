@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace court_register.Services
 {
-    public class UserMongoDbRepository : IUserRepositoryService
+    public class MongoDbRepositoryService : IRepositoryService
     {
         private readonly DbContext _context = null;
-        public UserMongoDbRepository(IOptions<DatabaseSettings> databaseSettings)
+        public MongoDbRepositoryService(IOptions<DatabaseSettings> databaseSettings)
         {
             _context = new DbContext(databaseSettings);
         }
@@ -34,7 +34,7 @@ namespace court_register.Services
                 {
                     newId = userList.Max(us => us.current._id) + 1;
                 }
-                
+
                 var newUser = new UserSystem
                 {
                     current = new User
@@ -150,8 +150,8 @@ namespace court_register.Services
             {
                 await CheckCurrentUserIsExistAsync(userExecutorEmail);
 
-                var isAvtive = await GetCurrentUserIsActiveAsync(userExecutorEmail);
-                if (!isAvtive)
+                var isAcvtive = await GetCurrentUserIsActiveAsync(userExecutorEmail);
+                if (!isAcvtive)
                     return false;
 
                 //var isAdmin = await GetCurrentUserIsAdminAsync(userExecutorEmail);
@@ -252,6 +252,79 @@ namespace court_register.Services
                                             , new UpdateOptions { IsUpsert = true });
                 return actionResult.IsAcknowledged
                     && actionResult.ModifiedCount > 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<IEnumerable<Unit>> GetUnitsAsync(string userExecutorEmail)
+        {
+            try
+            {
+                await CheckCurrentUserIsExistAsync(userExecutorEmail);
+
+                var isActive = await GetCurrentUserIsActiveAsync(userExecutorEmail);
+                if (!isActive)
+                    return null;
+
+                var unitSystemList = await _context.units
+                        .Find(unitSystem => true).ToListAsync();
+
+                var unitList = unitSystemList.Select(userSystem => userSystem.current);
+
+                return unitList;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task AddUnitAsync(string userExecutorEmail, Unit unit)
+        {
+            try
+            {
+                await CheckCurrentUserIsExistAsync(userExecutorEmail);
+
+                var isActive = await GetCurrentUserIsActiveAsync(userExecutorEmail);
+                if (!isActive)
+                    return;
+
+                var isAdmin = await GetCurrentUserIsAdminAsync(userExecutorEmail);
+                if (!(isAdmin))
+                    return;
+
+                var newUnitSystem = new UnitSystem();
+                var newId = 0;
+                if (await _context.units.Find<UnitSystem>(_ => true).AnyAsync())
+                {
+                    var unitSystemList = await _context.units.Find<UnitSystem>(_ => true).ToListAsync();
+                    newId = unitSystemList.Max(us => us.current._id ?? 0) + 1;
+                }
+                var userExecutor = (await GetUserSystemByUserEmailAsync(userExecutorEmail)).current;
+
+                newUnitSystem.current = unit;
+                newUnitSystem.current._id = newId;
+                newUnitSystem.current.version = 0;
+                newUnitSystem.current.created = new Created
+                {
+                    date = DateTime.Now,
+                    userInfo = new UserInfo
+                    {
+                        email = userExecutor.email,
+                        first_name = userExecutor.first_name,
+                        second_name = userExecutor.second_name,
+                        third_name = userExecutor.third_name,
+                        version = userExecutor.version,
+                        _id = userExecutor._id,
+                        permission = userExecutor.permission
+                    }
+                };
+                newUnitSystem.current.deleted = false;
+
+                await _context.units.InsertOneAsync(newUnitSystem);
+
             }
             catch (Exception ex)
             {

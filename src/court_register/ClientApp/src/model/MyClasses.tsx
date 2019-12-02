@@ -41,3 +41,15 @@ export class UserInfo {
 
     @observable permission: Permission | null = null;
 }
+
+export class Unit {
+    @observable version: number | null = null;
+    @observable _id: number | null = null;
+
+    @observable name: string | null = null;
+    @observable full_name: string | null = null;
+
+    @observable deleted: boolean | null = null;
+
+    @observable created: Created | null = null;
+}

@@ -15,96 +15,67 @@ namespace court_register.Controllers
     [Authorize]
     public class UnitController : ControllerBase
     {
-        private readonly IUnitRepositoryService _unitRepositoryService;
-        private readonly IUserRepositoryService _userRepositoryService;
+        private readonly IRepositoryService _repositoryService;
 
-        public UnitController(IUnitRepositoryService unitRepositoryService, IUserRepositoryService userRepositoryService)
+        public UnitController(IRepositoryService repositoryService)
         {
-            _unitRepositoryService = unitRepositoryService;
-            _userRepositoryService = userRepositoryService;
+            _repositoryService = repositoryService;
         }
 
         [HttpGet]
-        [Route("api/unit/get_unit_list")]
-        public async Task<IEnumerable<Unit>> GetUnitList()
+        [Route("api/units")]
+        public async Task<IEnumerable<Unit>> GetUnitListAsync()
         {
-            if (await GetSelfIsActive(User?.Claims))
-            {
-                var unitList = await _unitRepositoryService.GetAllUnitsAsync();
-                return unitList;
-            }
+            string _userExecutorEmail = null;
+            _userExecutorEmail = GetCurrentUserEmail();
 
+            var unitList = await _repositoryService.GetUnitsAsync(_userExecutorEmail);
+            return unitList;
+        }
+
+        [HttpPost]
+        [Route("api/unit")]
+        public async Task<bool> AddUnitAsync([FromBody]Unit unit)
+        {
+            string _userExecutorEmail = null;
+            _userExecutorEmail = GetCurrentUserEmail();
+
+            await _repositoryService.AddUnitAsync(_userExecutorEmail, unit);
+
+            return true;
+        }
+
+        //[HttpPut]
+        //[Route("api/unit/udpate_unit/{id}")]
+        //public async Task<bool> UpdateUnit(int id, [FromBody]Unit unit)
+        //{
+        //    if (await GetSelfIsAdmin(User?.Claims))
+        //    {
+        //        var unitList = await _unitRepositoryService.GetAllUnitsAsync();
+        //        var unitWillUpdate = unitList.Where(un => un.id == id).SingleOrDefault();
+        //        var newUnit = new Unit
+        //        {
+        //            id = id,
+        //            name = unit.name,
+        //            full_name = unit.full_name
+        //        };
+
+        //        return await _unitRepositoryService.UpdateUnitAsync(id, newUnit);
+        //    }
+
+        //    return false;
+        //}
+
+        private string GetCurrentUserEmail()
+        {
+            if (User != null)
+            {
+                var currentType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress";
+                var email = User?.Claims.Where(c => c.Type == currentType).SingleOrDefault().Value;
+                return email;
+            }
             return null;
-        }
-
-        [HttpGet]
-        [Route("api/unit/getunit/{id}")]
-        public async Task<Unit> GetUnit(int id)
-        {
-            if (await GetSelfIsAdmin(User?.Claims))
-            {
-                var unit = await _unitRepositoryService.GetUnitAsync(id);
-                return unit;
-            }
-            return null;
-        }
-
-        [HttpPut]
-        [Route("api/unit/udpate_unit/{id}")]
-        public async Task<bool> UpdateUnit(int id, [FromBody]Unit unit)
-        {
-            if (await GetSelfIsAdmin(User?.Claims))
-            {
-                var unitList = await _unitRepositoryService.GetAllUnitsAsync();
-                var unitWillUpdate = unitList.Where(un => un.id == id).SingleOrDefault();
-                var newUnit = new Unit
-                {
-                    id = id,
-                    name = unit.name,
-                    full_name = unit.full_name
-                };
-
-                return await _unitRepositoryService.UpdateUnitAsync(id, newUnit);
-            }
-
-            return false;
-        }
-
-        private string GetUserEmail(IEnumerable<Claim> claimsPrincinal)
-        {
-            var currentType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress";
-
-            var email = claimsPrincinal.Where(c => c.Type == currentType).SingleOrDefault().Value;
-
-            return email;
-        }
-
-        private async Task<bool> GetSelfIsAdmin(IEnumerable<Claim> claimsPrincinal)
-        {
-            //var email = GetUserEmail(claimsPrincinal);
-
-            //var userList = await _userRepositoryService.GetUsersAsync();
-            //var currentUser = userList.Where(u => u.email == email).SingleOrDefault();
-            //if (currentUser != null && currentUser.active && currentUser.admin)
-            //{
-            //    return true;
-            //}
-
-            return false;
-        }
-
-        private async Task<bool> GetSelfIsActive(IEnumerable<Claim> claimsPrincinal)
-        {
-            //var email = GetUserEmail(claimsPrincinal);
-
-            //var userList = await _userRepositoryService.GetUsersAsync();
-            //var currentUser = userList.Where(u => u.email == email).SingleOrDefault();
-            //if (currentUser != null && currentUser.active)
-            //{
-            //    return true;
-            //}
-
-            return false;
+            throw new Exception();
         }
     }
 }

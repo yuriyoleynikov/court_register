@@ -13,11 +13,11 @@ namespace court_register.Controllers
     [Authorize]
     public class UserController : ControllerBase
     {
-        private readonly IUserRepositoryService _userRepositoryService;
+        private readonly IRepositoryService _repositoryService;
         //private string _userExecutorEmail = null;
-        public UserController(IUserRepositoryService userRepositoryService)
+        public UserController(IRepositoryService repositoryService)
         {
-            _userRepositoryService = userRepositoryService;
+            _repositoryService = repositoryService;
             //_userExecutorEmail = GetCurrentUserEmail();
         }
 
@@ -27,7 +27,7 @@ namespace court_register.Controllers
         {
             string _userExecutorEmail = null;
             _userExecutorEmail = GetCurrentUserEmail();
-            var userList = await _userRepositoryService.GetUsersAsync(_userExecutorEmail);
+            var userList = await _repositoryService.GetUsersAsync(_userExecutorEmail);
             return userList;
         }
 
@@ -37,7 +37,7 @@ namespace court_register.Controllers
         {
             string _userExecutorEmail = null;
             _userExecutorEmail = GetCurrentUserEmail();
-            var userSystem = await _userRepositoryService.GetUserSystemByUserEmailAsync(_userExecutorEmail, userEmail);
+            var userSystem = await _repositoryService.GetUserSystemByUserEmailAsync(_userExecutorEmail, userEmail);
             return userSystem;
         }
 
@@ -47,7 +47,7 @@ namespace court_register.Controllers
         {
             string _userExecutorEmail = null;
             _userExecutorEmail = GetCurrentUserEmail();
-            var userSystem = await _userRepositoryService.GetUserSystemByUserEmailAsync(_userExecutorEmail);
+            var userSystem = await _repositoryService.GetUserSystemByUserEmailAsync(_userExecutorEmail);
             return userSystem;
         }
 
@@ -58,7 +58,7 @@ namespace court_register.Controllers
             string _userExecutorEmail = null;
             _userExecutorEmail = GetCurrentUserEmail();
 
-            var userSystemResult = await _userRepositoryService.UpdateUserSystemByUserEmailAsync(_userExecutorEmail, user);
+            var userSystemResult = await _repositoryService.UpdateUserSystemByUserEmailAsync(_userExecutorEmail, user);
             return userSystemResult;
         }
 
@@ -69,7 +69,7 @@ namespace court_register.Controllers
             string _userExecutorEmail = null;
             _userExecutorEmail = GetCurrentUserEmail();
 
-            var userSystemResult = await _userRepositoryService.UpdateUserSystemByUserEmailAsync(_userExecutorEmail, userEmail, user);
+            var userSystemResult = await _repositoryService.UpdateUserSystemByUserEmailAsync(_userExecutorEmail, userEmail, user);
             return userSystemResult;
         }
 
@@ -80,7 +80,7 @@ namespace court_register.Controllers
             string _userExecutorEmail = null;
             _userExecutorEmail = GetCurrentUserEmail();
 
-            var user = (await _userRepositoryService.GetUserSystemByUserEmailAsync(_userExecutorEmail, userEmail)).current;
+            var user = (await _repositoryService.GetUserSystemByUserEmailAsync(_userExecutorEmail, userEmail)).current;
             user.active = true;
 
             return await UpdateUserByUserEmailAsync(userEmail, user);
@@ -93,7 +93,7 @@ namespace court_register.Controllers
             string _userExecutorEmail = null;
             _userExecutorEmail = GetCurrentUserEmail();
 
-            var user = (await _userRepositoryService.GetUserSystemByUserEmailAsync(_userExecutorEmail, userEmail)).current;
+            var user = (await _repositoryService.GetUserSystemByUserEmailAsync(_userExecutorEmail, userEmail)).current;
             user.active = false;
 
             return await UpdateUserByUserEmailAsync(userEmail, user);

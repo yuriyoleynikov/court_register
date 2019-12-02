@@ -5,59 +5,44 @@ import { store } from '../../../store2'
 import * as MyClasses from '../../../model/MyClasses';
 import Loading from '../../../Loading';
 
-type UsersProps = {
-    users: MyClasses.User[] | null;
+import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
+import { Link } from 'react-router-dom';
+
+type UnitsProps = {
+    units: MyClasses.Unit[] | null;
     loading: boolean;
-    loadUsers(): void;
-    activateUser(email: string): void;
+    loadUnits(): void;
+    //activateUser(email: string | null): void;
+    //deactivateUser(email: string | null): void;
 }
 
-const Units = (props: UsersProps) => {
-    React.useEffect(() => { props.loadUsers(); console.log('loadUsers ok'); }, [])
+const $btn = 'f6 link dim bn br2 ph3 pv2 mr2 dib white bg-dark-blue';
+const Units = (props: UnitsProps) => {
+    React.useEffect(() => { props.loadUnits(); console.log('loadUnits ok'); }, [])
+    
     if (props.loading) {
         return <div>
-            <button type="button"
-                className="btn btn-primary btn-lg"
-                onClick={() => { props.loadUsers() }}>
-                loadUsers
-                </button>
             <Loading />
         </div>;
     }
     return (
         <div>
-            <button type="button"
-                className="btn btn-primary btn-lg"
-                onClick={() => { props.loadUsers(); }}>
-                loadUsers
-                </button>
+            <NavLink tag={Link} className="text-dark" to="/settings/units/new">- Создать новое подразделение</NavLink>
             <table className='table table-striped' aria-labelledby="tabelLabel">
                 <thead>
                     <tr>
-
-                        <th>id</th>
-                        <th>email</th>
+                        <th>_id</th>
                         <th>name</th>
-                        <th>active</th>
-                        <th>admin</th>
+                        <th>full_name</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {props.users ?
-                        props.users.map((user: any) =>
-                            <tr key={user._id}>
-                                <td>{user._id}</td>
-                                <td>{user.email}</td>
-                                <td>{user.name}</td>
-                                <td>{user.active ? <div>true</div> : <div>false</div>}</td>
-                                <td>{user.admin ? <div>true</div> : <div>false</div>}</td>
-                                <td>
-                                    <button type="button"
-                                        className="btn btn-primary btn-lg"
-                                        onClick={() => { props.activateUser(user.email) }}>
-                                        activate
-                                        </button>
-                                </td>
+                    {props.units ?
+                        props.units.map((unit: MyClasses.Unit) =>
+                            <tr key={unit._id ? unit._id : undefined}>
+                                <td>{unit._id}</td>
+                                <td>{unit.name}</td>
+                                <td>{unit.full_name}</td>
                             </tr>
                         ) : null}
                 </tbody>
@@ -67,8 +52,7 @@ const Units = (props: UsersProps) => {
 };
 
 export default observer(() => <Units
-    users={store.admin.users}
-    loading={store.admin.loading}
-    loadUsers={store.admin.loadUsers}
-    activateUser={store.admin.activateUser}
+    units={store.units.units}
+    loading={store.units.loading}
+    loadUnits={store.units.loadUnits}
 />);

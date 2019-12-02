@@ -69,7 +69,7 @@ export class Admin {
             }
         });
 
-        this.users = await response.json();
+        await response.json();
     }
 
     @action.bound async activateUser(email: string) {

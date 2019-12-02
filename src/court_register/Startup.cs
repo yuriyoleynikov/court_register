@@ -32,8 +32,7 @@ namespace court_register
                     = Configuration.GetSection("DatabaseSettings:DatabaseName").Value;
             });
 
-            services.AddTransient<IUserRepositoryService, UserMongoDbRepository>();
-            //services.AddTransient<IUnitRepositoryService, UnitMongoDbRepository>();
+            services.AddTransient<IRepositoryService, MongoDbRepositoryService>();
 
             services
                 .AddAuthentication(options =>

@@ -26,15 +26,8 @@ const fields = [
         name: "third_name",
         label: "third_name",
         placeholder: "third_name",
-        rules: "required|string"
+        rules: "required|string"    
     }
-    //},
-    //{
-    //    name: "name",
-    //    label: "Name",
-    //    placeholder: "Insert Name",
-    //    rules: "required|string"
-    //},
     //{
     //    name: "password",
     //    label: "Password",
@@ -51,11 +44,10 @@ const fields = [
 
 const hooks = {
     onSuccess(form) {
-        alert("Form is valid! Send the request here.");
-        // get field values
+        //alert("Form is valid! Send the request here.");
 
-        console.log("Form Values!", form.values());
-        console.log("Form Values!", form.values().password);
+        //console.log("Form Values!", form.values());
+        //console.log("Form Values!", form.values().password);
 
         let newUser = new MyClasses.User();
 
@@ -64,8 +56,8 @@ const hooks = {
         newUser.first_name = form.values().first_name;
         newUser.second_name = form.values().second_name;
         newUser.third_name = form.values().third_name;
-        store.admin.changePersonal(newUser);
 
+        store.admin.changePersonal(newUser);
     },
     onError(form) {
         alert("Form has errors!");
@@ -74,6 +66,6 @@ const hooks = {
     }
 };
 
-const form = new MobxReactForm({ fields }, { plugins, hooks });
-window.form = form;
-export default form;
+const formUser = new MobxReactForm({ fields }, { plugins, hooks });
+window.formUser = formUser;
+export default formUser;

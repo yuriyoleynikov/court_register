@@ -13,6 +13,7 @@ import "tachyons";
 import './custom.css'
 import SettingsBlock from './components/settings/SettingsBlock';
 import Units from './components/settings/units/Units';
+import NewUnitContainer from './components/settings/units/NewUnitContainer';
 
 export default () => (
     <ConnectedRouter history={history}>
@@ -23,6 +24,7 @@ export default () => (
 
             <Route path='/settings/users' component={Users} />
             <Route path='/settings/units' component={Units} />
+            <Route path='/settings/units/new' component={NewUnitContainer} />
             <Route path='/settings/profile' component={ProfileContainer} />
 
             <Route path='/counter' component={Counter} />
