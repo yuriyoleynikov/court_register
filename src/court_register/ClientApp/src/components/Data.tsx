@@ -1,16 +1,15 @@
 import * as React from "react";
 import { Observer } from "mobx-react";
 import { store } from "../store2";
-import { userInfo } from "os";
 
 export const Data = () => (
   <>
     <Observer>
       {() => {
-        if (store.auth.currentUser) {
+        if (store.auth.user) {
           return (
             <div>
-              Hello, {store.auth.currentUser.name}
+              Hello, {store.auth.user.email}
               <button onClick={store.auth.signOut}>Sign out</button>
             </div>
           );

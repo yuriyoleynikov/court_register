@@ -2,11 +2,11 @@
 import { observer } from 'mobx-react';
 
 import { store } from '../../../store2'
-import { User } from '../../../model/Auth';
+import * as MyClasses from '../../../model/MyClasses';
 import Loading from '../../../Loading';
 
 type UsersProps = {
-    users: User[] | null;
+    users: MyClasses.User[] | null;
     loading: boolean;
     loadUsers(): void;
     activateUser(email: string): void;

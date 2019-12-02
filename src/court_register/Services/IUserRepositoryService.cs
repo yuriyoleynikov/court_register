@@ -12,5 +12,6 @@ namespace court_register.Services
         Task<UserSystem> GetUserSystemByUserEmailAsync(string userExecutorEmail, string userEmail);
         Task<UserSystem> GetUserSystemByUserEmailAsync(string userExecutorEmail);
         Task<bool> UpdateUserSystemByUserEmailAsync(string userExecutorEmail, string userEmail, User user);
+        Task<bool> UpdateUserSystemByUserEmailAsync(string userExecutorEmail, User user);
     }
 }

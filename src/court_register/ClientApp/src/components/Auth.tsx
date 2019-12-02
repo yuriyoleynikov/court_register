@@ -26,7 +26,7 @@ const Auth = () => {
                 <button onClick={login}>Log in</button>
             </div>
             : <div>
-                <div>Hello <NavLink tag={Link} className="text-dark" to="/profile">{store.auth.currentUser!.name}</NavLink></div>
+                <div>Hello <NavLink tag={Link} className="text-dark" to="/profile">{store.auth.user!.email}</NavLink></div>
                 <button onClick={logout}>Log out</button>
             </div>
         }

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 const SettingsBlock = () => (
     <div>
+        <NavLink tag={Link} className="text-dark" to="/settings/profile">Профиль</NavLink>
         <NavLink tag={Link} className="text-dark" to="/settings/users">Пользователи</NavLink>
         <NavLink tag={Link} className="text-dark" to="/settings/units">Подразделения</NavLink>
     </div>

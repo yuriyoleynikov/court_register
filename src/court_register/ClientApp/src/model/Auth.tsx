@@ -1,12 +1,6 @@
-import { observable, action, computed } from "mobx"
-
+import { observable, action, computed } from "mobx";
+import * as MyClasses from './MyClasses';
 declare var window: any;
-
-export class User {
-    @observable name = '';
-    @observable email = '';
-    @observable permissions: any | null = null;
-}
 
 const loadAuth2 = () => {
     return new Promise<undefined>((resolve) => {
@@ -27,7 +21,7 @@ const getUserPermissions = async () => {
 }
 
 export class Auth {
-    @observable currentUser: User | null = null;
+    @observable user: MyClasses.User | null = null;
     @observable loading = false;
     @observable downloadedAuth2 = false;
 
@@ -51,17 +45,12 @@ export class Auth {
         if (googleAuth.isSignedIn.get()) {
             this.loading = true;
             let data = await getUserPermissions();
-
-            this.currentUser = {
-                email: googleAuth.currentUser.get().getBasicProfile().getEmail(),
-                name: googleAuth.currentUser.get().getBasicProfile().getEmail(),
-                permissions: { active: data.current.active, admin: data.current.permission.admin }
-            }
+            this.user = data.current;
             this.loading = false;
         }
     }
 
-    @computed get isSignedIn() { return !!this.currentUser }
+    @computed get isSignedIn() { return !!this.user }
 
     @action.bound async signIn() {
 
@@ -79,7 +68,7 @@ export class Auth {
         let googleAuth = window.gapi.auth2.getAuthInstance();
         this.loading = true;
         await googleAuth.signOut();
-        this.currentUser = null;
+        this.user = null;
         this.loading = false;
     }
 }

@@ -1,6 +1,5 @@
 import { observable, action, computed } from "mobx"
-import { store } from "../store2";
-import { User } from "./Auth";
+import * as MyClasses from "./MyClasses";
 
 declare var window: any;
 
@@ -29,7 +28,7 @@ declare var window: any;
 //}
 
 export class Admin {
-    @observable users: User[] | null = null;
+    @observable users: MyClasses.User[] | null = null;
     @observable loading = false;
 
     @action.bound async loadUsers() {
@@ -55,6 +54,22 @@ export class Admin {
         //console.log('init ok');
         //this.downloadedAuth2 = true;
         //this.getUser();
+    }
+
+    @action.bound async changePersonal(user: MyClasses.User) {
+        console.log(user);
+        debugger
+        let response = await fetch(`api/user`, {
+            method: 'PUT',
+            body: JSON.stringify(user),
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
+            }
+        });
+
+        this.users = await response.json();
     }
 
     @action.bound async activateUser(email: string) {

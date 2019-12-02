@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Route } from 'react-router';
 import Layout from './components/Layout';
 import Home from './components/Home';
-import ProfileContainer from './components/ProfileContainer';
+import ProfileContainer from './components/settings/profile/ProfileContainer';
 import Users from './components/settings/users/Users';
 import Counter from './components/Counter';
 import FetchData from './components/FetchData';
@@ -12,7 +12,7 @@ import "tachyons";
 
 import './custom.css'
 import SettingsBlock from './components/settings/SettingsBlock';
-import Units from './components/settings/users/Units';
+import Units from './components/settings/units/Units';
 
 export default () => (
     <ConnectedRouter history={history}>
@@ -23,11 +23,10 @@ export default () => (
 
             <Route path='/settings/users' component={Users} />
             <Route path='/settings/units' component={Units} />
+            <Route path='/settings/profile' component={ProfileContainer} />
 
             <Route path='/counter' component={Counter} />
             <Route path='/fetch-data/:startDateIndex?' component={FetchData} />
-
-            <Route path='/profile' component={ProfileContainer} />
         </Layout>
     </ConnectedRouter>
 );

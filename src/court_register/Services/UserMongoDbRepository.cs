@@ -201,5 +201,62 @@ namespace court_register.Services
                 throw ex;
             }
         }
+        public async Task<bool> UpdateUserSystemByUserEmailAsync(string userExecutorEmail, User user)
+        {
+            try
+            {
+                await CheckCurrentUserIsExistAsync(userExecutorEmail);
+
+                var isAvtive = await GetCurrentUserIsActiveAsync(userExecutorEmail);
+                if (!isAvtive)
+                    return false;
+
+                //var isAdmin = await GetCurrentUserIsAdminAsync(userExecutorEmail);
+                //if (!(isAdmin || userExecutorEmail == userEmail))
+                //    return false;
+
+                var userSystem = await _context.users
+                        .Find<UserSystem>(userSystem => userSystem.current.email == userExecutorEmail).SingleOrDefaultAsync();
+                var newChanges = new List<User> { };
+                if (userSystem.changes != null)
+                {
+                    newChanges = userSystem.changes.ToList();
+                }
+
+                newChanges.Add(userSystem.current);
+
+                userSystem.changes = newChanges;
+                var newVersion = userSystem.current.version + 1;
+                userSystem.current = user;
+                var userExecutor = (await GetUserSystemByUserEmailAsync(userExecutorEmail)).current;
+                userSystem.current.created = new Created
+                {
+                    date = DateTime.Now,
+                    userInfo = new UserInfo
+                    {
+                        email = userExecutor.email,
+                        first_name = userExecutor.first_name,
+                        permission = userExecutor.permission,
+                        second_name = userExecutor.second_name,
+                        third_name = userExecutor.third_name,
+                        version = userExecutor.version,
+                        _id = userExecutor._id
+                    }
+                };
+                userSystem.current.version = newVersion;
+
+                ReplaceOneResult actionResult
+                    = await _context.users
+                                    .ReplaceOneAsync(u => u.current.email == userExecutorEmail
+                                            , userSystem
+                                            , new UpdateOptions { IsUpsert = true });
+                return actionResult.IsAcknowledged
+                    && actionResult.ModifiedCount > 0;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

@@ -52,14 +52,25 @@ namespace court_register.Controllers
         }
 
         [HttpPut]
+        [Route("api/user")]
+        public async Task<bool> UpdateUserAsync([FromBody]User user)
+        {
+            string _userExecutorEmail = null;
+            _userExecutorEmail = GetCurrentUserEmail();
+
+            var userSystemResult = await _userRepositoryService.UpdateUserSystemByUserEmailAsync(_userExecutorEmail, user);
+            return userSystemResult;
+        }
+
+        [HttpPut]
         [Route("api/user/{userEmail}")]
         public async Task<bool> UpdateUserByUserEmailAsync(string userEmail, User user)
         {
             string _userExecutorEmail = null;
             _userExecutorEmail = GetCurrentUserEmail();
 
-            var userSystem = await _userRepositoryService.UpdateUserSystemByUserEmailAsync(_userExecutorEmail, userEmail, user);
-            return true;
+            var userSystemResult = await _userRepositoryService.UpdateUserSystemByUserEmailAsync(_userExecutorEmail, userEmail, user);
+            return userSystemResult;
         }
 
         [HttpGet]
