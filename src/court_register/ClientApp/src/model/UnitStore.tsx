@@ -21,8 +21,6 @@ export class UnitStore {
     }
 
     @action.bound async createUnit(unit: MyClasses.Unit) {
-        console.log(unit);
-        debugger
         this.loading = true;
 
         let response = await fetch(`api/unit`, {

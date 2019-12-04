@@ -14,11 +14,15 @@ import './custom.css'
 import SettingsBlock from './components/settings/SettingsBlock';
 import Units from './components/settings/units/Units';
 import NewUnitContainer from './components/settings/units/NewUnitContainer';
+import CasesBlock from './components/cases/CasesBlock';
+import NewCaseContainer from './components/cases/NewCaseContainer';
 
 export default () => (
     <ConnectedRouter history={history}>
         <Layout>
             <Route exact path='/' component={Home} />
+            <Route exact path='/cases/:filter1?:filter2?' component={CasesBlock} />
+            <Route exact path='/case' component={NewCaseContainer} />
 
             <Route path='/settings' component={SettingsBlock} />
 

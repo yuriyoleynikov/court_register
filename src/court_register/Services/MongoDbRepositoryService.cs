@@ -331,5 +331,78 @@ namespace court_register.Services
                 throw ex;
             }
         }
+
+        public async Task<IEnumerable<Case>> GetCasesAsync(string userExecutorEmail)
+        {
+            try
+            {
+                await CheckCurrentUserIsExistAsync(userExecutorEmail);
+
+                var isActive = await GetCurrentUserIsActiveAsync(userExecutorEmail);
+                if (!isActive)
+                    return null;
+
+                var caseSystemList = await _context.cases
+                        .Find(unitSystem => true).ToListAsync();
+
+                var caseList = caseSystemList.Select(caseSystem => caseSystem.current);
+
+                return caseList;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task AddCaseAsync(string userExecutorEmail, Case @case)
+        {
+            try
+            {
+                await CheckCurrentUserIsExistAsync(userExecutorEmail);
+
+                var isActive = await GetCurrentUserIsActiveAsync(userExecutorEmail);
+                if (!isActive)
+                    return;
+
+                var isAdmin = await GetCurrentUserIsAdminAsync(userExecutorEmail);
+                if (!(isAdmin))
+                    return;
+
+                var newCaseSystem = new CaseSystem();
+                var newId = 0;
+                if (await _context.cases.Find<CaseSystem>(_ => true).AnyAsync())
+                {
+                    var caseSystemList = await _context.cases.Find<CaseSystem>(_ => true).ToListAsync();
+                    newId = caseSystemList.Max(us => us.current._id ?? 0) + 1;
+                }
+                var userExecutor = (await GetUserSystemByUserEmailAsync(userExecutorEmail)).current;
+
+                newCaseSystem.current = @case;
+                newCaseSystem.current._id = newId;
+                newCaseSystem.current.version = 0;
+                newCaseSystem.current.created = new Created
+                {
+                    date = DateTime.Now,
+                    userInfo = new UserInfo
+                    {
+                        email = userExecutor.email,
+                        first_name = userExecutor.first_name,
+                        second_name = userExecutor.second_name,
+                        third_name = userExecutor.third_name,
+                        version = userExecutor.version,
+                        _id = userExecutor._id,
+                        permission = userExecutor.permission
+                    }
+                };
+                newCaseSystem.current.deleted = false;
+
+                await _context.cases.InsertOneAsync(newCaseSystem);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

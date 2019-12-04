@@ -1,5 +1,8 @@
 import { observable, action, computed } from "mobx";
 import * as MyClasses from './MyClasses';
+import { store } from "../store2";
+import { Admin } from "./Admin";
+import { UnitStore } from "./UnitStore";
 declare var window: any;
 
 const loadAuth2 = () => {
@@ -15,7 +18,6 @@ const getUserPermissions = async () => {
             Authorization: 'Bearer ' + window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
         }
     });
-
     let data = await response.json();
     return data;
 }
@@ -30,11 +32,9 @@ export class Auth {
             return;
 
         await loadAuth2();
-
         await window.gapi.auth2.init({
             client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID
         });
-
         console.log('init ok');
         this.downloadedAuth2 = true;
         this.getUser();
@@ -53,14 +53,10 @@ export class Auth {
     @computed get isSignedIn() { return !!this.user }
 
     @action.bound async signIn() {
-
-
         let googleAuth = window.gapi.auth2.getAuthInstance();
-
         await googleAuth.signIn({
             scope: 'profile email'
         });
-
         await this.getUser();
     }
 
@@ -69,6 +65,8 @@ export class Auth {
         this.loading = true;
         await googleAuth.signOut();
         this.user = null;
+        store.admin = new Admin();
+        store.units = new UnitStore();
         this.loading = false;
     }
 }

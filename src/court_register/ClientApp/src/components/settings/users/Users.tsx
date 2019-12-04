@@ -17,7 +17,7 @@ const $btn = 'f6 link dim bn br2 ph3 pv2 mr2 dib white bg-dark-blue';
 const Users = (props: UsersProps) => {
     React.useEffect(() => { props.loadUsers(); console.log('loadUsers ok'); }, [])
     const showUser = (email: string | null) => {
-        console.log('showUser ok' + email);
+        console.log('showUser ok ' + email);
     }
     if (props.loading) {
         return <div>
@@ -39,7 +39,7 @@ const Users = (props: UsersProps) => {
                 <tbody>
                     {props.users ?
                         props.users.map((user: MyClasses.User) =>
-                            <tr key={user._id ? user._id : undefined}>
+                            <tr /*key={user._id ? user._id : undefined}*/>
                                 <td>{user._id}</td>
                                 <td>{user.email}</td>
                                 <td>{user.first_name}</td>

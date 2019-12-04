@@ -7,6 +7,7 @@ import AdminLink from './AdminLink';
 import { store } from '../store2'
 import { observer, Observer } from 'mobx-react';
 import Settings from './settings/Settings';
+import CaseLink from './CaseLink';
 
 export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }> {
     public state = {
@@ -23,7 +24,8 @@ export default class NavMenu extends React.PureComponent<{}, { isOpen: boolean }
                         <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={this.state.isOpen} navbar>
                             <ul className="navbar-nav flex-grow">
                                 <Observer>
-                                    {() => <div>{store.auth.isSignedIn ? <Settings /> : null}</div>}
+                                    {() => <div>{store.auth.isSignedIn ? <div><Settings />
+                                        <CaseLink/></div>: null}</div>}
                                 </Observer>
                                 <Auth />
                             </ul>

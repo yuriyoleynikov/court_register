@@ -16,10 +16,10 @@ namespace court_register.Models
     }
     public class Case
     {
-        public int version { get; set; }
-        public int id { get; set; }
-        public string reg_number { get; set; }
-        public string case_number { get; set; }
+        public int? version { get; set; }
+        public int? _id { get; set; }
+        public string? reg_number { get; set; }
+        public string? case_number { get; set; }
         public CourtSystem court { get; set; }
         public TypeRoleCase type_role_case { get; set; }
         public CaseCategory case_category { get; set; }
@@ -27,7 +27,7 @@ namespace court_register.Models
         public ExecutorSystem executor { get; set; }
         public List<StatusSystem> state { get; set; }
         
-        public bool deleted { get; set; } = false;
+        public bool? deleted { get; set; } = false;
         public Created created { get; set; }
     }
     public class CourtSystem
