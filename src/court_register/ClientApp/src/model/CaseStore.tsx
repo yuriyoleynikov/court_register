@@ -1,17 +1,19 @@
 import { observable, action, computed } from "mobx"
 import * as MyClasses from "./MyClasses";
-
+import * as queryString from 'query-string'
 declare var window: any;
 
 export class CaseStore {
     @observable cases: MyClasses.Case[] | null = null;
     @observable loading = false;
-    @observable filter1: string | null = null;
-    @observable filter2: string | null = null;
 
-    @action.bound async loadCases(filter1: string | null, filter2: string | null) {
+    @action.bound async loadCases() {
         this.loading = true;
-        let response = await fetch(`api/cases/?filter1=${filter1}&filter2=${filter2}`, {
+
+        let parsed = queryString.parse(window.location.search);
+        let url = Object.keys(parsed).length == 0 ? `api/cases` : `api/cases/?${queryString.stringify(parsed)}`;
+
+        let response = await fetch(url, {
             credentials: 'include',
             headers: {
                 Authorization: 'Bearer ' + window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token

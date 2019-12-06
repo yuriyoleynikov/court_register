@@ -404,5 +404,30 @@ namespace court_register.Services
                 throw ex;
             }
         }
+        public async Task<SettingsCase> GetSettingsCaseAsync(string userExecutorEmail)
+        {
+            try
+            {
+                await CheckCurrentUserIsExistAsync(userExecutorEmail);
+
+                var isActive = await GetCurrentUserIsActiveAsync(userExecutorEmail);
+                if (!isActive)
+                    return null;
+
+                var settingsCase = new SettingsCase();
+
+                var unitSystemList = await _context.units
+                        .Find(unitSystem => true).ToListAsync();
+
+                var unitList = unitSystemList.Select(caseSystem => caseSystem.current.name);
+                settingsCase.units = unitList;
+
+                return settingsCase;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

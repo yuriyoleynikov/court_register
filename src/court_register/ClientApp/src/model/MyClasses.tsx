@@ -1,5 +1,9 @@
 import { observable } from "mobx"
 
+export class SettingsCase {
+    @observable units: string[] | null = null;
+}
+
 export class User {
     @observable version: number | null = null;
     @observable _id: number | null = null;

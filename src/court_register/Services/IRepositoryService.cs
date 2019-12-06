@@ -18,6 +18,7 @@ namespace court_register.Services
         Task AddUnitAsync(string userExecutorEmail, Unit unit);
 
         Task<IEnumerable<Case>> GetCasesAsync(string userExecutorEmail);
+        Task<SettingsCase> GetSettingsCaseAsync(string userExecutorEmail);
         Task AddCaseAsync(string userExecutorEmail, Case unit);
     }
 }

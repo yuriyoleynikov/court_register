@@ -11,18 +11,14 @@ import { Link } from 'react-router-dom';
 type CasesProps = {
     cases: MyClasses.Case[] | null;
     loading: boolean;
-    loadCases(filter1: string | null, filter2: string | null): void;
+    loadCases(): void;
     addCase(newCase: MyClasses.Case): void;
-    filter1: string | null;
-    filter2: string | null;
-    //activateUser(email: string | null): void;
-    //deactivateUser(email: string | null): void;
 }
 
 const $btn = 'f6 link dim bn br2 ph3 pv2 mr2 dib white bg-dark-blue';
 
 const Cases = (props: CasesProps) => {
-    React.useEffect(() => { props.loadCases(props.filter1, props.filter2) }, [])
+    React.useEffect(() => { props.loadCases() }, [])
     //const showUser = (email: string | null) => {
     //    console.log('showUser ok ' + email);
     //}
@@ -55,6 +51,7 @@ const Cases = (props: CasesProps) => {
                                 <td>{index++}</td>
                                 <td>{user.reg_number}</td>
                                 <td>{user.court}</td>
+                                <td>{user.case_number}</td>
                             </tr>
                         ) : null}
                 </tbody>
@@ -66,11 +63,9 @@ const Cases = (props: CasesProps) => {
     );
 };
 
-export default observer((props:any) => <Cases
+export default observer((props: CasesProps) => <Cases
     cases={store.case.cases}
     loading={store.case.loading}
     loadCases={store.case.loadCases}
     addCase={store.case.createCase}
-    filter1={props.filter1}
-    filter2={props.filter2}
 />);

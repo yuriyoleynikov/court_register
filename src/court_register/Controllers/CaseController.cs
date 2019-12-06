@@ -33,6 +33,17 @@ namespace court_register.Controllers
             return caseList;
         }
 
+        [HttpGet]
+        [Route("api/case/settings")]
+        public async Task<SettingsCase> GetSettingsCaseAsync()
+        {
+            string _userExecutorEmail = null;
+            _userExecutorEmail = GetCurrentUserEmail();
+
+            var settingsCase = await _repositoryService.GetSettingsCaseAsync(_userExecutorEmail);
+            return settingsCase;
+        }
+
         [HttpPost]
         [Route("api/case")]
         public async Task<bool> AddCaseAsync([FromBody]Case @case)

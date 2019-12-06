@@ -30,6 +30,16 @@ namespace court_register.Models
         public bool? deleted { get; set; } = false;
         public Created created { get; set; }
     }
+    public class SettingsCase
+    {
+        //public CourtSystem court { get; set; }
+        //public TypeRoleCase type_role_case { get; set; }
+        //public CaseCategory case_category { get; set; }
+        public IEnumerable<string> units { get; set; }
+        //public ExecutorSystem executor { get; set; }
+        //public List<StatusSystem> state { get; set; }
+    }
+
     public class CourtSystem
     {
         [BsonId]

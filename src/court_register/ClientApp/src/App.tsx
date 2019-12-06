@@ -8,9 +8,11 @@ import Counter from './components/Counter';
 import FetchData from './components/FetchData';
 import { ConnectedRouter } from 'connected-react-router';
 import { history } from "./router";
-import "tachyons";
 
+import "tachyons";
 import './custom.css'
+import 'react-widgets/dist/css/react-widgets.css';
+
 import SettingsBlock from './components/settings/SettingsBlock';
 import Units from './components/settings/units/Units';
 import NewUnitContainer from './components/settings/units/NewUnitContainer';
@@ -21,7 +23,7 @@ export default () => (
     <ConnectedRouter history={history}>
         <Layout>
             <Route exact path='/' component={Home} />
-            <Route exact path='/cases/:filter1?:filter2?' component={CasesBlock} />
+            <Route exact path='/cases' component={CasesBlock} />
             <Route exact path='/case' component={NewCaseContainer} />
 
             <Route path='/settings' component={SettingsBlock} />

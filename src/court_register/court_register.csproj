@@ -23,8 +23,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="ClientApp\src\components\inputs\SimpleInput.js" />
+    <None Remove="ClientApp\src\components\inputs\WidgetDropdownList.js" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\components\inputs\WidgetDropdownList.js" />
     <TypeScriptCompile Include="ClientApp\src\components\inputs\SimpleInput.js" />
   </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
