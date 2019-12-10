@@ -12,8 +12,8 @@ const plugins = {
 const fields = [
     {
         name: "name",
-        label: "Name",
-        placeholder: "Insert Name",
+        label: "name",
+        placeholder: "name",
         rules: "required|string"
     },
     {

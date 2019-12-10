@@ -3,7 +3,6 @@ using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace court_register.Models
 {
@@ -20,26 +19,25 @@ namespace court_register.Models
         public int? _id { get; set; }
         public string? reg_number { get; set; }
         public string? case_number { get; set; }
-        public CourtSystem court { get; set; }
+        public Court court { get; set; }
         public TypeRoleCase type_role_case { get; set; }
         public CaseCategory case_category { get; set; }
-        public UnitSystem unit { get; set; }
-        public ExecutorSystem executor { get; set; }
-        public List<StatusSystem> state { get; set; }
+        public Unit unit { get; set; }
+        public Executor executor { get; set; }
+        public List<Status> state { get; set; }
         
         public bool? deleted { get; set; } = false;
         public Created created { get; set; }
     }
     public class SettingsCase
     {
-        //public CourtSystem court { get; set; }
+        public IEnumerable<Court>  courts { get; set; }
         //public TypeRoleCase type_role_case { get; set; }
         //public CaseCategory case_category { get; set; }
-        public IEnumerable<string> units { get; set; }
+        public IEnumerable<Unit> units { get; set; }
         //public ExecutorSystem executor { get; set; }
         //public List<StatusSystem> state { get; set; }
     }
-
     public class CourtSystem
     {
         [BsonId]
@@ -49,12 +47,12 @@ namespace court_register.Models
     }
     public class Court
     {
-        public int version { get; set; }
-        public int id { get; set; }
-        public string name { get; set; }
-        public string full_name { get; set; }
-        public string adress { get; set; }
-        public bool deleted { get; set; } = false;
+        public int? version { get; set; }
+        public int? id { get; set; }
+        public string? name { get; set; }
+        public string? full_name { get; set; }
+        public string? adress { get; set; }
+        public bool? deleted { get; set; } = false;
         public Created created { get; set; }
     }
     public class TypeRoleCaseSystem
@@ -128,14 +126,13 @@ namespace court_register.Models
     public class Status
     {
         public int version { get; set; }
-        public int id { get; set; }
+        public int _id { get; set; }
         public string name { get; set; }
         public string short_sign { get; set; }
         public bool deleted { get; set; } = false;
         public Created created { get; set; }
 
-    }
-    
+    }    
     public class UnitSystem
     {
         [BsonId]

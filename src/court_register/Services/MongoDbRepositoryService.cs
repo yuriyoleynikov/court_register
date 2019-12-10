@@ -416,11 +416,21 @@ namespace court_register.Services
 
                 var settingsCase = new SettingsCase();
 
+
                 var unitSystemList = await _context.units
                         .Find(unitSystem => true).ToListAsync();
+                var unitList = unitSystemList
+                    .Where(unitSystem => !(unitSystem.current.deleted ?? false))
+                    .Select(unitSystem => unitSystem.current);
+                settingsCase.units = unitList.ToList();
 
-                var unitList = unitSystemList.Select(caseSystem => caseSystem.current.name);
-                settingsCase.units = unitList;
+
+                var courtSystemList = await _context.courts
+                        .Find(courtSystem => true).ToListAsync();
+                var courtList = courtSystemList
+                    .Where(courtSystem => !(courtSystem.current.deleted ?? false))
+                    .Select(courtSystem => courtSystem.current);
+                settingsCase.courts = courtList.ToList();
 
                 return settingsCase;
             }

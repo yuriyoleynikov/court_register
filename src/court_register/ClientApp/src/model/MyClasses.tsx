@@ -1,7 +1,8 @@
 import { observable } from "mobx"
 
 export class SettingsCase {
-    @observable units: string[] | null = null;
+    @observable units: Unit[] | null = null;
+    @observable courts: Court[] | null = null;
 }
 
 export class User {

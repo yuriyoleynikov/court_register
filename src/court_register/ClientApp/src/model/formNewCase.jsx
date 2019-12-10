@@ -26,7 +26,13 @@ const fields = [
         name: "unit",
         label: "unit",
         placeholder: "unit",
-        extra: []
+        extra: null
+    },
+    {
+        name: "court",
+        label: "court",
+        placeholder: "court",
+        extra: null
     }
 ];
 
@@ -35,7 +41,9 @@ const hooks = {
         let newCase = new MyClasses.Case();
         newCase.reg_number = form.values().reg_number;
         newCase.case_number = form.values().case_number;
-        newCase.unit = form.values().unit;
+        newCase.unit = store.new_case.settingsCase.units.find(u => u.name == form.values().unit);
+        newCase.court = store.new_case.settingsCase.courts.find(u => u.name == form.values().court);
+        
         store.case.createCase(newCase);
     },
     onError(form) {

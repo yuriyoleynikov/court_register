@@ -36,8 +36,8 @@ export class Auth {
             client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID
         });
         console.log('init ok');
-        this.downloadedAuth2 = true;
-        this.getUser();
+        await this.getUser();
+        this.downloadedAuth2 = true;        
     }
 
     @action.bound async getUser() {

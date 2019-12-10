@@ -11,6 +11,7 @@ export default observer(({ field }) => (
             {field.label}
         </label>
         <DropdownList
+            filter
             id={field.id}
             value={field.value}
             onChange={field.sync}

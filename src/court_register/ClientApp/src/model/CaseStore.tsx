@@ -9,7 +9,6 @@ export class CaseStore {
 
     @action.bound async loadCases() {
         this.loading = true;
-
         let parsed = queryString.parse(window.location.search);
         let url = Object.keys(parsed).length == 0 ? `api/cases` : `api/cases/?${queryString.stringify(parsed)}`;
 
@@ -19,14 +18,12 @@ export class CaseStore {
                 Authorization: 'Bearer ' + window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
             }
         });
-
         this.cases = await response.json();
         this.loading = false;
     }
 
     @action.bound async createCase(currentCase: MyClasses.Case) {
         this.loading = true;
-
         let response = await fetch(`api/case`, {
             method: 'POST',
             body: JSON.stringify(currentCase),

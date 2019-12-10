@@ -49,9 +49,14 @@ const Cases = (props: CasesProps) => {
                         props.cases.map((user: MyClasses.Case, index: number = 1) =>
                             <tr key={user._id ? user._id : 0}>
                                 <td>{index++}</td>
-                                <td>{user.reg_number}</td>
+                                <td>{user.reg_number}</td>                                
                                 <td>{user.court}</td>
                                 <td>{user.case_number}</td>
+                                <td>{user.case_category ? user.case_category.name : null}</td>
+                                <td>{user.type_role_case ? user.type_role_case.name : null}</td>
+                                <td>{user.unit ? user.unit.name : null}</td>
+                                <td>{user.executor ? user.executor.first_name : null}</td>
+                                <td>{user.state ? user.state.length : null}</td>
                             </tr>
                         ) : null}
                 </tbody>
@@ -63,7 +68,7 @@ const Cases = (props: CasesProps) => {
     );
 };
 
-export default observer((props: CasesProps) => <Cases
+export default observer(() => <Cases
     cases={store.case.cases}
     loading={store.case.loading}
     loadCases={store.case.loadCases}

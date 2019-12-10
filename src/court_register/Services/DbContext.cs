@@ -43,5 +43,13 @@ namespace court_register.Services
                 return _database.GetCollection<CaseSystem>("cases");
             }
         }
+
+        public IMongoCollection<CourtSystem> courts
+        {
+            get
+            {
+                return _database.GetCollection<CourtSystem>("courts");
+            }
+        }
     }
 }
