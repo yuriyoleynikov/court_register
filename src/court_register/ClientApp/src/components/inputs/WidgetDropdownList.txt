@@ -1,6 +1,5 @@
-import React from 'react';
+import * as React from 'react';
 import { observer } from 'mobx-react';
-import { DropdownList } from 'react-widgets';
 
 export default observer(({ field }) => (
     <div className="measure">

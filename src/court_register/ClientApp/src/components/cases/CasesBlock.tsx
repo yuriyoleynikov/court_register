@@ -1,35 +1,30 @@
 ﻿import * as React from 'react';
 import { observer } from 'mobx-react';
+import { Link, NavLink } from 'react-router-dom';
 
-import { store } from '../../store2';
-import * as MyClasses from '../../model/MyClasses';
-import Loading from '../../Loading';
+import { store } from '../../store';
+import { Case } from '../../models/MyClasses';
+import Loading from '../../components/Loading';
 import NotCases from './NotCases';
-import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
-import { Link } from 'react-router-dom';
 
 type CasesProps = {
-    cases: MyClasses.Case[] | null;
+    cases: Case[] | null;
     loading: boolean;
     loadCases(): void;
-    addCase(newCase: MyClasses.Case): void;
+    addCase(newCase: Case): void;
 }
 
-const $btn = 'f6 link dim bn br2 ph3 pv2 mr2 dib white bg-dark-blue';
-
 const Cases = (props: CasesProps) => {
-    React.useEffect(() => { props.loadCases() }, [])
-    //const showUser = (email: string | null) => {
-    //    console.log('showUser ok ' + email);
-    //}
+    React.useEffect(() => {
+        props.loadCases()
+    }, [])
+
     if (props.loading) {
-        return <div>
-            <Loading />
-        </div>;
+        return <Loading />;
     }
     return (
         <div>
-            <NavLink tag={Link} className={$btn} to="/case">Добавить дело</NavLink>
+            <NavLink to="/case">Добавить дело</NavLink>
             <table className='table table-striped' aria-labelledby="tabelLabel">
                 <thead>
                     <tr>
@@ -46,10 +41,10 @@ const Cases = (props: CasesProps) => {
                 </thead>
                 <tbody>
                     {props.cases ?
-                        props.cases.map((user: MyClasses.Case, index: number = 1) =>
+                        props.cases.map((user: Case, index: number = 1) =>
                             <tr key={user._id ? user._id : 0}>
                                 <td>{index++}</td>
-                                <td>{user.reg_number}</td>                                
+                                <td>{user.reg_number}</td>
                                 <td>{user.court}</td>
                                 <td>{user.case_number}</td>
                                 <td>{user.case_category ? user.case_category.name : null}</td>

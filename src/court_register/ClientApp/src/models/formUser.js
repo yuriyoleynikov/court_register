@@ -1,9 +1,9 @@
 import MobxReactForm from "mobx-react-form";
 import dvr from "mobx-react-form/lib/validators/DVR";
 import validatorjs from "validatorjs";
-import { store } from '../../src/store2';
-import { observable } from "mobx";
-import * as MyClasses from '../model/MyClasses'
+
+import { store } from './../store';
+import * as MyClasses from './MyClasses'
 
 const plugins = {
     dvr: dvr(validatorjs)
@@ -28,18 +28,6 @@ const fields = [
         placeholder: "third_name",
         rules: "required|string"    
     }
-    //{
-    //    name: "password",
-    //    label: "Password",
-    //    placeholder: "Insert Password",
-    //    rules: "required|string|between:5,25"
-    //},
-    //{
-    //    name: "passwordConfirm",
-    //    label: "Password Confirmation",
-    //    placeholder: "Confirm Password",
-    //    rules: "required|string|same:password"
-    //}
 ];
 
 const hooks = {
@@ -66,6 +54,4 @@ const hooks = {
     }
 };
 
-const formUser = new MobxReactForm({ fields }, { plugins, hooks });
-window.formUser = formUser;
-export default formUser;
+export default new MobxReactForm({ fields }, { plugins, hooks });

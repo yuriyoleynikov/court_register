@@ -1,8 +1,7 @@
 import MobxReactForm from "mobx-react-form";
 import dvr from "mobx-react-form/lib/validators/DVR";
 import validatorjs from "validatorjs";
-import { store } from '../store2';
-import { observable } from "mobx";
+import { store } from './../store';
 import * as MyClasses from './MyClasses'
 
 const plugins = {
@@ -26,13 +25,13 @@ const fields = [
         name: "unit",
         label: "unit",
         placeholder: "unit",
-        extra: null
+        extra: []
     },
     {
         name: "court",
         label: "court",
         placeholder: "court",
-        extra: null
+        extra: []
     }
 ];
 
@@ -53,6 +52,4 @@ const hooks = {
     }
 };
 
-const formNewCase = new MobxReactForm({ fields }, { plugins, hooks });
-window.formNewCase = formNewCase;
-export default formNewCase;
+export default new MobxReactForm({ fields }, { plugins, hooks });

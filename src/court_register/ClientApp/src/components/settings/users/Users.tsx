@@ -1,12 +1,12 @@
 ﻿import * as React from 'react';
 import { observer } from 'mobx-react';
 
-import { store } from '../../../store2'
-import * as MyClasses from '../../../model/MyClasses';
-import Loading from '../../../Loading';
+import { store } from '../../../store'
+import { User } from '../../../models/MyClasses';
+import Loading from '../../../components/Loading';
 
 type UsersProps = {
-    users: MyClasses.User[] | null;
+    users: User[] | null;
     loading: boolean;
     loadUsers(): void;
     activateUser(email: string | null): void;
@@ -14,15 +14,12 @@ type UsersProps = {
 }
 
 const $btn = 'f6 link dim bn br2 ph3 pv2 mr2 dib white bg-dark-blue';
+
 const Users = (props: UsersProps) => {
-    React.useEffect(() => { props.loadUsers(); console.log('loadUsers ok'); }, [])
-    const showUser = (email: string | null) => {
-        console.log('showUser ok ' + email);
-    }
+    React.useEffect(() => { props.loadUsers(); console.log('loadUsers()'); }, [])
+
     if (props.loading) {
-        return <div>
-            <Loading />
-        </div>;
+        return <Loading />;
     }
     return (
         <div>
@@ -38,7 +35,7 @@ const Users = (props: UsersProps) => {
                 </thead>
                 <tbody>
                     {props.users ?
-                        props.users.map((user: MyClasses.User) =>
+                        props.users.map((user: User) =>
                             <tr /*key={user._id ? user._id : undefined}*/>
                                 <td>{user._id}</td>
                                 <td>{user.email}</td>
@@ -49,7 +46,7 @@ const Users = (props: UsersProps) => {
                                     <button type="button"
                                         //className="btn btn-primary btn-lg"
                                         className={$btn}
-                                        onClick={() => { showUser(user.email) }}>
+                                        onClick={() => { }}>
                                         Открыть
                                         </button>
                                 </td>

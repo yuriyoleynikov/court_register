@@ -1,8 +1,10 @@
 import { observable, action, computed } from "mobx";
-import * as MyClasses from './MyClasses';
-import { store } from "../store2";
+
+import { User } from './MyClasses';
+import { store } from "./../store";
 import { Admin } from "./Admin";
 import { UnitStore } from "./UnitStore";
+
 declare var window: any;
 
 const loadAuth2 = () => {
@@ -23,19 +25,18 @@ const getUserPermissions = async () => {
 }
 
 export class Auth {
-    @observable user: MyClasses.User | null = null;
+    @observable user: User | null = null;
     @observable loading = false;
     @observable downloadedAuth2 = false;
 
     @action.bound async loadAuth2() {
         if (this.downloadedAuth2)
-            return;
-
+            return;        
         await loadAuth2();
         await window.gapi.auth2.init({
             client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID
         });
-        console.log('init ok');
+        console.log('loadAuth2() in function');
         await this.getUser();
         this.downloadedAuth2 = true;        
     }

@@ -36,32 +36,4 @@ export class UnitStore {
         await response.json();
         this.loading = false;
     }
-
-    //@action.bound async activateUser(email: string) {
-    //    this.loading = true;
-    //    let response = await fetch(`api/user/activate/${email}`, {
-    //        credentials: 'include',
-    //        headers: {
-    //            Authorization: 'Bearer ' + window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
-    //        }
-    //    });
-
-    //    await response.json();
-    //    this.loadUsers();
-    //    this.loading = false;
-    //}
-
-    //@action.bound async deactivateUser(email: string) {
-    //    this.loading = true;
-    //    let response = await fetch(`api/user/deactivate/${email}`, {
-    //        credentials: 'include',
-    //        headers: {
-    //            Authorization: 'Bearer ' + window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
-    //        }
-    //    });
-
-    //    await response.json();
-    //    this.loadUsers();
-    //    this.loading = false;
-    //}
 }

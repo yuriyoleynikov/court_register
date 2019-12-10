@@ -1,7 +1,8 @@
 import * as React from 'react';
+
 import Profile from './Profile';
-import formUser from '../../../model/formUser';
-import { store } from '../../../store2';
+import formUser from '../../../models/formUser';
+import { store } from '../../../store';
 
 const ProfileContainer = () => {
     formUser.$('first_name').value = store.auth.user ? store.auth.user.first_name : null;

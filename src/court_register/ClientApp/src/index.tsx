@@ -1,20 +1,16 @@
-import 'bootstrap/dist/css/bootstrap.css';
-
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import configureStore from './store/configureStore';
-import AppContainer from './AppContainer';
+import { Provider } from 'mobx-react';
+
+import App from './App';
 import registerServiceWorker from './registerServiceWorker';
-import { history } from './router'
+import { store } from './store';
 
-// Get the application-wide store instance, prepopulating with state from the server where available.
-const store = configureStore(history);
 
-ReactDOM.render(
+ReactDOM.render((
     <Provider store={store}>
-        <AppContainer />
-    </Provider>,
-    document.getElementById('root'));
+        <App />
+    </Provider>
+), document.getElementById('root'));
 
 registerServiceWorker();

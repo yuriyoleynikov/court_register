@@ -1,8 +1,7 @@
 import MobxReactForm from "mobx-react-form";
 import dvr from "mobx-react-form/lib/validators/DVR";
 import validatorjs from "validatorjs";
-import { store } from '../store2';
-import { observable } from "mobx";
+import { store } from './../store';
 import * as MyClasses from './MyClasses'
 
 const plugins = {

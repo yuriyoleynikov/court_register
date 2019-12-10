@@ -1,31 +1,7 @@
-import { observable, action, computed } from "mobx"
+import { observable, action } from "mobx"
 import * as MyClasses from "./MyClasses";
 
 declare var window: any;
-
-//export class User {
-//    @observable name = '';
-//    @observable email = '';
-//    @observable permissions: any | null = null;
-//}
-
-//const loadAuth2 = () => {
-//    return new Promise<undefined>((resolve) => {
-//        window.gapi.load('auth2', () => resolve(undefined));
-//    })
-//}
-
-//const getUserPermissions = async (email:any) => {
-//    let response = await fetch(email != null ? `api/UserPermissions/{email}` : `api/UserPermissions`, {
-//        credentials: 'include',
-//        headers: {
-//            Authorization: 'Bearer ' + window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
-//        }
-//    });
-
-//    let data = await response.json();
-//    return data;
-//}
 
 export class Admin {
     @observable users: MyClasses.User[] | null = null;

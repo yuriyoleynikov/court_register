@@ -1,40 +1,47 @@
 import * as React from 'react';
+import { observer } from 'mobx-react';
 import { Route } from 'react-router';
-import Layout from './components/Layout';
+import { ConnectedRouter } from 'connected-react-router';
+
+import { history } from "./router";
+import { store } from './store'
+
+import Loading from './components/Loading';
 import Home from './components/Home';
+import Header from './components/Header';
+
 import ProfileContainer from './components/settings/profile/ProfileContainer';
 import Users from './components/settings/users/Users';
-import Counter from './components/Counter';
-import FetchData from './components/FetchData';
-import { ConnectedRouter } from 'connected-react-router';
-import { history } from "./router";
-
-import "tachyons";
-import './custom.css'
-import 'react-widgets/dist/css/react-widgets.css';
-
 import SettingsBlock from './components/settings/SettingsBlock';
 import Units from './components/settings/units/Units';
 import NewUnitContainer from './components/settings/units/NewUnitContainer';
+
 import CasesBlock from './components/cases/CasesBlock';
 import NewCaseContainer from './components/cases/NewCaseContainer';
 
-export default () => (
-    <ConnectedRouter history={history}>
-        <Layout>
-            <Route exact path='/' component={Home} />
-            <Route exact path='/cases' component={CasesBlock} />
-            <Route exact path='/case' component={NewCaseContainer} />
 
-            <Route path='/settings' component={SettingsBlock} />
+export default observer(() => {
+    React.useEffect(() => {
+        store.auth.loadAuth2();
+        console.log('loadAuth2() ok');
+    }, [])
 
-            <Route path='/settings/users' component={Users} />
-            <Route path='/settings/units' component={Units} />
-            <Route path='/settings/units/new' component={NewUnitContainer} />
-            <Route path='/settings/profile' component={ProfileContainer} />
+    if (!store.auth.downloadedAuth2)
+        return <Loading />;
 
-            <Route path='/counter' component={Counter} />
-            <Route path='/fetch-data/:startDateIndex?' component={FetchData} />
-        </Layout>
-    </ConnectedRouter>
-);
+    return (<ConnectedRouter history={history}>
+        <Header />
+        <Route exact path='/' component={Home} />
+
+        <Route exact path='/cases' component={CasesBlock} />
+        <Route exact path='/case' component={NewCaseContainer} />
+
+        <Route path='/settings' component={SettingsBlock} />
+
+        <Route path='/settings/users' component={Users} />
+        <Route path='/settings/units' component={Units} />
+        <Route path='/settings/units/new' component={NewUnitContainer} />
+
+        <Route path='/settings/profile' component={ProfileContainer} />
+    </ConnectedRouter>);
+});

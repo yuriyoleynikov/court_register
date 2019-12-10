@@ -1,6 +1,7 @@
-import { observable, action, computed } from "mobx"
+import { observable, action } from "mobx"
 import * as MyClasses from "./MyClasses";
 import * as queryString from 'query-string'
+
 declare var window: any;
 
 export class CaseStore {

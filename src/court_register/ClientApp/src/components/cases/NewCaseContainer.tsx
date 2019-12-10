@@ -1,10 +1,11 @@
 ﻿import * as React from 'react';
+
 import NewCase from './NewCase';
-import formNewCase from '../../model/formNewCase';
-import Loading from '../../Loading';
+import formNewCase from '../../models/formNewCase';
+import Loading from '../../components/Loading';
 import { observer } from 'mobx-react';
-import { store } from '../../store2';
-import { SettingsCase } from '../../model/MyClasses';
+import { store } from '../../store';
+import { SettingsCase } from '../../models/MyClasses';
 
 interface NewCaseContainerProps {
     settingsCase: SettingsCase;

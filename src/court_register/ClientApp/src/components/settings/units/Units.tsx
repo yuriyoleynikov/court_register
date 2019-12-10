@@ -1,19 +1,16 @@
 ﻿import * as React from 'react';
 import { observer } from 'mobx-react';
+import { Link, NavLink } from 'react-router-dom';
 
-import { store } from '../../../store2'
-import * as MyClasses from '../../../model/MyClasses';
-import Loading from '../../../Loading';
+import { store } from '../../../store'
+import { Unit } from '../../../models/MyClasses';
+import Loading from '../../../components/Loading';
 
-import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
-import { Link } from 'react-router-dom';
 
 type UnitsProps = {
-    units: MyClasses.Unit[] | null;
+    units: Unit[] | null;
     loading: boolean;
     loadUnits(): void;
-    //activateUser(email: string | null): void;
-    //deactivateUser(email: string | null): void;
 }
 
 const $btn = 'f6 link dim bn br2 ph3 pv2 mr2 dib white bg-dark-blue';
@@ -27,7 +24,7 @@ const Units = (props: UnitsProps) => {
     }
     return (
         <div>
-            <NavLink tag={Link} className="text-dark" to="/settings/units/new">- Создать новое подразделение</NavLink>
+            <NavLink className="text-dark" to="/settings/units/new">- Создать новое подразделение</NavLink>
             <table className='table table-striped' aria-labelledby="tabelLabel">
                 <thead>
                     <tr>
@@ -38,7 +35,7 @@ const Units = (props: UnitsProps) => {
                 </thead>
                 <tbody>
                     {props.units ?
-                        props.units.map((unit: MyClasses.Unit) =>
+                        props.units.map((unit: Unit) =>
                             <tr key={unit._id ? unit._id : undefined}>
                                 <td>{unit._id}</td>
                                 <td>{unit.name}</td>

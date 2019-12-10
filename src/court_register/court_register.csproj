@@ -22,12 +22,22 @@
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="ClientApp\src\components\inputs\SimpleInput.js" />
-    <None Remove="ClientApp\src\components\inputs\WidgetDropdownList.js" />
+    <None Remove="ClientApp\src\components\cases\NewCase.tsx" />
+    <None Remove="ClientApp\src\components\inputs\MaterialTextField.tsx" />
+    <None Remove="ClientApp\src\components\inputs\SimpleInput.txt" />
+    <None Remove="ClientApp\src\components\inputs\WidgetDropdownList.txt" />
+    <None Remove="ClientApp\src\models\formNewCase.js" />
+    <None Remove="ClientApp\src\models\formUnit.js" />
+    <None Remove="ClientApp\src\models\formUser.js" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\src\components\inputs\WidgetDropdownList.js" />
-    <TypeScriptCompile Include="ClientApp\src\components\inputs\SimpleInput.js" />
+    <TypeScriptCompile Include="ClientApp\src\components\cases\NewCase.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\inputs\MaterialTextField.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\inputs\WidgetDropdownList.txt" />
+    <TypeScriptCompile Include="ClientApp\src\components\inputs\SimpleInput.txt" />
+    <TypeScriptCompile Include="ClientApp\src\models\formNewCase.js" />
+    <TypeScriptCompile Include="ClientApp\src\models\formUnit.js" />
+    <TypeScriptCompile Include="ClientApp\src\models\formUser.js" />
   </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->
