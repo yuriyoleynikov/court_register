@@ -4,6 +4,8 @@ import { User } from './MyClasses';
 import { store } from "./../store";
 import { Admin } from "./Admin";
 import { UnitStore } from "./UnitStore";
+import { CaseStore } from "./CaseStore";
+import { NewCase } from "./NewCase";
 
 declare var window: any;
 
@@ -65,9 +67,13 @@ export class Auth {
         let googleAuth = window.gapi.auth2.getAuthInstance();
         this.loading = true;
         await googleAuth.signOut();
-        this.user = null;
-        store.admin = new Admin();
+
+        store.auth.user = null;
+        store.auth.loading = false;
+        store.auth.downloadedAuth2 = true;
         store.units = new UnitStore();
-        this.loading = false;
+        store.admin = new Admin();
+        store.case = new CaseStore();
+        store.new_case = new NewCase();
     }
 }

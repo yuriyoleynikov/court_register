@@ -21,7 +21,7 @@ export default observer(() => {
         return <Loading />
 
     return <div>
-        <div>Реестр судебных дел</div>
+        <div><NavLink className="text-dark" to="/">Реестр судебных дел</NavLink></div>
         {!store.auth.isSignedIn
             ? <div>
                 <button onClick={login}>Log in</button>
@@ -34,10 +34,10 @@ export default observer(() => {
         {store.auth.isSignedIn
             ?
             <div>
-                <Settings />
-                <CaseLink />
+                <div><Settings /></div>
+                <div><CaseLink /></div>
             </div>
             : null
-        }        
+        }
     </div>;
 });

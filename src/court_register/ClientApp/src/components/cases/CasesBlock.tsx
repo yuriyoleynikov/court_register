@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
 import { observer } from 'mobx-react';
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 import { store } from '../../store';
 import { Case } from '../../models/MyClasses';

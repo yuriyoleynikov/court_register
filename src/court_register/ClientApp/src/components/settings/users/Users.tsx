@@ -1,9 +1,11 @@
 ﻿import * as React from 'react';
 import { observer } from 'mobx-react';
+import { Redirect } from 'react-router';
 
 import { store } from '../../../store'
 import { User } from '../../../models/MyClasses';
 import Loading from '../../../components/Loading';
+
 
 type UsersProps = {
     users: User[] | null;
@@ -23,6 +25,7 @@ const Users = (props: UsersProps) => {
     }
     return (
         <div>
+            {store.auth.isSignedIn ? null: <Redirect to="/" />}
             <table className='table table-striped' aria-labelledby="tabelLabel">
                 <thead>
                     <tr>

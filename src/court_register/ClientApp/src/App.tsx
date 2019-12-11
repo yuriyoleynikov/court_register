@@ -1,13 +1,11 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { Route } from 'react-router';
-import { ConnectedRouter } from 'connected-react-router';
+import { Route, Redirect } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 
-import { history } from "./router";
 import { store } from './store'
 
 import Loading from './components/Loading';
-import Home from './components/Home';
 import Header from './components/Header';
 
 import ProfileContainer from './components/settings/profile/ProfileContainer';
@@ -29,9 +27,13 @@ export default observer(() => {
     if (!store.auth.downloadedAuth2)
         return <Loading />;
 
-    return (<ConnectedRouter history={history}>
+    return (<BrowserRouter>
         <Header />
-        <Route exact path='/' component={Home} />
+        {!store.auth.isSignedIn ? <Redirect to="/" /> : null}
+
+        <Route exact path="/">
+            {store.auth.isSignedIn ? <Redirect to="/cases" /> : null}
+        </Route>
 
         <Route exact path='/cases' component={CasesBlock} />
         <Route exact path='/case' component={NewCaseContainer} />
@@ -43,5 +45,5 @@ export default observer(() => {
         <Route path='/settings/units/new' component={NewUnitContainer} />
 
         <Route path='/settings/profile' component={ProfileContainer} />
-    </ConnectedRouter>);
+    </BrowserRouter>);
 });
