@@ -25,7 +25,6 @@ const Users = (props: UsersProps) => {
     }
     return (
         <div>
-            {store.auth.isSignedIn ? null: <Redirect to="/" />}
             <table className='table table-striped' aria-labelledby="tabelLabel">
                 <thead>
                     <tr>

@@ -29,6 +29,7 @@ export default observer(() => {
 
     return (<BrowserRouter>
         <Header />
+
         {!store.auth.isSignedIn ? <Redirect to="/" /> : null}
 
         <Route exact path="/">

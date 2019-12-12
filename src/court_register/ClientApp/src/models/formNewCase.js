@@ -42,8 +42,15 @@ const hooks = {
         newCase.case_number = form.values().case_number;
         newCase.unit = store.new_case.settingsCase.units.find(u => u.name == form.values().unit);
         newCase.court = store.new_case.settingsCase.courts.find(u => u.name == form.values().court);
-        
-        store.case.createCase(newCase);
+
+
+        form.values().reg_number = null;
+        form.values().case_number = null;
+        form.values().unit = null;
+        form.values().court = null;
+
+
+        store.case.createCase(newCase);        
     },
     onError(form) {
         alert("Form has errors!");
