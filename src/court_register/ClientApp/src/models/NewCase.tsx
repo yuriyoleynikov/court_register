@@ -1,10 +1,10 @@
 import { observable, action } from "mobx"
-import * as MyClasses from "./MyClasses";
+import { SettingsCase } from "./MyClasses";
 
 declare var window: any;
 
 export class NewCase {
-    @observable settingsCase: MyClasses.SettingsCase = new MyClasses.SettingsCase();
+    @observable settingsCase: SettingsCase = new SettingsCase();
     @observable loading: boolean = false;
 
     @action.bound async loadSettingsCase() {

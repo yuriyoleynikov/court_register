@@ -1,11 +1,11 @@
 import { observable, action } from "mobx"
-import * as MyClasses from "./MyClasses";
+import { Case } from "./MyClasses";
 import * as queryString from 'query-string'
 
 declare var window: any;
 
 export class CaseStore {
-    @observable cases: MyClasses.Case[] | null = null;
+    @observable cases: Case[] | null = null;
     @observable loading = false;
 
     @action.bound async loadCases() {
@@ -23,7 +23,7 @@ export class CaseStore {
         this.loading = false;
     }
 
-    @action.bound async createCase(currentCase: MyClasses.Case) {
+    @action.bound async createCase(currentCase: Case) {
         this.loading = true;
         let response = await fetch(`api/case`, {
             method: 'POST',

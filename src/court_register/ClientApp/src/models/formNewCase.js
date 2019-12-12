@@ -2,7 +2,7 @@ import MobxReactForm from "mobx-react-form";
 import dvr from "mobx-react-form/lib/validators/DVR";
 import validatorjs from "validatorjs";
 import { store } from './../store';
-import * as MyClasses from './MyClasses'
+import { Case } from './MyClasses'
 
 const plugins = {
     dvr: dvr(validatorjs)
@@ -25,32 +25,29 @@ const fields = [
         name: "unit",
         label: "unit",
         placeholder: "unit",
+        value: null,
         extra: []
     },
     {
         name: "court",
         label: "court",
         placeholder: "court",
+        value: null,
         extra: []
     }
 ];
 
 const hooks = {
     onSuccess(form) {
-        let newCase = new MyClasses.Case();
+        let newCase = new Case();
+
         newCase.reg_number = form.values().reg_number;
         newCase.case_number = form.values().case_number;
+
         newCase.unit = store.new_case.settingsCase.units.find(u => u.name == form.values().unit);
         newCase.court = store.new_case.settingsCase.courts.find(u => u.name == form.values().court);
-
-
-        form.values().reg_number = null;
-        form.values().case_number = null;
-        form.values().unit = null;
-        form.values().court = null;
-
-
-        store.case.createCase(newCase);        
+        
+        store.case.createCase(newCase);
     },
     onError(form) {
         alert("Form has errors!");

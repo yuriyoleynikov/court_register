@@ -10,12 +10,13 @@ export default observer(({
     validatingText = 'validating...',
 }) => (
         <div>
-            <Autocomplete                
+            <Autocomplete
                 options={field.extra}
                 //getOptionLabel={field.extra}
                 //style={{ width: 300 }}
                 id="debug"
                 debug
+                onChange={(event, value) => { field.value = value; }}
                 renderInput={params => (
                     <TextField {...params} label={field.label} margin="normal" fullWidth />
                 )}

@@ -332,6 +332,53 @@ namespace court_register.Services
             }
         }
 
+        public async Task AddCourtAsync(string userExecutorEmail, Court court)
+        {
+            try
+            {
+                await CheckCurrentUserIsExistAsync(userExecutorEmail);
+
+                var isActive = await GetCurrentUserIsActiveAsync(userExecutorEmail);
+                if (!isActive)
+                    return;
+
+                var newCourtSystem = new CourtSystem();
+                var newId = 0;
+                if (await _context.courts.Find<CourtSystem>(_ => true).AnyAsync())
+                {
+                    var courtSystemList = await _context.courts.Find<CourtSystem>(_ => true).ToListAsync();
+                    newId = courtSystemList.Max(us => us.current._id ?? 0) + 1;
+                }
+                var userExecutor = (await GetUserSystemByUserEmailAsync(userExecutorEmail)).current;
+
+                newCourtSystem.current = court;
+                newCourtSystem.current._id = newId;
+                newCourtSystem.current.version = 0;
+                newCourtSystem.current.created = new Created
+                {
+                    date = DateTime.Now,
+                    userInfo = new UserInfo
+                    {
+                        email = userExecutor.email,
+                        first_name = userExecutor.first_name,
+                        second_name = userExecutor.second_name,
+                        third_name = userExecutor.third_name,
+                        version = userExecutor.version,
+                        _id = userExecutor._id,
+                        permission = userExecutor.permission
+                    }
+                };
+                newCourtSystem.current.deleted = false;
+
+                await _context.courts.InsertOneAsync(newCourtSystem);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task<IEnumerable<Case>> GetCasesAsync(string userExecutorEmail)
         {
             try

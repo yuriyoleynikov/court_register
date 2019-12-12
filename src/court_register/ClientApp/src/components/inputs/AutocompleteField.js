@@ -21,6 +21,6 @@ exports.default = mobx_react_1.observer(function (_a) {
         React.createElement(Autocomplete_1.default, { options: field.extra, 
             //getOptionLabel={field.extra}
             //style={{ width: 300 }}
-            id: "debug", debug: true, renderInput: function (params) { return (React.createElement(TextField_1.default, __assign({}, params, { label: field.label, margin: "normal", fullWidth: true }))); } })));
+            id: "debug", debug: true, onChange: function (event, value) { field.value = value; }, renderInput: function (params) { return (React.createElement(TextField_1.default, __assign({}, params, { label: field.label, margin: "normal", fullWidth: true }))); } })));
 });
 //# sourceMappingURL=AutocompleteField.js.map

@@ -11,8 +11,8 @@ interface NewCaseContainerProps {
     settingsCase: SettingsCase;
     loading: boolean;
     loadSettingsCase(): void;
-    //openCourt: boolean;
-    //onClickNewCort(): void;
+    isOpenStatus: boolean;
+    toggle(): void;
 }
 
 const NewCaseContainer = (props: NewCaseContainerProps) => {
@@ -37,12 +37,14 @@ const NewCaseContainer = (props: NewCaseContainerProps) => {
     }
 
     return (<div>
-        <NewCase form={formNewCase} />
+        <NewCase form={formNewCase} toggle={props.toggle} isOpenStatus={props.isOpenStatus} />
     </div>);
 };
 
 export default observer(() => <NewCaseContainer
     settingsCase={store.new_case.settingsCase}
     loading={store.new_case.loading}
-    loadSettingsCase={store.new_case.loadSettingsCase}    
+    loadSettingsCase={store.new_case.loadSettingsCase}
+    toggle={store.court.toggle}
+    isOpenStatus={store.court.isOpenStatus}
 />);

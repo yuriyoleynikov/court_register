@@ -11,7 +11,6 @@ type CasesProps = {
     cases: Case[] | null;
     loading: boolean;
     loadCases(): void;
-    addCase(newCase: Case): void;
 }
 
 const Cases = (props: CasesProps) => {
@@ -45,7 +44,7 @@ const Cases = (props: CasesProps) => {
                             <tr key={user._id ? user._id : 0}>
                                 <td>{index++}</td>
                                 <td>{user.reg_number}</td>
-                                <td>{user.court}</td>
+                                <td>{user.court ? user.court.name : null}</td>
                                 <td>{user.case_number}</td>
                                 <td>{user.case_category ? user.case_category.name : null}</td>
                                 <td>{user.type_role_case ? user.type_role_case.name : null}</td>
@@ -67,5 +66,4 @@ export default observer(() => <Cases
     cases={store.case.cases}
     loading={store.case.loading}
     loadCases={store.case.loadCases}
-    addCase={store.case.createCase}
 />);
