@@ -3,6 +3,10 @@ import { observable } from "mobx"
 export class SettingsCase {
     @observable units: Unit[] | null = null;
     @observable courts: Court[] | null = null;
+    @observable type_roles: TypeRoleCase[] | null = null;
+    @observable category: Category[] | null = null;
+    @observable statuses: Status[] | null = null;
+    @observable executors: Executor[] | null = null;
 }
 
 export class User {
@@ -27,7 +31,7 @@ export class Permission {
 }
 
 export class Role {
-    @observable test_fild: string | null = null;
+    @observable _id: number | null = null;
 }
 
 export class Created {
@@ -67,8 +71,8 @@ export class Case {
     @observable case_number: string | undefined = undefined;
 
     @observable court: Court | null = null;
-    @observable type_role_case: TypeRoleCase | null = null;
-    @observable case_category: CaseCategory | null = null;
+    @observable type_role: TypeRoleCase | null = null;
+    @observable category: Category | null = null;
     @observable unit: Unit | null = null;
     @observable executor: Executor | null = null;
     @observable state: Status[] | null = null;
@@ -103,7 +107,7 @@ export class TypeRoleCase {
     @observable created: Created | null = null;
 }
 
-export class CaseCategory {
+export class Category {
     @observable version: number | null = null;
     @observable _id: number | null = null;
 
@@ -122,6 +126,7 @@ export class Executor {
     @observable first_name: string | null = null;
     @observable second_name: string | null = null;
     @observable third_name: string | null = null;
+    @observable full_name: string | null = null;
 
     @observable deleted: boolean | null = null;
 

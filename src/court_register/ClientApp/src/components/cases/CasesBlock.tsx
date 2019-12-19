@@ -40,17 +40,17 @@ const Cases = (props: CasesProps) => {
                 </thead>
                 <tbody>
                     {props.cases ?
-                        props.cases.map((user: Case, index: number = 1) =>
-                            <tr key={user._id ? user._id : 0}>
+                        props.cases.map((currentCase: Case, index: number = 1) =>
+                            <tr key={currentCase._id ? currentCase._id : 0}>
                                 <td>{index++}</td>
-                                <td>{user.reg_number}</td>
-                                <td>{user.court ? user.court.name : null}</td>
-                                <td>{user.case_number}</td>
-                                <td>{user.case_category ? user.case_category.name : null}</td>
-                                <td>{user.type_role_case ? user.type_role_case.name : null}</td>
-                                <td>{user.unit ? user.unit.name : null}</td>
-                                <td>{user.executor ? user.executor.first_name : null}</td>
-                                <td>{user.state ? user.state.length : null}</td>
+                                <td>{currentCase.reg_number}</td>
+                                <td>{currentCase.court ? currentCase.court.name : null}</td>
+                                <td>{currentCase.case_number}</td>
+                                <td>{currentCase.type_role ? currentCase.type_role.name : null}</td>
+                                <td>{currentCase.category ? currentCase.category.name : null}</td>                                
+                                <td>{currentCase.unit ? currentCase.unit.name : null}</td>
+                                <td>{currentCase.executor ? currentCase.executor.first_name : null}</td>
+                                <td>{currentCase.state ? currentCase.state.length : null}</td>
                             </tr>
                         ) : null}
                 </tbody>

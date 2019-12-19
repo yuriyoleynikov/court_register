@@ -390,9 +390,9 @@ namespace court_register.Services
                     return null;
 
                 var caseSystemList = await _context.cases
-                        .Find(unitSystem => true).ToListAsync();
+                        .Find(caseSystem => true).ToListAsync();
 
-                var caseList = caseSystemList.Select(caseSystem => caseSystem.current);
+                var caseList = caseSystemList.Select(caseSystem => caseSystem.current).ToList();
 
                 return caseList;
             }
@@ -443,6 +443,16 @@ namespace court_register.Services
                 };
                 newCaseSystem.current.deleted = false;
 
+                var typeRoleCaseSystem = await _context.roles_in_case
+                    .Find<TypeRoleCaseSystem>(_ => _.current.name == @case.type_role.name)
+                    .SingleOrDefaultAsync();
+                newCaseSystem.current.type_role = typeRoleCaseSystem.current;
+
+                var typeCategorySystem = await _context.category
+                    .Find<CategorySystem>(_ => _.current.name == @case.category.name)
+                    .SingleOrDefaultAsync();
+                newCaseSystem.current.category = typeCategorySystem.current;
+
                 await _context.cases.InsertOneAsync(newCaseSystem);
 
             }
@@ -451,6 +461,294 @@ namespace court_register.Services
                 throw ex;
             }
         }
+
+        private async Task CreateTypesRoleInCase(string userExecutorEmail)
+        {
+            try
+            {
+                var userExecutor = (await GetUserSystemByUserEmailAsync(userExecutorEmail)).current;
+
+
+                var typeRoleCaseSystemList = new List<TypeRoleCaseSystem>{
+                    new TypeRoleCaseSystem
+                    {
+                    current = new TypeRoleCase
+                    {
+                        _id = 0,
+                        created = new Created
+                        {
+                            date = DateTime.Now,
+                            userInfo = new UserInfo
+                            {
+                                email = userExecutor.email,
+                                first_name = userExecutor.first_name,
+                                second_name = userExecutor.second_name,
+                                third_name = userExecutor.third_name,
+                                version = userExecutor.version,
+                                _id = userExecutor._id,
+                                permission = userExecutor.permission
+                            }
+                        },
+                        name = "Истец",
+                        deleted = false,
+                        full_name = null,
+                        version = 0
+                    },
+                    changes = null
+                },
+                    new TypeRoleCaseSystem
+                    {
+                    current = new TypeRoleCase
+                    {
+                        _id = 1,
+                        created = new Created
+                        {
+                            date = DateTime.Now,
+                            userInfo = new UserInfo
+                            {
+                                email = userExecutor.email,
+                                first_name = userExecutor.first_name,
+                                second_name = userExecutor.second_name,
+                                third_name = userExecutor.third_name,
+                                version = userExecutor.version,
+                                _id = userExecutor._id,
+                                permission = userExecutor.permission
+                            }
+                        },
+                        name = "Ответчик",
+                        deleted = false,
+                        full_name = null,
+                        version = 0
+                    },
+                    changes = null
+                },
+                    new TypeRoleCaseSystem
+                    {
+                    current = new TypeRoleCase
+                    {
+                        _id = 2,
+                        created = new Created
+                        {
+                            date = DateTime.Now,
+                            userInfo = new UserInfo
+                            {
+                                email = userExecutor.email,
+                                first_name = userExecutor.first_name,
+                                second_name = userExecutor.second_name,
+                                third_name = userExecutor.third_name,
+                                version = userExecutor.version,
+                                _id = userExecutor._id,
+                                permission = userExecutor.permission
+                            }
+                        },
+                        name = "Третье лицо",
+                        deleted = false,
+                        full_name = null,
+                        version = 0
+                    },
+                    changes = null
+                }
+                };
+
+                await _context.roles_in_case.InsertManyAsync(typeRoleCaseSystemList);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        private async Task CreateCategoryInCase(string userExecutorEmail)
+        {
+            try
+            {
+                var userExecutor = (await GetUserSystemByUserEmailAsync(userExecutorEmail)).current;
+
+                var typeCategorySystemList = new List<CategorySystem>{
+                    new CategorySystem
+                    {
+                    current = new Category
+                    {
+                        _id = 0,
+                        created = new Created
+                        {
+                            date = DateTime.Now,
+                            userInfo = new UserInfo
+                            {
+                                email = userExecutor.email,
+                                first_name = userExecutor.first_name,
+                                second_name = userExecutor.second_name,
+                                third_name = userExecutor.third_name,
+                                version = userExecutor.version,
+                                _id = userExecutor._id,
+                                permission = userExecutor.permission
+                            }
+                        },
+                        name = "Категория 1",
+                        deleted = false,
+                        full_name = null,
+                        version = 0
+                    },
+                    changes = null
+                },
+                    new CategorySystem
+                    {
+                    current = new Category
+                    {
+                        _id = 1,
+                        created = new Created
+                        {
+                            date = DateTime.Now,
+                            userInfo = new UserInfo
+                            {
+                                email = userExecutor.email,
+                                first_name = userExecutor.first_name,
+                                second_name = userExecutor.second_name,
+                                third_name = userExecutor.third_name,
+                                version = userExecutor.version,
+                                _id = userExecutor._id,
+                                permission = userExecutor.permission
+                            }
+                        },
+                        name = "Категория 2",
+                        deleted = false,
+                        full_name = null,
+                        version = 0
+                    },
+                    changes = null
+                },
+                    new CategorySystem
+                    {
+                    current = new Category
+                    {
+                        _id = 2,
+                        created = new Created
+                        {
+                            date = DateTime.Now,
+                            userInfo = new UserInfo
+                            {
+                                email = userExecutor.email,
+                                first_name = userExecutor.first_name,
+                                second_name = userExecutor.second_name,
+                                third_name = userExecutor.third_name,
+                                version = userExecutor.version,
+                                _id = userExecutor._id,
+                                permission = userExecutor.permission
+                            }
+                        },
+                        name = "Категория 3",
+                        deleted = false,
+                        full_name = null,
+                        version = 0
+                    },
+                    changes = null
+                }
+                };
+
+                await _context.category.InsertManyAsync(typeCategorySystemList);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        private async Task CreateStatusesInCase(string userExecutorEmail)
+        {
+            try
+            {
+                var userExecutor = (await GetUserSystemByUserEmailAsync(userExecutorEmail)).current;
+
+                var statusSystemList = new List<StatusSystem>{
+                    new StatusSystem
+                    {
+                    current = new Status
+                    {
+                        _id = 0,
+                        created = new Created
+                        {
+                            date = DateTime.Now,
+                            userInfo = new UserInfo
+                            {
+                                email = userExecutor.email,
+                                first_name = userExecutor.first_name,
+                                second_name = userExecutor.second_name,
+                                third_name = userExecutor.third_name,
+                                version = userExecutor.version,
+                                _id = userExecutor._id,
+                                permission = userExecutor.permission
+                            }
+                        },
+                        name = "В процессе",
+                        deleted = false,
+                        short_sign= "?",
+                        version = 0
+                    },
+                    changes = null
+                },
+                    new StatusSystem
+                    {
+                    current = new Status
+                    {
+                        _id = 1,
+                        created = new Created
+                        {
+                            date = DateTime.Now,
+                            userInfo = new UserInfo
+                            {
+                                email = userExecutor.email,
+                                first_name = userExecutor.first_name,
+                                second_name = userExecutor.second_name,
+                                third_name = userExecutor.third_name,
+                                version = userExecutor.version,
+                                _id = userExecutor._id,
+                                permission = userExecutor.permission
+                            }
+                        },
+                        name = "Отрицательно",
+                        deleted = false,
+                        short_sign= "-",
+                        version = 0
+                    },
+                    changes = null
+                },
+                    new StatusSystem
+                    {
+                    current = new Status
+                    {
+                        _id = 2,
+                        created = new Created
+                        {
+                            date = DateTime.Now,
+                            userInfo = new UserInfo
+                            {
+                                email = userExecutor.email,
+                                first_name = userExecutor.first_name,
+                                second_name = userExecutor.second_name,
+                                third_name = userExecutor.third_name,
+                                version = userExecutor.version,
+                                _id = userExecutor._id,
+                                permission = userExecutor.permission
+                            }
+                        },
+                        name = "Положительно",
+                        deleted = false,
+                        short_sign= "+",
+                        version = 0
+                    },
+                    changes = null
+                }
+                };
+
+                await _context.statuses.InsertManyAsync(statusSystemList);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task<SettingsCase> GetSettingsCaseAsync(string userExecutorEmail)
         {
             try
@@ -478,6 +776,40 @@ namespace court_register.Services
                     .Where(courtSystem => !(courtSystem.current.deleted ?? false))
                     .Select(courtSystem => courtSystem.current);
                 settingsCase.courts = courtList.ToList();
+
+                var roleInCaseSystemList = await _context.roles_in_case
+                        .Find(courtSystem => true).ToListAsync();
+                var roleInCaseList = roleInCaseSystemList
+                    .Select(roleInCaseSystem => roleInCaseSystem.current);
+                settingsCase.type_roles = roleInCaseList.ToList();
+
+                var categoryInCaseSystemList = await _context.category
+                        .Find(categorySystem => true).ToListAsync();
+                var categoryInCaseList = categoryInCaseSystemList
+                    .Select(categoryInCaseSystem => categoryInCaseSystem.current);
+                settingsCase.category = categoryInCaseList.ToList();
+
+                var statusSystemList = await _context.statuses
+                        .Find(statusSystem => true).ToListAsync();
+                var statusList = statusSystemList
+                    .Select(statusSystem => statusSystem.current);
+                settingsCase.statuses = statusList.ToList();
+
+                var userSystemList = await _context.users
+                        .Find(userSystem => true).ToListAsync();
+                var userList = userSystemList
+                    .Select(userSystem => userSystem.current)
+                    .Where(user => user.active && !String.IsNullOrEmpty(user.second_name));
+                settingsCase.executors = userList.Select(user => new Executor
+                {
+                    _id = user._id,
+                    created = user.created,
+                    deleted = false,
+                    first_name = user.first_name,
+                    second_name = user.second_name,
+                    third_name = user.third_name,
+                    version = user.version
+                }).ToList();
 
                 return settingsCase;
             }

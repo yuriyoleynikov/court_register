@@ -20,8 +20,8 @@ namespace court_register.Models
         public string? reg_number { get; set; }
         public string? case_number { get; set; }
         public Court court { get; set; }
-        public TypeRoleCase type_role_case { get; set; }
-        public CaseCategory case_category { get; set; }
+        public TypeRoleCase type_role { get; set; }
+        public Category category { get; set; }
         public Unit unit { get; set; }
         public Executor executor { get; set; }
         public List<Status> state { get; set; }
@@ -32,11 +32,11 @@ namespace court_register.Models
     public class SettingsCase
     {
         public IEnumerable<Court>  courts { get; set; }
-        //public TypeRoleCase type_role_case { get; set; }
-        //public CaseCategory case_category { get; set; }
+        public IEnumerable<TypeRoleCase> type_roles { get; set; }
+        public IEnumerable<Category> category { get; set; }
         public IEnumerable<Unit> units { get; set; }
-        //public ExecutorSystem executor { get; set; }
-        //public List<StatusSystem> state { get; set; }
+        public IEnumerable<Executor> executors { get; set; }
+        public IEnumerable<Status> statuses { get; set; }
     }
     public class CourtSystem
     {
@@ -65,7 +65,7 @@ namespace court_register.Models
     public class TypeRoleCase
     {
         public int version { get; set; }
-        public int id { get; set; }
+        public int _id { get; set; }
         public string name { get; set; }
         public string full_name { get; set; }
         public bool deleted { get; set; } = false;
@@ -81,7 +81,7 @@ namespace court_register.Models
     public class Executor
     {
         public int version { get; set; }
-        public int id { get; set; }
+        public int _id { get; set; }
         public string first_name { get; set; }
         public string second_name { get; set; }
         public string third_name { get; set; }
@@ -99,22 +99,21 @@ namespace court_register.Models
         public bool deleted { get; set; } = false;
         public Created created { get; set; }
     }
-    public class CaseCategorySystem
+    public class CategorySystem
     {
         [BsonId]
         public ObjectId _id { get; set; }
-        public CaseCategory current { get; set; }
-        public List<CaseCategory> changes { get; set; }
+        public Category current { get; set; }
+        public List<Category> changes { get; set; }
     }
-    public class CaseCategory
+    public class Category
     {
         public int version { get; set; }
-        public int id { get; set; }
+        public int _id { get; set; }
         public string name { get; set; }
         public string full_name { get; set; }
         public bool deleted { get; set; } = false;
         public Created created { get; set; }
-
     }
     public class StatusSystem
     {
@@ -132,7 +131,7 @@ namespace court_register.Models
         public bool deleted { get; set; } = false;
         public Created created { get; set; }
 
-    }    
+    }
     public class UnitSystem
     {
         [BsonId]

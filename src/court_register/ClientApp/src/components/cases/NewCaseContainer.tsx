@@ -30,6 +30,22 @@ const NewCaseContainer = (props: NewCaseContainerProps) => {
             let nameCourtList = props.settingsCase.courts.map(u => u.name);
             formNewCase.$('court').$extra = nameCourtList;
         }
+        if (props.settingsCase.type_roles != null) {
+            let roleList = props.settingsCase.type_roles.map(u => u.name);
+            formNewCase.$('type_role').$extra = roleList;
+        }
+        if (props.settingsCase.category != null) {
+            let categoryList = props.settingsCase.category.map(u => u.name);
+            formNewCase.$('category').$extra = categoryList;
+        }
+        if (props.settingsCase.executors != null) {
+            let executorList = props.settingsCase.executors.map(u => u.full_name);
+            formNewCase.$('executor').$extra = executorList;
+        }
+        if (props.settingsCase.statuses != null) {
+            let statusList = props.settingsCase.statuses.map(u => u.name);
+            formNewCase.$('state').$extra = statusList;
+        }
     }
 
     if (props.loading) {

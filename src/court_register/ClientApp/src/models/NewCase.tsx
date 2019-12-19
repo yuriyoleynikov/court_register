@@ -15,6 +15,7 @@ export class NewCase {
                 Authorization: 'Bearer ' + window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
             }
         });
+
         this.settingsCase = await response.json();
         this.loading = false;
     }

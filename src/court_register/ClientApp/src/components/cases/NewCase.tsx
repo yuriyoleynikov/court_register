@@ -22,13 +22,17 @@ export default observer(({ form, toggle, isOpenStatus }) => (
 
             <MaterialTextField field={form.$('case_number')} />
             <AutocompleteField field={form.$('unit')} />
+            <AutocompleteField field={form.$('type_role')} />
+            <AutocompleteField field={form.$('category')} />
+            <AutocompleteField field={form.$('executor')} />
+            <AutocompleteField field={form.$('state')} />
+
         </div>
         <br />
         <Button type='submit' variant='contained' color='primary' onClick={form.onSubmit}>Добавить</Button>
         {/*<button type="submit" className={$btn} onClick={form.onSubmit}>Submit</button>
         <button type="button" className={$btn} onClick={form.onClear}>Clear</button>
         <button type="button" className={$btn} onClick={form.onReset}>Reset</button>*/}
-
 
         <p>{form.error}</p>
     </form>

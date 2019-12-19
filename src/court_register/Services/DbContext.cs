@@ -51,5 +51,29 @@ namespace court_register.Services
                 return _database.GetCollection<CourtSystem>("courts");
             }
         }
+
+        public IMongoCollection<TypeRoleCaseSystem> roles_in_case
+        {
+            get
+            {
+                return _database.GetCollection<TypeRoleCaseSystem>("role_in_case");
+            }
+        }
+
+        public IMongoCollection<CategorySystem> category
+        {
+            get
+            {
+                return _database.GetCollection<CategorySystem>("category");
+            }
+        }
+
+        public IMongoCollection<StatusSystem> statuses
+        {
+            get
+            {
+                return _database.GetCollection<StatusSystem>("statuses");
+            }
+        }
     }
 }

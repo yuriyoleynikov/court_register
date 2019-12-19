@@ -2,7 +2,7 @@ import MobxReactForm from "mobx-react-form";
 import dvr from "mobx-react-form/lib/validators/DVR";
 import validatorjs from "validatorjs";
 import { store } from './../store';
-import { Case } from './MyClasses'
+import { Case, Status } from './MyClasses'
 
 const plugins = {
     dvr: dvr(validatorjs)
@@ -34,6 +34,34 @@ const fields = [
         placeholder: "court",
         value: null,
         extra: []
+    },
+    {
+        name: "type_role",
+        label: "type_role",
+        placeholder: "type_role",
+        value: null,
+        extra: []
+    },
+    {
+        name: "category",
+        label: "category",
+        placeholder: "category",
+        value: null,
+        extra: []
+    },
+    {
+        name: "executor",
+        label: "executor",
+        placeholder: "executor",
+        value: null,
+        extra: []
+    },
+    {
+        name: "state",
+        label: "state",
+        placeholder: "state",
+        value: null,
+        extra: []
     }
 ];
 
@@ -46,7 +74,11 @@ const hooks = {
 
         newCase.unit = store.new_case.settingsCase.units.find(u => u.name == form.values().unit);
         newCase.court = store.new_case.settingsCase.courts.find(u => u.name == form.values().court);
-        
+        newCase.type_role = store.new_case.settingsCase.type_roles.find(u => u.name == form.values().type_role);
+        newCase.category = store.new_case.settingsCase.category.find(u => u.name == form.values().category);
+        newCase.state = [store.new_case.settingsCase.statuses.find(u => u.name == form.values().state)];
+        newCase.executor = store.new_case.settingsCase.executors.find(u => u.full_name == form.values().executor);
+
         store.case.createCase(newCase);
     },
     onError(form) {
