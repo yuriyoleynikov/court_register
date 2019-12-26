@@ -78,7 +78,7 @@ namespace court_register.Services
             return userSystem.current.permission.admin;
         }
 
-        public async Task<IEnumerable<User>> GetUsersAsync(string userExecutorEmail)
+        public async Task<IEnumerable<User>> GetUsersAsync(string userExecutorEmail, bool active)   
         {
             try
             {
@@ -95,7 +95,7 @@ namespace court_register.Services
                 var userSystemList = await _context.users
                         .Find(userSystem => true).ToListAsync();
 
-                var userList = userSystemList.Select(userSystem => userSystem.current);
+                var userList = userSystemList.Select(userSystem => userSystem.current).Where(user=>user.active == active);
 
                 return userList;
             }

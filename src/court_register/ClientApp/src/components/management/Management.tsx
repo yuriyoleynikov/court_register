@@ -2,5 +2,5 @@
 import { NavLink } from 'react-router-dom';
 
 export default () => (
-    <NavLink to="/settings">Настройки</NavLink>
+    <NavLink to="/management">Управление</NavLink>
 );

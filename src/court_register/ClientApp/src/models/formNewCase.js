@@ -25,42 +25,42 @@ const fields = [
         name: "unit",
         label: "unit",
         placeholder: "unit",
-        value: null,
+        value: undefined,
         extra: []
     },
     {
         name: "court",
         label: "court",
         placeholder: "court",
-        value: null,
+        value: undefined,
         extra: []
     },
     {
         name: "type_role",
         label: "type_role",
         placeholder: "type_role",
-        value: null,
+        value: undefined,
         extra: []
     },
     {
         name: "category",
         label: "category",
         placeholder: "category",
-        value: null,
+        value: undefined,
         extra: []
     },
     {
         name: "executor",
         label: "executor",
         placeholder: "executor",
-        value: null,
+        value: undefined,
         extra: []
     },
     {
         name: "state",
         label: "state",
         placeholder: "state",
-        value: null,
+        value: undefined,
         extra: []
     }
 ];

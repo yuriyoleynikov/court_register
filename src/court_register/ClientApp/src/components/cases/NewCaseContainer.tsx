@@ -46,6 +46,9 @@ const NewCaseContainer = (props: NewCaseContainerProps) => {
             let statusList = props.settingsCase.statuses.map(u => u.name);
             formNewCase.$('state').$extra = statusList;
         }
+
+        formNewCase.$('reg_number').value = null;
+        formNewCase.$('case_number').value = null;
     }
 
     if (props.loading) {

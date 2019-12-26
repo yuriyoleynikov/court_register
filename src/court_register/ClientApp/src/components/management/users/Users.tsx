@@ -1,30 +1,45 @@
 ﻿import * as React from 'react';
 import { observer } from 'mobx-react';
-import { Redirect } from 'react-router';
+import { Redirect, useParams } from 'react-router';
 
 import { store } from '../../../store'
 import { User } from '../../../models/MyClasses';
 import Loading from '../../../components/Loading';
+import { NavLink } from 'react-router-dom';
+import * as queryString from 'query-string'
 
+declare var window: any;
 
 type UsersProps = {
     users: User[] | null;
     loading: boolean;
-    loadUsers(): void;
+    loadUsers(active: boolean): void;
     activateUser(email: string | null): void;
     deactivateUser(email: string | null): void;
-}
+};
 
 const $btn = 'f6 link dim bn br2 ph3 pv2 mr2 dib white bg-dark-blue';
 
 const Users = (props: UsersProps) => {
-    React.useEffect(() => { props.loadUsers(); console.log('loadUsers()'); }, [])
+    React.useEffect(() => {
+        let queryFilter = queryString.parse(window.location.search);
+        props.loadUsers(queryFilter.active == 'true');
+        console.log('loadUsers()');
+        
+        
+        console.log(queryFilter.active ? queryFilter.active : '-');
+    }, []);
 
     if (props.loading) {
         return <Loading />;
     }
     return (
         <div>
+            <div>Список пользователей</div>
+            <div>
+                <NavLink to={`/management/users?active=false`}>Список неактивных пользователей</NavLink>
+            </div>
+            
             <table className='table table-striped' aria-labelledby="tabelLabel">
                 <thead>
                     <tr>
@@ -38,19 +53,14 @@ const Users = (props: UsersProps) => {
                 <tbody>
                     {props.users ?
                         props.users.map((user: User) =>
-                            <tr /*key={user._id ? user._id : undefined}*/>
+                            <tr key={user.email ? user.email : undefined}>
                                 <td>{user._id}</td>
                                 <td>{user.email}</td>
                                 <td>{user.first_name}</td>
                                 <td>{user.active ? <div>true</div> : <div>false</div>}</td>
                                 <td>{user.permission ? user.permission.admin ? < div > true</div> : <div>false</div> : null}</td>
                                 <td>
-                                    <button type="button"
-                                        //className="btn btn-primary btn-lg"
-                                        className={$btn}
-                                        onClick={() => { }}>
-                                        Открыть
-                                        </button>
+                                    <NavLink to={`/management/user?email=${user.email}`}>Открыть профиль</NavLink>
                                 </td>
                                 <td>
                                     {user.active

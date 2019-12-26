@@ -49,7 +49,7 @@ const Cases = (props: CasesProps) => {
                                 <td>{currentCase.type_role ? currentCase.type_role.name : null}</td>
                                 <td>{currentCase.category ? currentCase.category.name : null}</td>                                
                                 <td>{currentCase.unit ? currentCase.unit.name : null}</td>
-                                <td>{currentCase.executor ? currentCase.executor.first_name : null}</td>
+                                <td>{currentCase.executor ? currentCase.executor.full_name : null}</td>
                                 <td>{currentCase.state ? currentCase.state.length : null}</td>
                             </tr>
                         ) : null}

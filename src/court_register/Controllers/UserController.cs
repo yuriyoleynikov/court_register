@@ -23,11 +23,11 @@ namespace court_register.Controllers
 
         [HttpGet]
         [Route("api/users")]
-        public async Task<IEnumerable<User>> GetUserListAsync()
+        public async Task<IEnumerable<User>> GetUserListAsync([FromQuery]string active)
         {
             string _userExecutorEmail = null;
             _userExecutorEmail = GetCurrentUserEmail();
-            var userList = await _repositoryService.GetUsersAsync(_userExecutorEmail);
+            var userList = await _repositoryService.GetUsersAsync(_userExecutorEmail, active == "true" ? true : false);
             return userList;
         }
 

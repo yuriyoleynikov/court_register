@@ -7,9 +7,9 @@ export class Admin {
     @observable users: MyClasses.User[] | null = null;
     @observable loading = false;
 
-    @action.bound async loadUsers() {
+    @action.bound async loadUsers(active: boolean) {
         this.loading = true;
-        let response = await fetch(`api/users`, {
+        let response = await fetch(`api/users/?active=${active}`, {
             credentials: 'include',
             headers: {
                 Authorization: 'Bearer ' + window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
@@ -34,7 +34,6 @@ export class Admin {
 
     @action.bound async changePersonal(user: MyClasses.User) {
         console.log(user);
-        debugger
         let response = await fetch(`api/user`, {
             method: 'PUT',
             body: JSON.stringify(user),
@@ -58,7 +57,7 @@ export class Admin {
         });
 
         await response.json();
-        this.loadUsers();
+        this.loadUsers(true);
         this.loading = false;
     }
 
@@ -72,7 +71,7 @@ export class Admin {
         });
 
         await response.json();
-        this.loadUsers();
+        this.loadUsers(true);
         this.loading = false;
     }
 

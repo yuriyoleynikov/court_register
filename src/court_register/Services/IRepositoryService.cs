@@ -8,7 +8,7 @@ namespace court_register.Services
 {
     public interface IRepositoryService
     {
-        Task<IEnumerable<User>> GetUsersAsync(string userExecutorEmail);
+        Task<IEnumerable<User>> GetUsersAsync(string userExecutorEmail, bool active);
         Task<UserSystem> GetUserSystemByUserEmailAsync(string userExecutorEmail, string userEmail);
         Task<UserSystem> GetUserSystemByUserEmailAsync(string userExecutorEmail);
         Task<bool> UpdateUserSystemByUserEmailAsync(string userExecutorEmail, string userEmail, User user);
