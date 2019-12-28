@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
 import { Route, Redirect } from 'react-router';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, useLocation } from 'react-router-dom';
 
 import { store } from './store'
 
@@ -21,7 +21,19 @@ import CasesBlock from './components/cases/CasesBlock';
 import NewCaseContainer from './components/cases/NewCaseContainer';
 
 
+const useQuery = ()=> {
+    return new URLSearchParams(useLocation().search);
+}
+const UsersPage = () => {
+    let query = useQuery();
+    return <Users active={query.get(`active`)} active2={query.get(`active2`)} />;
+};
+const UserPage = () => {
+    let query = useQuery();
+    return <User email={query.get(`email`)} />;
+};
 export default observer(() => {
+    
     React.useEffect(() => {
         store.auth.loadAuth2();
         console.log('loadAuth2() ok');
@@ -43,8 +55,8 @@ export default observer(() => {
         <Route exact path='/case' component={NewCaseContainer} />
 
         <Route path='/management' component={ManagementBlock} />
-        <Route path='/management/users' component={Users} />
-        <Route path='/management/user' component={User} />
+        <Route path='/management/users' component={UsersPage} />
+        <Route path='/management/user' component={UserPage} />
 
         <Route path='/settings' component={SettingsBlock} />
 

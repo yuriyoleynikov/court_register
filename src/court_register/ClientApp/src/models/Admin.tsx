@@ -1,4 +1,4 @@
-import { observable, action } from "mobx"
+import { observable, action, computed } from "mobx"
 import * as MyClasses from "./MyClasses";
 
 declare var window: any;
@@ -6,10 +6,11 @@ declare var window: any;
 export class Admin {
     @observable users: MyClasses.User[] | null = null;
     @observable loading = false;
+    @computed get search() { return window.location.search }
 
     @action.bound async loadUsers(active: boolean) {
         this.loading = true;
-        let response = await fetch(`api/users/?active=${active}`, {
+        let response = await fetch(`api/users?active=${active}`, {
             credentials: 'include',
             headers: {
                 Authorization: 'Bearer ' + window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token

@@ -8,25 +8,25 @@ import Loading from '../../../components/Loading';
 import { NavLink } from 'react-router-dom';
 
 
-type UsersProps = {
-    users: User[] | null;
+type UserProps = {
+    user: User | null;
     loading: boolean;
-    loadUsers(acvite: boolean): void;
+    loadUser(email: string | null): void;
     activateUser(email: string | null): void;
     deactivateUser(email: string | null): void;
+    email: string | null;
 }
 
 const $btn = 'f6 link dim bn br2 ph3 pv2 mr2 dib white bg-dark-blue';
 
-const Users = (props: UsersProps) => {
-    React.useEffect(() => { props.loadUsers(true); console.log('loadUsers()'); }, [])
-    let { email } = useParams();
+const UserComp = (props: UserProps) => {
+    React.useEffect(() => { props.loadUser(props.email); console.log('loadUser()'); }, [])
+
     if (props.loading) {
         return <Loading />;
     }
     return (
         <div>
-            <div>{email}</div>
             <table className='table table-striped' aria-labelledby="tabelLabel">
                 <thead>
                     <tr>
@@ -38,46 +38,46 @@ const Users = (props: UsersProps) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {props.users ?
-                        props.users.map((user: User) =>
-                            <tr key={user.email ? user.email : undefined}>
-                                <td>{user._id}</td>
-                                <td>{user.email}</td>
-                                <td>{user.first_name}</td>
-                                <td>{user.active ? <div>true</div> : <div>false</div>}</td>
-                                <td>{user.permission ? user.permission.admin ? < div > true</div> : <div>false</div> : null}</td>
-                                <td>
-                                    <NavLink to={"/management/user/" + user.email}>Открыть профиль</NavLink>
-                                </td>
-                                <td>
-                                    {user.active
-                                        ?
-                                        <button type="button"
-                                            //className="btn btn-primary btn-lg"
-                                            className={$btn}
-                                            onClick={() => { props.deactivateUser(user.email) }}>
-                                            deactivate
+                    {props.user ?
+                        <tr key={props.user.email ? props.user.email : undefined}>
+                            <td>{props.user._id}</td>
+                            <td>{props.user.email}</td>
+                            <td>{props.user.first_name}</td>
+                            <td>{props.user.active ? <div>true</div> : <div>false</div>}</td>
+                            <td>{props.user.permission ? props.user.permission.admin ? < div > true</div> : <div>false</div> : null}</td>
+                            <td>
+                                <NavLink to={"/management/user/" + props.user.email}>Открыть профиль</NavLink>
+                            </td>
+                            <td>
+                                {props.user.active
+                                    ?
+                                    <button type="button"
+                                        //className="btn btn-primary btn-lg"
+                                        className={$btn}
+                                        onClick={() => { props.deactivateUser(props.user != null ? props.user.email: '') }}>
+                                        deactivate
                                         </button>
-                                        :
-                                        <button type="button"
-                                            //className="btn btn-primary btn-lg"
-                                            className={$btn}
-                                            onClick={() => { props.activateUser(user.email) }}>
-                                            activate
+                                    :
+                                    <button type="button"
+                                        //className="btn btn-primary btn-lg"
+                                        className={$btn}
+                                        onClick={() => { props.activateUser(props.user != null ? props.user.email : '') }}>
+                                        activate
                                         </button>}
-                                </td>
-                            </tr>
-                        ) : null}
+                            </td>
+                        </tr>
+                        : null}
                 </tbody>
             </table>
         </div>
     );
 };
 
-export default observer(() => <Users
-    users={store.admin.users}
+export default observer((props: { email: string | null; }) => <UserComp
+    user={store.user_page.user}
     loading={store.admin.loading}
-    loadUsers={store.admin.loadUsers}
+    loadUser={store.user_page.loadUser}
     activateUser={store.admin.activateUser}
     deactivateUser={store.admin.deactivateUser}
+    email={props.email}
 />);

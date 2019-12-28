@@ -33,14 +33,14 @@ export class Auth {
 
     @action.bound async loadAuth2() {
         if (this.downloadedAuth2)
-            return;        
+            return;
         await loadAuth2();
         await window.gapi.auth2.init({
             client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID
         });
         console.log('loadAuth2() in function');
         await this.getUser();
-        this.downloadedAuth2 = true;        
+        this.downloadedAuth2 = true;
     }
 
     @action.bound async getUser() {

@@ -11,7 +11,7 @@ export class CaseStore {
     @action.bound async loadCases() {
         this.loading = true;
         let parsed = queryString.parse(window.location.search);
-        let url = Object.keys(parsed).length == 0 ? `api/cases` : `api/cases/?${queryString.stringify(parsed)}`;
+        let url = Object.keys(parsed).length == 0 ? `api/cases` : `api/cases?${queryString.stringify(parsed)}`;
 
         let response = await fetch(url, {
             credentials: 'include',

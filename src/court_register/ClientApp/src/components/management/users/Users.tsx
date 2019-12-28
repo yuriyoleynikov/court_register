@@ -2,7 +2,7 @@
 import { observer } from 'mobx-react';
 import { Redirect, useParams } from 'react-router';
 
-import { store } from '../../../store'
+import { store } from '../../../store';
 import { User } from '../../../models/MyClasses';
 import Loading from '../../../components/Loading';
 import { NavLink } from 'react-router-dom';
@@ -16,6 +16,9 @@ type UsersProps = {
     loadUsers(active: boolean): void;
     activateUser(email: string | null): void;
     deactivateUser(email: string | null): void;
+    search(): any;
+    active: string | null;
+    active2: string | null;
 };
 
 const $btn = 'f6 link dim bn br2 ph3 pv2 mr2 dib white bg-dark-blue';
@@ -25,10 +28,9 @@ const Users = (props: UsersProps) => {
         let queryFilter = queryString.parse(window.location.search);
         props.loadUsers(queryFilter.active == 'true');
         console.log('loadUsers()');
-        
-        
+        console.log('1111' + props.active2);
         console.log(queryFilter.active ? queryFilter.active : '-');
-    }, []);
+    }, [props.active, props.active2]);
 
     if (props.loading) {
         return <Loading />;
@@ -36,10 +38,11 @@ const Users = (props: UsersProps) => {
     return (
         <div>
             <div>Список пользователей</div>
+            {props.active}
             <div>
                 <NavLink to={`/management/users?active=false`}>Список неактивных пользователей</NavLink>
             </div>
-            
+
             <table className='table table-striped' aria-labelledby="tabelLabel">
                 <thead>
                     <tr>
@@ -87,10 +90,16 @@ const Users = (props: UsersProps) => {
     );
 };
 
-export default observer(() => <Users
-    users={store.admin.users}
-    loading={store.admin.loading}
-    loadUsers={store.admin.loadUsers}
-    activateUser={store.admin.activateUser}
-    deactivateUser={store.admin.deactivateUser}
-/>);
+export default observer((props: {
+    active: string | null;
+    active2: string | null;
+}) => <Users
+        users={store.admin.users}
+        loading={store.admin.loading}
+        loadUsers={store.admin.loadUsers}
+        activateUser={store.admin.activateUser}
+        deactivateUser={store.admin.deactivateUser}
+        search={store.admin.search}
+        active={props.active}
+        active2={props.active2}
+    />);
