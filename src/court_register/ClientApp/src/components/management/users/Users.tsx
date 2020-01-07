@@ -35,10 +35,10 @@ const Users = (props: UsersProps) => {
     if (props.loading) {
         return <Loading />;
     }
+
     return (
         <div>
             <div>Список пользователей</div>
-            {props.active}
             <div>
                 <NavLink to={`/management/users?active=false`}>Список неактивных пользователей</NavLink>
             </div>
@@ -46,42 +46,22 @@ const Users = (props: UsersProps) => {
             <table className='table table-striped' aria-labelledby="tabelLabel">
                 <thead>
                     <tr>
-                        <th>_id</th>
-                        <th>email</th>
-                        <th>name</th>
-                        <th>active</th>
-                        <th>admin</th>
+                        <th></th>
+                        <th>Id</th>
+                        <th>E-mail</th>
+                        <th>ФИО</th>
                     </tr>
                 </thead>
                 <tbody>
                     {props.users ?
                         props.users.map((user: User) =>
                             <tr key={user.email ? user.email : undefined}>
+                                <td>
+                                    <NavLink to={`/management/user?email=${user.email}`}>Открыть</NavLink>
+                                </td>
                                 <td>{user._id}</td>
                                 <td>{user.email}</td>
-                                <td>{user.first_name}</td>
-                                <td>{user.active ? <div>true</div> : <div>false</div>}</td>
-                                <td>{user.permission ? user.permission.admin ? < div > true</div> : <div>false</div> : null}</td>
-                                <td>
-                                    <NavLink to={`/management/user?email=${user.email}`}>Открыть профиль</NavLink>
-                                </td>
-                                <td>
-                                    {user.active
-                                        ?
-                                        <button type="button"
-                                            //className="btn btn-primary btn-lg"
-                                            className={$btn}
-                                            onClick={() => { props.deactivateUser(user.email) }}>
-                                            deactivate
-                                        </button>
-                                        :
-                                        <button type="button"
-                                            //className="btn btn-primary btn-lg"
-                                            className={$btn}
-                                            onClick={() => { props.activateUser(user.email) }}>
-                                            activate
-                                        </button>}
-                                </td>
+                                <td>{`${user.second_name ? user.second_name : ''} ${user.first_name ? user.first_name : ''} ${user.third_name ? user.third_name : ''}`}</td>                                
                             </tr>
                         ) : null}
                 </tbody>
