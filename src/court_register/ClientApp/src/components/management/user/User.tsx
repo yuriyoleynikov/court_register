@@ -1,21 +1,76 @@
 ﻿import * as React from 'react';
 
-import Profile from './../../settings/profile/Profile';
-import formUser from '../../../models/formUser';
+import ManagementProfile from './ManagementProfile';
+import formManagementUser, { createUserForm } from '../../../models/formManagementUser';
 import { store } from '../../../store';
 import { User } from '../../../models/MyClasses';
+import Loading from '../../../components/Loading';
+import { observer } from 'mobx-react';
 
-const ProfileContainer = (props: UserProps) => {
-    //formUser.$('first_name').value = store.auth.user ? store.auth.user.first_name : null;
-    //formUser.$('second_name').value = store.auth.user ? store.auth.user.second_name : null;
-    //formUser.$('third_name').value = store.auth.user ? store.auth.user.third_name : null;
+const ProfileContainer = observer((props: UserProps) => {
+    React.useEffect(() => {
+        store.management_user.loadUser(props.email);
+        return () => {
+            console.log('on dismount or email changed')
+        }}, []);
+
+    if (!store.management_user.loading) {
+        formManagementUser.$('first_name').value = store.management_user.user ? store.management_user.user.first_name : null;
+        formManagementUser.$('second_name').value = store.management_user.user ? store.management_user.user.second_name : null;
+        formManagementUser.$('third_name').value = store.management_user.user ? store.management_user.user.third_name : null;
+        formManagementUser.$('email').value = store.management_user.user ? store.management_user.user.email : null;
+        formManagementUser.$('active').value = store.management_user.user ? store.management_user.user.active : null;
+        formManagementUser.$('admin').value = store.management_user.user && store.management_user.user.permission ?
+            store.management_user.user.permission.admin : null;
+    }
+
+    if (store.management_user.loading) {
+        return <Loading />;
+    }
+
     return (<div>
-        <Profile form={formUser} />
+        <ManagementProfile form={formManagementUser} />
     </div>);
-};
+});
 
-export default ProfileContainer;
+//const UserEditor = observer((props: { userForm: any }) => {
+//    return <Profile form={props.userForm} />;
+//})
 
+//const UserEditorContainer = (props: { email: string }) => {
+//    const [loading, setLoading] = React.useState(true);
+//    const [user, setUser] = React.useState<User | null>(null);
+
+//    async function load() {
+//        setLoading(true);
+//        try {
+//            setUser(createUserForm(await store.management_user.loadUser2(props.email)));
+//        }
+//        finally {
+//            setLoading(false);
+//        }
+//    }
+
+//    React.useEffect(() => {
+//        load();
+//        return () => {
+//            console.log('on dismount or email changed')
+//        }
+//    }, [props.email])
+
+//    if (user)
+//        return <UserEditor userForm={user} />
+
+//    return loading ? <Loading /> : <div>Something went wrong.</div>;
+//};
+
+//export default ProfileContainer;
+//export default observer((props: { email: string; }) => <UserEditorContainer
+//    email={props.email}
+///>);
+export default observer((props: { email: string; }) => <ProfileContainer
+    email={props.email}
+/>);
 
 //import * as React from 'react';
 //import { observer } from 'mobx-react';
@@ -28,8 +83,8 @@ export default ProfileContainer;
 
 
 type UserProps = {
-//    user: User | null;
-//    loading: boolean;
+    //    user: User | null;
+    //loading: boolean;
     //loadUser(email: string | null): void;
     //activateUser(email: string | null): void;
     //deactivateUser(email: string | null): void;

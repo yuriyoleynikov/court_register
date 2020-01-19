@@ -7,8 +7,6 @@ import { UnitStore } from "./UnitStore";
 import { CaseStore } from "./CaseStore";
 import { NewCase } from "./NewCase";
 
-declare var window: any;
-
 const loadAuth2 = () => {
     return new Promise<undefined>((resolve) => {
         window.gapi.load('auth2', () => resolve(undefined));
@@ -35,16 +33,21 @@ export class Auth {
         if (this.downloadedAuth2)
             return;
         await loadAuth2();
-        await window.gapi.auth2.init({
+        const auth = gapi.auth2.init({
             client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID
         });
-        console.log('loadAuth2() in function');
-        await this.getUser();
+        await new Promise<undefined>(resolve => { auth.then(() => resolve()) });
         this.downloadedAuth2 = true;
+
+        auth.currentUser.listen(u => {
+            this.getUser();
+        })
+
+        await this.getUser();
     }
 
     @action.bound async getUser() {
-        let googleAuth = window.gapi.auth2.getAuthInstance();
+        let googleAuth = gapi.auth2.getAuthInstance();
         if (googleAuth.isSignedIn.get()) {
             this.loading = true;
             let data = await getUserPermissions();
@@ -56,7 +59,7 @@ export class Auth {
     @computed get isSignedIn() { return !!this.user }
 
     @action.bound async signIn() {
-        let googleAuth = window.gapi.auth2.getAuthInstance();
+        let googleAuth = gapi.auth2.getAuthInstance();
         await googleAuth.signIn({
             scope: 'profile email'
         });
@@ -64,7 +67,7 @@ export class Auth {
     }
 
     @action.bound async signOut() {
-        let googleAuth = window.gapi.auth2.getAuthInstance();
+        let googleAuth = gapi.auth2.getAuthInstance();
         this.loading = true;
         await googleAuth.signOut();
 

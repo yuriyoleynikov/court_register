@@ -1,11 +1,10 @@
-import * as React from 'react';
+﻿import * as React from 'react';
 import { observer } from 'mobx-react';
 import { Route, Redirect } from 'react-router';
 import { BrowserRouter, useLocation } from 'react-router-dom';
 
-import { store } from './store'
+import { store } from './store';
 
-import Loading from './components/Loading';
 import Header from './components/Header';
 
 import ProfileContainer from './components/settings/profile/ProfileContainer';
@@ -19,50 +18,75 @@ import ManagementBlock from './components/management/ManagementBlock';
 
 import CasesBlock from './components/cases/CasesBlock';
 import NewCaseContainer from './components/cases/NewCaseContainer';
+import { Button, makeStyles, Theme, createStyles, Typography, CircularProgress, Box } from '@material-ui/core';
 
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            display: 'flex',
+            '& > * + *': {
+                marginLeft: theme.spacing(2),
+            },
+        },
+    }),
+);
 
-const useQuery = ()=> {
+const useQuery = () => {
     return new URLSearchParams(useLocation().search);
-}
+};
+
 const UsersPage = () => {
     let query = useQuery();
     return <Users active={query.get(`active`)} active2={query.get(`active2`)} />;
 };
+
 const UserPage = () => {
     let query = useQuery();
-    return <User email={query.get(`email`)} />;
+    const email = query.get(`email`);
+    if (!email) return <div>No user</div>;
+    return <User email={email} />;
 };
+
 export default observer(() => {
-    
-    React.useEffect(() => {
-        store.auth.loadAuth2();
-        console.log('loadAuth2() ok');
-    }, [])
+    const classes = useStyles();
+    React.useEffect(() => { store.auth.loadAuth2(); }, []);
 
-    if (!store.auth.downloadedAuth2)
-        return <Loading />;
+    if (!store.auth.downloadedAuth2) {
+        return (
+            <div className={classes.root}>
+                <CircularProgress />
+            </div>
+        );
+    }
 
-    return (<BrowserRouter>
-        <Header />
+    return (
+        <BrowserRouter>
+            <Header />
 
-        {!store.auth.isSignedIn ? <Redirect to='/' /> : null}
+            {!store.auth.isSignedIn || !(store.auth.user && store.auth.user.active) ? <Redirect to='/' /> : null}
 
-        <Route exact path='/'>
-            {store.auth.isSignedIn ? <Redirect to='/cases' /> : null}
-        </Route>
+            <Route exact path='/'>
+                {store.auth.isSignedIn && store.auth.user && store.auth.user.active ? <Redirect to='/cases' /> : null}
+            </Route>
 
-        <Route exact path='/cases' component={CasesBlock} />
-        <Route exact path='/case' component={NewCaseContainer} />
+            {store.auth.isSignedIn && store.auth.user && store.auth.user.active ?
+                <div>
+                    <Route exact path='/cases' component={CasesBlock} />
+                    <Route exact path='/case' component={NewCaseContainer} />
 
-        <Route path='/management' component={ManagementBlock} />
-        <Route path='/management/users' component={UsersPage} />
-        <Route path='/management/user' component={UserPage} />
+                    <Route path='/management' component={ManagementBlock} />
+                    <Route path='/management/users' component={UsersPage} />
+                    <Route path='/management/user' component={UserPage} />
 
-        <Route path='/settings' component={SettingsBlock} />
+                    <Route path='/settings' component={SettingsBlock} />
 
-        <Route path='/settings/units' component={Units} />
-        <Route path='/settings/units/new' component={NewUnitContainer} />
+                    <Route path='/settings/units' component={Units} />
+                    <Route path='/settings/units/new' component={NewUnitContainer} />
 
-        <Route path='/settings/profile' component={ProfileContainer} />
-    </BrowserRouter>);
+                    <Route path='/settings/profile' component={ProfileContainer} />
+                </div> :
+                null
+            }
+        </BrowserRouter>
+    );
 });

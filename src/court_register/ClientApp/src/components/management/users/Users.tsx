@@ -1,6 +1,5 @@
 ﻿import * as React from 'react';
 import { observer } from 'mobx-react';
-import { Redirect, useParams } from 'react-router';
 
 import { store } from '../../../store';
 import { User } from '../../../models/MyClasses';
@@ -27,9 +26,6 @@ const Users = (props: UsersProps) => {
     React.useEffect(() => {
         let queryFilter = queryString.parse(window.location.search);
         props.loadUsers(queryFilter.active == 'true');
-        console.log('loadUsers()');
-        console.log('1111' + props.active2);
-        console.log(queryFilter.active ? queryFilter.active : '-');
     }, [props.active, props.active2]);
 
     if (props.loading) {
@@ -39,9 +35,15 @@ const Users = (props: UsersProps) => {
     return (
         <div>
             <div>Список пользователей</div>
-            <div>
-                <NavLink to={`/management/users?active=false`}>Список неактивных пользователей</NavLink>
-            </div>
+            {
+                props.active == 'true' ?
+                <div>
+                    <NavLink to={`/management/users?active=false`}>Список неактивных пользователей</NavLink>
+                </div> :
+                <div>
+                    <NavLink to={`/management/users?active=true`}>Список активных пользователей</NavLink>
+                </div>
+            }
 
             <table className='table table-striped' aria-labelledby="tabelLabel">
                 <thead>
@@ -61,7 +63,7 @@ const Users = (props: UsersProps) => {
                                 </td>
                                 <td>{user._id}</td>
                                 <td>{user.email}</td>
-                                <td>{`${user.second_name ? user.second_name : ''} ${user.first_name ? user.first_name : ''} ${user.third_name ? user.third_name : ''}`}</td>                                
+                                <td>{`${user.second_name ? user.second_name : ''} ${user.first_name ? user.first_name : ''} ${user.third_name ? user.third_name : ''}`}</td>
                             </tr>
                         ) : null}
                 </tbody>

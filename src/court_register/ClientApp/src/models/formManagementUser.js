@@ -1,4 +1,4 @@
-import MobxReactForm from "mobx-react-form";
+﻿import MobxReactForm from "mobx-react-form";
 import dvr from "mobx-react-form/lib/validators/DVR";
 import validatorjs from "validatorjs";
 
@@ -12,40 +12,62 @@ const plugins = {
 const fields = [
     {
         name: "first_name",
-        label: "first_name",
-        placeholder: "first_name",
+        label: "Имя",
+        placeholder: "Имя",
         rules: "required|string"
     },
     {
         name: "second_name",
-        label: "second_name",
-        placeholder: "second_name",
+        label: "Фамилия",
+        placeholder: "Фамилия",
         rules: "required|string"
     },
     {
         name: "third_name",
-        label: "third_name",
-        placeholder: "third_name",
-        rules: "required|string"    
+        label: "Отчество",
+        placeholder: "Отчество",
+        rules: "required|string"
+    },
+    {
+        name: "email",
+        label: "E-mail",
+        placeholder: "E-mail",
+        rules: "required|string"
+    },
+    {
+        name: "active",
+        label: "Активен",
+        placeholder: "Активен",
+        rules: "required|boolean"
+    },
+    {
+        name: "admin",
+        label: "Администратор",
+        placeholder: "Администратор",
+        rules: "required|boolean"
+    },
+    {
+        name: "unitAdmin",
+        label: "Администратор подразделений",
+        placeholder: "Администратор подразделений",
+        rules: "required|boolean"
     }
 ];
 
 const hooks = {
-    onSuccess(form) {
-        //alert("Form is valid! Send the request here.");
-
-        //console.log("Form Values!", form.values());
-        //console.log("Form Values!", form.values().password);
-
+    async onSuccess(form) {
         let newUser = new User();
 
-        newUser = store.auth.user;
+        newUser = await store.admin.getUserByEmail(form.values().email);
+        console.log(form);
 
         newUser.first_name = form.values().first_name;
         newUser.second_name = form.values().second_name;
         newUser.third_name = form.values().third_name;
+        newUser.active = form.values().active;
+        newUser.permission.admin = form.values().admin;
 
-        store.admin.changePersonalUser(newUser);
+        store.admin.changeUserByEmail(form.values().email, newUser);
     },
     onError(form) {
         alert("Form has errors!");

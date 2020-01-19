@@ -1,10 +1,10 @@
 import { observable, action, computed } from "mobx"
-import * as MyClasses from "./MyClasses";
+import { User } from "./MyClasses";
 
 declare var window: any;
 
 export class Admin {
-    @observable users: MyClasses.User[] | null = null;
+    @observable users: User[] | null = null;
     @observable loading = false;
     @computed get search() { return window.location.search }
 
@@ -33,9 +33,34 @@ export class Admin {
         //this.getUser();
     }
 
-    @action.bound async changePersonal(user: MyClasses.User) {
-        console.log(user);
+    @action.bound async getUserByEmail(email: string) {
+        let response = await fetch(`api/user/${email}`, {
+            credentials: 'include',
+            headers: {
+                Authorization: 'Bearer ' + window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
+            }
+        });
+
+        let userSystem = await response.json();
+        return userSystem.current;
+    }
+
+    @action.bound async changePersonalUser(user: User) {
         let response = await fetch(`api/user`, {
+            method: 'PUT',
+            body: JSON.stringify(user),
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
+            }
+        });
+
+        await response.json();
+    }
+
+    @action.bound async changeUserByEmail(email: string, user: User) {
+        let response = await fetch(`api/user/${email}`, {
             method: 'PUT',
             body: JSON.stringify(user),
             credentials: 'include',
