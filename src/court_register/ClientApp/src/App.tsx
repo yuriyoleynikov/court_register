@@ -14,11 +14,9 @@ import SettingsBlock from './components/settings/SettingsBlock';
 import Units from './components/settings/units/Units';
 import NewUnitContainer from './components/settings/units/NewUnitContainer';
 
-import ManagementBlock from './components/management/ManagementBlock';
-
 import CasesBlock from './components/cases/CasesBlock';
 import NewCaseContainer from './components/cases/NewCaseContainer';
-import { Button, makeStyles, Theme, createStyles, Typography, CircularProgress, Box, LinearProgress } from '@material-ui/core';
+import { Button, makeStyles, Theme, createStyles, Typography, CircularProgress, Box, LinearProgress, CardContent } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -47,6 +45,12 @@ const UserPage = () => {
     return <User email={email} />;
 };
 
+const Loadinds = observer(() => {
+    if (store.management_user.loading || store.auth.loading)
+        return <LinearProgress />;
+    return <></>;
+});
+
 export default observer(() => {
     const classes = useStyles();
     React.useEffect(() => { store.auth.loadAuth2(); }, []);
@@ -57,6 +61,7 @@ export default observer(() => {
 
     return (
         <BrowserRouter>
+            <Loadinds />
             <Header />
 
             {!store.auth.isSignedIn || !(store.auth.user && store.auth.user.active) ? <Redirect to='/' /> : null}

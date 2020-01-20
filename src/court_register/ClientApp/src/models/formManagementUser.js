@@ -76,24 +76,24 @@ const hooks = {
     }
 };
 
-export function createUserForm(user) {
-    const form = new MobxReactForm({ fields }, { plugins, hooks: {
-        onSuccess(form) {
-            user.first_name = form.values().first_name;
-            user.second_name = form.values().second_name;
-            user.third_name = form.values().third_name;
-        }
-    },
-    onError(form) {
-        alert("Form has errors!");
-        // get all form errors
-        console.log("All form errors", form.errors());
-        }
-    });
+//export function createUserForm(user) {
+//    const form = new MobxReactForm({ fields }, { plugins, hooks: {
+//        onSuccess(form) {
+//            user.first_name = form.values().first_name;
+//            user.second_name = form.values().second_name;
+//            user.third_name = form.values().third_name;
+//        }
+//    },
+//    onError(form) {
+//        alert("Form has errors!");
+//        // get all form errors
+//        console.log("All form errors", form.errors());
+//        }
+//    });
 
-    form.$('first_name').value = user.first_name;
+//    form.$('first_name').value = user.first_name;
 
-    return form;
-}
+//    return form;
+//}
 
 export default new MobxReactForm({ fields }, { plugins, hooks });

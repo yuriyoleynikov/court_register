@@ -5,7 +5,7 @@ declare var window: any;
 
 export class ManagementUser {
     @observable user: User | null = null;
-    @observable loading = true;
+    @observable loading = false;
     @observable userMap = new Map<string, User>();
 
     @action.bound async loadUser(email: string|null) {

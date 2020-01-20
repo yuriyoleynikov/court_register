@@ -1,18 +1,19 @@
 ﻿import * as React from 'react';
 
 import ManagementProfile from './ManagementProfile';
-import formManagementUser, { createUserForm } from '../../../models/formManagementUser';
+import formManagementUser from '../../../models/formManagementUser';
 import { store } from '../../../store';
 import { User } from '../../../models/MyClasses';
 import Loading from '../../../components/Loading';
 import { observer } from 'mobx-react';
+import { LinearProgress, CardContent } from '@material-ui/core';
 
 const ProfileContainer = observer((props: UserProps) => {
     React.useEffect(() => {
         store.management_user.loadUser(props.email);
         return () => {
-            console.log('on dismount or email changed')
-        }}, []);
+        }
+    }, []);
 
     if (!store.management_user.loading) {
         formManagementUser.$('first_name').value = store.management_user.user ? store.management_user.user.first_name : null;
@@ -25,7 +26,7 @@ const ProfileContainer = observer((props: UserProps) => {
     }
 
     if (store.management_user.loading) {
-        return <Loading />;
+        return <></>;
     }
 
     return (<div>

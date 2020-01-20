@@ -28,7 +28,7 @@ export default observer(() => {
     }
 
     if (store.auth.loading)
-        return <LinearProgress />;
+        return <></>;
 
     return <Typography className={classes.root}>
         {!store.auth.isSignedIn ?
