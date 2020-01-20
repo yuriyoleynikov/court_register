@@ -17,7 +17,7 @@ const getUserPermissions = async () => {
     let response = await fetch(`api/user`, {
         credentials: 'include',
         headers: {
-            Authorization: 'Bearer ' + window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
+            Authorization: 'Bearer ' + gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
         }
     });
     let data = await response.json();
@@ -74,6 +74,7 @@ export class Auth {
         store.auth.user = null;
         store.auth.loading = false;
         store.auth.downloadedAuth2 = true;
+
         store.units = new UnitStore();
         store.admin = new Admin();
         store.case = new CaseStore();

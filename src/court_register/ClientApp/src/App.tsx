@@ -18,7 +18,7 @@ import ManagementBlock from './components/management/ManagementBlock';
 
 import CasesBlock from './components/cases/CasesBlock';
 import NewCaseContainer from './components/cases/NewCaseContainer';
-import { Button, makeStyles, Theme, createStyles, Typography, CircularProgress, Box } from '@material-ui/core';
+import { Button, makeStyles, Theme, createStyles, Typography, CircularProgress, Box, LinearProgress } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -52,11 +52,7 @@ export default observer(() => {
     React.useEffect(() => { store.auth.loadAuth2(); }, []);
 
     if (!store.auth.downloadedAuth2) {
-        return (
-            <div className={classes.root}>
-                <CircularProgress />
-            </div>
-        );
+        return <LinearProgress />;
     }
 
     return (
@@ -74,7 +70,6 @@ export default observer(() => {
                     <Route exact path='/cases' component={CasesBlock} />
                     <Route exact path='/case' component={NewCaseContainer} />
 
-                    <Route path='/management' component={ManagementBlock} />
                     <Route path='/management/users' component={UsersPage} />
                     <Route path='/management/user' component={UserPage} />
 

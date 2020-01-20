@@ -3,11 +3,8 @@ import { NavLink, Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 
 import { store } from '../store';
-import Settings from './settings/Settings';
-import Management from './management/Management';
-import CaseLink from './CaseLink';
-import { Button, makeStyles, Theme, createStyles, Typography, CircularProgress, Box } from '@material-ui/core';
-import { GoogleLoginButton } from './GoogleLoginButton'
+import { Button, makeStyles, Theme, createStyles, Typography, CardActions, CardContent, LinearProgress } from '@material-ui/core';
+import { GoogleLoginButton } from './GoogleLoginButton';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -31,71 +28,65 @@ export default observer(() => {
     }
 
     if (store.auth.loading)
-        return (
-            <div className={classes.root}>
-                <Box textAlign="justify">
-                    <CircularProgress />
-                </Box>
-            </div>
-        );
+        return <LinearProgress />;
 
     return <Typography className={classes.root}>
         {!store.auth.isSignedIn ?
             <div>
-                <Typography component="div">
-                    <Box textAlign="justify">
-                        Добро пожаловать в реестр судебных дел администрации Волгограда.
-                        </Box>
-                    <Box textAlign="justify">
-                        Для дальнейшей работы необходимо выполнить вход!
-                        </Box>
-                </Typography>
-                <Button variant="contained" color="primary" onClick={login}>Войти</Button>
-                <GoogleLoginButton />
+                <CardContent>
+                    <Typography gutterBottom variant="h5" component="h2">
+                        Реестр судебных дел администрации Волгограда
+                            </Typography>
+                    <Typography variant="body2" component="p">
+                        Добро пожаловать в реестр судебных дел администрации Волгограда. Для дальнейшей работы необходимо выполнить вход!
+                            </Typography>
+                </CardContent>
+                <CardContent>
+                    <GoogleLoginButton />
+                </CardContent>
             </div> :
             null
         }
 
         {store.auth.isSignedIn && store.auth.user && !store.auth.user.active ?
             <div>
-                <Typography component="div">
-                    <Box textAlign="justify">
-                        Здравствуйте {`${store.auth.user.first_name} ${store.auth.user.second_name}! Email: ${store.auth.user.email}`}, <
-                            NavLink to="/" onClick={logout}>Выход</NavLink>.
-                    </Box>
-                    <Box textAlign="justify">
-                        Ваша учетная запись не активированна либо заблокированна.
-                        </Box>
-                    <Box textAlign="justify">
+                <CardContent>
+                    <Typography gutterBottom variant="h5" component="h2">
+                        Реестр судебных дел администрации Волгограда
+                            </Typography>
+                    <Typography variant="body2" component="p">
+                        Здравствуйте {store.auth.user.email}! Ваша учетная запись не активированна либо заблокированна.
                         Обратитесь к администратору системы.
-                        </Box>
-                    <Box textAlign="justify">
-                        После активации пользователя перезагрузите страницу.
-                        </Box>
-                    <Button variant="contained" color="primary" onClick={logout}>Выйти</Button>
-                </Typography>
+                        </Typography>
+                </CardContent>
+                <CardContent>
+                    <Typography variant="body2" component="p">
+                        Если пользователь был активирован, попробуйте обновить страницу.
+                    </Typography>
+                </CardContent>
+                <CardContent>
+                    <Button variant="contained" size="small" color="primary" onClick={logout}>Выйти</Button>
+                </CardContent>
             </div> :
             null
         }
 
         {store.auth.isSignedIn && store.auth.user && store.auth.user.active ?
             <div>
-                <Typography component="div">
-                    <Box textAlign="justify">
+                <CardContent>
+                    <Typography variant="body2" component="p">
                         Здравствуйте {`${store.auth.user.first_name} ${store.auth.user.second_name}! Email: ${store.auth.user.email}`}, <
                             NavLink to="/" onClick={logout}>Выход</NavLink>, <
                                 NavLink to={`/management/user?email=${store.auth.user.email}`}>Редактировать</NavLink>.
-                    </Box>
-                    <Box textAlign="justify">
-                        <NavLink color="inherit" to="/">Реестр судебных дел</NavLink>
-                    </Box>
-                </Typography>
-
-                <div>
-                    <div><Settings /></div>
-                    <div><Management /></div>
-                    <div><CaseLink /></div>
-                </div>
+                        </Typography>
+                </CardContent>
+                <CardContent>
+                    <Typography variant="body2" component="p">
+                        <NavLink type="button" color="inherit" to="/cases">Реестр судебных дел</NavLink> / <
+                            NavLink className="text-dark" to="/settings/users">Пользователи</NavLink> / <
+                                NavLink className="text-dark" to="/settings/units">Подразделения</NavLink>
+                    </Typography>
+                </CardContent>
             </div> :
             null
         }
