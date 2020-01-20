@@ -5,7 +5,7 @@ declare var window: any;
 
 export class NewCase {
     @observable settingsCase: SettingsCase = new SettingsCase();
-    @observable loading: boolean = false;
+    @observable loading = false;
 
     @action.bound async loadSettingsCase() {
         this.loading = true;

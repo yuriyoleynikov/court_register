@@ -1,4 +1,4 @@
-import MobxReactForm from "mobx-react-form";
+﻿import MobxReactForm from "mobx-react-form";
 import dvr from "mobx-react-form/lib/validators/DVR";
 import validatorjs from "validatorjs";
 import { store } from './../store';
@@ -11,55 +11,55 @@ const plugins = {
 const fields = [
     {
         name: "reg_number",
-        label: "reg_number",
-        placeholder: "reg_number",
+        label: "Регистрационный номер",
+        placeholder: "Регистрационный номер",
         rules: "required|string"
     },
     {
         name: "case_number",
-        label: "case_number",
-        placeholder: "case_number",
+        label: "Номер дела",
+        placeholder: "Номер дела",
         rules: "string"
     },
     {
         name: "unit",
-        label: "unit",
-        placeholder: "unit",
+        label: "Подразделение",
+        placeholder: "Подразделение",
         value: undefined,
         extra: []
     },
     {
         name: "court",
-        label: "court",
-        placeholder: "court",
+        label: "Суд",
+        placeholder: "Суд",
         value: undefined,
         extra: []
     },
     {
         name: "type_role",
-        label: "type_role",
-        placeholder: "type_role",
+        label: "Роль",
+        placeholder: "Роль",
         value: undefined,
         extra: []
     },
     {
         name: "category",
-        label: "category",
-        placeholder: "category",
+        label: "Категория",
+        placeholder: "Категория",
         value: undefined,
         extra: []
     },
     {
         name: "executor",
-        label: "executor",
-        placeholder: "executor",
+        label: "Исполнитель",
+        placeholder: "Исполнитель",
         value: undefined,
         extra: []
     },
     {
         name: "state",
-        label: "state",
-        placeholder: "state",
+        label: "Состояние",
+        placeholder: "Состояние",
         value: undefined,
         extra: []
     }

@@ -23,6 +23,8 @@ const ProfileContainer = observer((props: UserProps) => {
         formManagementUser.$('active').value = store.management_user.user ? store.management_user.user.active : null;
         formManagementUser.$('admin').value = store.management_user.user && store.management_user.user.permission ?
             store.management_user.user.permission.admin : null;
+        //formManagementUser.$('unitAdmin').value = store.management_user.user && store.management_user.user.permission ?
+        //    store.management_user.user.permission.admin : null;
     }
 
     if (store.management_user.loading) {

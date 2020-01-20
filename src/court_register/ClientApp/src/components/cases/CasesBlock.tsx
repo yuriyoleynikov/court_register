@@ -18,6 +18,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import { NavLink } from 'react-router-dom';
+import { Fab } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 
 interface Data {
     calories: number;
@@ -169,6 +172,12 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
         title: {
             flex: '1 1 100%',
         },
+        margin: {
+            margin: theme.spacing(1),
+        },
+        extendedIcon: {
+            marginRight: theme.spacing(1),
+        },
     }),
 );
 
@@ -192,7 +201,11 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         </Typography>
             ) : (
                     <Typography className={classes.title} variant="h6" id="tableTitle">
-                        Nutrition
+                        <NavLink to="/case">
+                            <Fab size="small" color="secondary" aria-label="add" className={classes.margin}>
+                                <AddIcon />
+                            </Fab>
+                        </NavLink> Дела
         </Typography>
                 )}
             {numSelected > 0 ? (
@@ -304,7 +317,7 @@ export default function EnhancedTable() {
 
     return (
         <div className={classes.root}>
-            <Paper className={classes.paper}>
+            <div>
                 <EnhancedTableToolbar numSelected={selected.length} />
                 <div className={classes.tableWrapper}>
                     <Table
@@ -372,7 +385,7 @@ export default function EnhancedTable() {
                     onChangePage={handleChangePage}
                     onChangeRowsPerPage={handleChangeRowsPerPage}
                 />
-            </Paper>
+            </div>
             <FormControlLabel
                 control={<Switch checked={dense} onChange={handleChangeDense} />}
                 label="Компактный список"

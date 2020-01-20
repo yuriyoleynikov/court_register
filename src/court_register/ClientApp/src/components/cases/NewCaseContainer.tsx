@@ -18,7 +18,6 @@ interface NewCaseContainerProps {
 const NewCaseContainer = (props: NewCaseContainerProps) => {
     React.useEffect(() => {
         props.loadSettingsCase();
-        console.log('getSettingsCase ok');
     }, []);
 
     if (!props.loading) {
@@ -52,7 +51,7 @@ const NewCaseContainer = (props: NewCaseContainerProps) => {
     }
 
     if (props.loading) {
-        return <Loading />;
+        return <></>;
     }
 
     return (<div>

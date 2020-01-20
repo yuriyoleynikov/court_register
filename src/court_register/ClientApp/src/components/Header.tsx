@@ -83,8 +83,9 @@ export default observer(() => {
                 <CardContent>
                     <Typography variant="body2" component="p">
                         <NavLink type="button" color="inherit" to="/cases">Реестр судебных дел</NavLink> / <
-                            NavLink className="text-dark" to="/settings/users">Пользователи</NavLink> / <
-                                NavLink className="text-dark" to="/settings/units">Подразделения</NavLink>
+                            NavLink className="text-dark" to="/settings/users?active=true">Пользователи</NavLink> / <
+                                NavLink className="text-dark" to="/settings/units">Подразделения</NavLink> / <
+                                    NavLink className="text-dark" to="/statistic">Статистика</NavLink>
                     </Typography>
                 </CardContent>
             </div> :

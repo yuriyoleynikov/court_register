@@ -45,8 +45,8 @@ const UserPage = () => {
     return <User email={email} />;
 };
 
-const Loadinds = observer(() => {
-    if (store.management_user.loading || store.auth.loading)
+const Loadings = observer(() => {
+    if (store.management_user.loading || store.auth.loading || store.management_user.loading)
         return <LinearProgress />;
     return <></>;
 });
@@ -61,7 +61,7 @@ export default observer(() => {
 
     return (
         <BrowserRouter>
-            <Loadinds />
+            <Loadings />
             <Header />
 
             {!store.auth.isSignedIn || !(store.auth.user && store.auth.user.active) ? <Redirect to='/' /> : null}
