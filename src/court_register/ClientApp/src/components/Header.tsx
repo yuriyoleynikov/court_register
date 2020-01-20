@@ -76,16 +76,16 @@ export default observer(() => {
                 <CardContent>
                     <Typography variant="body2" component="p">
                         Здравствуйте {`${store.auth.user.first_name} ${store.auth.user.second_name}! Email: ${store.auth.user.email}`}, <
-                            NavLink to="/" onClick={logout}>Выход</NavLink>, <
+                            NavLink to={`/`} onClick={logout}>Выход</NavLink>, <
                                 NavLink to={`/management/user?email=${store.auth.user.email}`}>Редактировать</NavLink>.
                         </Typography>
                 </CardContent>
                 <CardContent>
                     <Typography variant="body2" component="p">
                         <NavLink type="button" color="inherit" to="/cases">Реестр судебных дел</NavLink> / <
-                            NavLink className="text-dark" to="/settings/users?active=true">Пользователи</NavLink> / <
-                                NavLink className="text-dark" to="/settings/units">Подразделения</NavLink> / <
-                                    NavLink className="text-dark" to="/statistic">Статистика</NavLink>
+                            NavLink className="text-dark" to={`/management/users?active=true`}>Пользователи</NavLink> / <
+                            NavLink className="text-dark" to={`/settings/units`}>Подразделения</NavLink> / <
+                            NavLink className="text-dark" to={`/statistic`}>Статистика</NavLink>
                     </Typography>
                 </CardContent>
             </div> :
