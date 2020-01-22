@@ -1,10 +1,9 @@
 ﻿import * as React from 'react';
 import { observer } from 'mobx-react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useHistory } from 'react-router-dom';
 
 import { store } from '../../store';
 import { Case } from '../../models/MyClasses';
-import Loading from '../../components/Loading';
 
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -12,13 +11,30 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { Typography, Fab } from '@material-ui/core';
+import { Typography, Fab, IconButton, CardContent, Button, TextField } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import { SettingsCase } from "./../../models/MyClasses";
+import filterForCases from '../../models/filterForCases';
+import MaterialTextField from '../inputs/MaterialTextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
-type CasesProps = {
+type CasesContainerProps = {
     cases: Case[] | null;
     loading: boolean;
+    settingsCase: SettingsCase;
     loadCases(): void;
+    loadSettingsCase(): void
+
+
+    reg_number: string | null;
+    case_number: string | null;
+    court: string | null;
+    unit: string | null;
+    type_role: string | null;
+    category: string | null;
+    status: string | null;
+    executor: string | null;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -38,18 +54,129 @@ const useStyles = makeStyles((theme: Theme) =>
         }
     }));
 
-const Cases = (props: CasesProps) => {
+const CasesContainer = observer((props: CasesContainerProps) => {
     const classes = useStyles();
+    const history = useHistory();
 
+    const changeUrl = (param: string, value: string | null) => {
+        let newUrl = `/cases`;
+
+        if (props.reg_number || props.case_number || props.court || props.unit ||
+            props.type_role || props.category || props.status || props.executor || value) {
+            newUrl = newUrl + '?';
+        }
+        else {
+            history.replace(newUrl);
+            return;
+        }
+
+        let noParamUrl = newUrl;
+        const addAnd = () => (newUrl.length == noParamUrl.length ? '' : '&');
+
+        if (param == 'reg_number') {
+            if (value) {
+                newUrl = newUrl + addAnd() + param + '=' + value;
+            }
+        }
+        else {
+            if (props.reg_number) {
+                newUrl = newUrl + addAnd() + 'reg_number' + '=' + props.reg_number;
+            }
+        }
+
+        if (param == 'case_number') {
+            if (value) {
+                newUrl = newUrl + addAnd() + param + '=' + value;
+            }
+        }
+        else {
+            if (props.case_number) {
+                newUrl = newUrl + addAnd() + 'case_number' + '=' + props.case_number;
+            }
+        }
+
+        if (param == 'court') {
+            if (value) {
+                newUrl = newUrl + addAnd() + param + '=' + value;
+            }
+        }
+        else {
+            if (props.court) {
+                newUrl = newUrl + addAnd() + 'court' + '=' + props.court;
+            }
+        }
+
+        if (param == 'unit') {
+            if (value) {
+                newUrl = newUrl + addAnd() + param + '=' + value;
+            }
+        }
+        else {
+            if (props.unit) {
+                newUrl = newUrl + addAnd() + 'unit' + '=' + props.unit;
+            }
+        }
+
+        if (param == 'type_role') {
+            if (value) {
+                newUrl = newUrl + addAnd() + param + '=' + value;
+            }
+        }
+        else {
+            if (props.type_role) {
+                newUrl = newUrl + addAnd() + 'type_role' + '=' + props.type_role;
+            }
+        }
+
+        if (param == 'category') {
+            if (value) {
+                newUrl = newUrl + addAnd() + param + '=' + value;
+            }
+        }
+        else {
+            if (props.category) {
+                newUrl = newUrl + addAnd() + 'category' + '=' + props.category;
+            }
+        }
+
+        if (param == 'status') {
+            if (value) {
+                newUrl = newUrl + addAnd() + param + '=' + value;
+            }
+        }
+        else {
+            if (props.status) {
+                newUrl = newUrl + addAnd() + 'status' + '=' + props.status;
+            }
+        }
+
+        if (param == 'executor') {
+            if (value) {
+                newUrl = newUrl + addAnd() + param + '=' + value;
+            }
+        }
+        else {
+            if (props.executor) {
+                newUrl = newUrl + addAnd() + 'executor' + '=' + props.executor;
+            }
+        }
+
+        history.replace(newUrl);
+
+        console.log(param, value, newUrl);
+    };
     React.useEffect(() => {
-        props.loadCases();
-    }, [])
+        props.loadSettingsCase();
+        props.loadCases();        
+    }, [props.reg_number, props.case_number, props.court, props.unit,
+    props.type_role, props.category, props.status, props.executor]);
 
     if (props.loading) {
-        return <Loading />;
+        return <></>;
     }
+
     return (
-        <div>
+        <>
             <Typography className={classes.title} variant="h6" id="tableTitle">
                 <NavLink to="/case">
                     <Fab size="small" color="secondary" aria-label="add" className={classes.margin}>
@@ -57,51 +184,210 @@ const Cases = (props: CasesProps) => {
                     </Fab>
                 </NavLink> Список дел
         </Typography>
-            <>
-                <Table className={classes.table} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell><b>N</b></TableCell>
-                            <TableCell align="left"><b>N Рег.</b></TableCell>
-                            <TableCell align="left"><b>Суд</b></TableCell>
-                            <TableCell align="left"><b>N Дела</b></TableCell>
-                            <TableCell align="left"><b>Роль</b></TableCell>
-                            <TableCell align="left"><b>Категория</b></TableCell>
-                            <TableCell align="left"><b>Ответственный</b></TableCell>
-                            <TableCell align="left"><b>Исполнитель</b></TableCell>
-                            <TableCell align="left"><b>Состояние</b></TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {props.cases ?
-                            props.cases.map((currentCase: Case, index: number = 1) =>
-                                <TableRow key={currentCase._id ? currentCase._id : 0}>
-                                    <TableCell component="th" scope="row">{index++}</TableCell>
-                                    <TableCell align="left">{currentCase.reg_number}</TableCell>
-                                    <TableCell align="left">{currentCase.court ? currentCase.court.name : null}</TableCell>
-                                    <TableCell align="left">{currentCase.case_number}</TableCell>
-                                    <TableCell align="left">{currentCase.type_role ? currentCase.type_role.name : null}</TableCell>
-                                    <TableCell align="left">{currentCase.category ? currentCase.category.name : null}</TableCell>
-                                    <TableCell align="left">{currentCase.unit ? currentCase.unit.name : null}</TableCell>
-                                    <TableCell align="left">{currentCase.executor ? currentCase.executor.full_name : null}</TableCell>
-                                    <TableCell align="left">{currentCase.state ? currentCase.state.length : null}</TableCell>
-                                </TableRow>
-                            ) : null}
-                    </TableBody>
-                </Table>
-            </>
 
-        </div>
-    );
-};
+            <Table className={classes.table} aria-label="simple table">
+                <TableHead>
+                    <TableRow>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell align="left">
+                            <TextField
+                                id="outlined-basic"
+                                label="N Рег."
+                                variant="outlined"
+                                defaultValue={props.reg_number ? props.reg_number : undefined}
+                                onChange={(event) => { changeUrl(`reg_number`, event.target.value); }}
+                            />
+                        </TableCell>
+                        <TableCell align="left">
+                            <Autocomplete
+                                id="free-solo-demo"                                
+                                freeSolo
+                                disableClearable={true}
+                                options={props.settingsCase && props.settingsCase.courts ?
+                                    props.settingsCase.courts.map(option => option.name) : undefined}
+                                renderInput={params => (
+                                    <TextField
+                                        {...params}
+                                        label="Суд"
+                                        margin="normal"
+                                        variant="outlined"
+                                        fullWidth
+                                    />
+                                )}
+                                defaultValue={props.court ? props.court : undefined}
+                                onInputChange={(event, value) => { changeUrl(`court`, value); }}
+                            />
+                        </TableCell>
+                        <TableCell align="left">
+                            <TextField
+                                id="outlined-basic"
+                                variant="outlined"
+                                defaultValue={props.case_number ? props.case_number : undefined}
+                                onChange={(event) => { changeUrl(`case_number`, event.target.value); }}
+                            />
+                        </TableCell>
+                        <TableCell align="left">
+                            <Autocomplete
+                                id="free-solo-demo"
+                                freeSolo
+                                disableClearable={true}
+                                options={props.settingsCase && props.settingsCase.type_roles ?
+                                    props.settingsCase.type_roles.map(option => option.name) : undefined}
+                                renderInput={params => (
+                                    <TextField
+                                        {...params}
+                                        margin="normal"
+                                        variant="outlined"
+                                        fullWidth
+                                    />
+                                )}
+                                defaultValue={props.type_role ? props.type_role : undefined}
+                                onInputChange={(event, value) => { changeUrl(`type_role`, value); }}
+                            />
+                        </TableCell>
+                        <TableCell align="left">
+                            <Autocomplete
+                                id="free-solo-demo"
+                                freeSolo
+                                disableClearable={true}
+                                options={props.settingsCase && props.settingsCase.category ?
+                                    props.settingsCase.category.map(option => option.name) : undefined}
+                                renderInput={params => (
+                                    <TextField
+                                        {...params}
+                                        margin="normal"
+                                        variant="outlined"
+                                        fullWidth
+                                    />
+                                )}
+                                defaultValue={props.category ? props.category : undefined}
+                                onInputChange={(event, value) => { changeUrl(`category`, value); }}
+                            />
+                        </TableCell>
+                        <TableCell align="left">
+                            <Autocomplete
+                                id="free-solo-demo"
+                                freeSolo
+                                disableClearable={true}
+                                options={props.settingsCase && props.settingsCase.units ?
+                                    props.settingsCase.units.map(option => option.name) : undefined}
+                                renderInput={params => (
+                                    <TextField
+                                        {...params}
+                                        margin="normal"
+                                        variant="outlined"
+                                        fullWidth
+                                    />
+                                )}
+                                defaultValue={props.unit ? props.unit : undefined}
+                                onInputChange={(event, value) => { changeUrl(`unit`, value); }}
+                            />
+                        </TableCell>
+                        <TableCell align="left">
+                            <Autocomplete
+                                id="free-solo-demo"
+                                freeSolo
+                                disableClearable={true}
+                                options={props.settingsCase && props.settingsCase.executors ?
+                                    props.settingsCase.executors.map(option => option.full_name) : undefined}
+                                renderInput={params => (
+                                    <TextField
+                                        {...params}
+                                        margin="normal"
+                                        variant="outlined"
+                                        fullWidth
+                                    />
+                                )}
+                                defaultValue={props.executor ? props.executor : undefined}
+                                onInputChange={(event, value) => { changeUrl(`executor`, value); }}
+                            />
+                        </TableCell>
+                        <TableCell align="left">
+                            <Autocomplete
+                                id="free-solo-demo"
+                                freeSolo
+                                disableClearable={true}
+                                options={props.settingsCase && props.settingsCase.statuses ?
+                                    props.settingsCase.statuses.map(option => option.name) : undefined}
+                                renderInput={params => (
+                                    <TextField
+                                        {...params}
+                                        margin="normal"
+                                        variant="outlined"
+                                        fullWidth
+                                    />
+                                )}
+                                defaultValue={props.status ? props.status : undefined}
+                                onInputChange={(event, value) => { changeUrl(`status`, value); }}
+                            />
+                        </TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableHead>
+                    <TableRow>
+                        <TableCell><b>N</b></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell align="left"><b>N Рег.</b></TableCell>
+                        <TableCell align="left"><b>Суд</b></TableCell>
+                        <TableCell align="left"><b>N Дела</b></TableCell>
+                        <TableCell align="left"><b>Роль</b></TableCell>
+                        <TableCell align="left"><b>Категория</b></TableCell>
+                        <TableCell align="left"><b>Ответственный</b></TableCell>
+                        <TableCell align="left"><b>Исполнитель</b></TableCell>
+                        <TableCell align="left"><b>Состояние</b></TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {props.cases ?
+                        props.cases.map((currentCase: Case, index: number = 1) =>
+                            <TableRow key={currentCase._id ? currentCase._id : 0}>
+                                <TableCell component="th" scope="row">{index++}</TableCell>
+                                <TableCell align="left">
+                                    <IconButton aria-label="delete" className={classes.margin} size="small">
+                                        <ArrowDownwardIcon fontSize="inherit" />
+                                    </IconButton>
+                                </TableCell>
+                                <TableCell align="left">{currentCase.reg_number}</TableCell>
+                                <TableCell align="left">{currentCase.court ? currentCase.court.name : null}</TableCell>
+                                <TableCell align="left">{currentCase.case_number}</TableCell>
+                                <TableCell align="left">{currentCase.type_role ? currentCase.type_role.name : null}</TableCell>
+                                <TableCell align="left">{currentCase.category ? currentCase.category.name : null}</TableCell>
+                                <TableCell align="left">{currentCase.unit ? currentCase.unit.name : null}</TableCell>
+                                <TableCell align="left">{currentCase.executor ? currentCase.executor.full_name : null}</TableCell>
+                                <TableCell align="left">{currentCase.state ? currentCase.state.length : null}</TableCell>
+                            </TableRow>
+                        ) : null}
+                </TableBody>
+            </Table>
+        </>);
+});
 
-export default observer(() => <Cases
-    cases={store.case.cases}
-    loading={store.case.loading}
-    loadCases={store.case.loadCases}
-/>);
+export default observer((props: {
+    reg_number: string | null;
+    case_number: string | null;
+    court: string | null;
+    unit: string | null;
+    type_role: string | null;
+    category: string | null;
+    status: string | null;
+    executor: string | null;
+}) => <CasesContainer
+        reg_number={props.reg_number}
+        case_number={props.case_number}
+        court={props.court}
+        unit={props.unit}
+        type_role={props.type_role}
+        category={props.category}
+        status={props.status}
+        executor={props.executor}
 
-
+        loadSettingsCase={store.case.loadSettingsCase}
+        settingsCase={store.case.settingsCase}
+        loading={store.case.loading}
+        loadCases={store.case.loadCases}
+        cases={store.case.cases}
+    />);
 
 //import React from 'react';
 //import clsx from 'clsx';
@@ -498,75 +784,3 @@ export default observer(() => <Cases
 //        </div>
 //    );
 //}
-
-
-
-//import * as React from 'react';
-//import { observer } from 'mobx-react';
-//import { NavLink } from 'react-router-dom';
-
-//import { store } from '../../store';
-//import { Case } from '../../models/MyClasses';
-//import Loading from '../../components/Loading';
-//import NotCases from './NotCases';
-
-//type CasesProps = {
-//    cases: Case[] | null;
-//    loading: boolean;
-//    loadCases(): void;
-//}
-
-//const Cases = (props: CasesProps) => {
-//    React.useEffect(() => {
-//        props.loadCases()
-//    }, [])
-
-//    if (props.loading) {
-//        return <Loading />;
-//    }
-//    return (
-//        <div>
-//            <NavLink to="/case">Добавить дело</NavLink>
-//            <table className='table table-striped' aria-labelledby="tabelLabel">
-//                <thead>
-//                    <tr>
-//                        <th>N</th>
-//                        <th>N Рег.</th>
-//                        <th>Суд</th>
-//                        <th>N Дела</th>
-//                        <th>Администрация</th>
-//                        <th>Категория</th>
-//                        <th>Ответственный</th>
-//                        <th>Исполнитель</th>
-//                        <th>Состояние</th>
-//                    </tr>
-//                </thead>
-//                <tbody>
-//                    {props.cases ?
-//                        props.cases.map((currentCase: Case, index: number = 1) =>
-//                            <tr key={currentCase._id ? currentCase._id : 0}>
-//                                <td>{index++}</td>
-//                                <td>{currentCase.reg_number}</td>
-//                                <td>{currentCase.court ? currentCase.court.name : null}</td>
-//                                <td>{currentCase.case_number}</td>
-//                                <td>{currentCase.type_role ? currentCase.type_role.name : null}</td>
-//                                <td>{currentCase.category ? currentCase.category.name : null}</td>                                
-//                                <td>{currentCase.unit ? currentCase.unit.name : null}</td>
-//                                <td>{currentCase.executor ? currentCase.executor.full_name : null}</td>
-//                                <td>{currentCase.state ? currentCase.state.length : null}</td>
-//                            </tr>
-//                        ) : null}
-//                </tbody>
-//            </table>
-//            {props.cases ?
-//                props.cases.length == 0 ?
-//                    <NotCases /> : null : <NotCases />}
-//        </div>
-//    );
-//};
-
-//export default observer(() => <Cases
-//    cases={store.case.cases}
-//    loading={store.case.loading}
-//    loadCases={store.case.loadCases}
-///>);

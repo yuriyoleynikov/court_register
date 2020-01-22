@@ -28,10 +28,6 @@ const Users = (props: UsersProps) => {
         props.loadUsers(queryFilter.active == 'true');
     }, [props.active, props.active2]);
 
-    if (props.loading) {
-        return <Loading />;
-    }
-
     return (
         <div>
             <div>Список пользователей</div>

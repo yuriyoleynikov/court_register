@@ -33,6 +33,20 @@ const useQuery = () => {
     return new URLSearchParams(useLocation().search);
 };
 
+const CasesPage = () => {
+    let query = useQuery();    
+    return <CasesBlock
+        reg_number={query.get(`reg_number`)}
+        case_number={query.get(`case_number`)}
+        court={query.get(`court`)}
+        unit={query.get(`unit`)}
+        type_role={query.get(`type_role`)}
+        category={query.get(`category`)}
+        status={query.get(`status`)}
+        executor={query.get(`executor`)}
+    />;
+};
+
 const UsersPage = () => {
     let query = useQuery();
     return <Users active={query.get(`active`)} active2={query.get(`active2`)} />;
@@ -46,7 +60,7 @@ const UserPage = () => {
 };
 
 const Loadings = observer(() => {
-    if (store.management_user.loading || store.auth.loading || store.management_user.loading)
+    if (store.management_user.loading || store.auth.loading || store.management_user.loading || store.case.loading)
         return <LinearProgress />;
     return <></>;
 });
@@ -72,7 +86,7 @@ export default observer(() => {
 
             {store.auth.isSignedIn && store.auth.user && store.auth.user.active ?
                 <div>
-                    <Route exact path='/cases' component={CasesBlock} />
+                    <Route exact path='/cases' component={CasesPage} />
                     <Route exact path='/case' component={NewCaseContainer} />
 
                     <Route path='/management/users' component={UsersPage} />
