@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using court_register.Models;
+﻿using court_register.Models;
 using court_register.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace court_register.Controllers
 {
@@ -53,6 +51,37 @@ namespace court_register.Controllers
 
             await _repositoryService.AddCaseAsync(_userExecutorEmail, @case);
             return true;
+        }
+
+        [HttpGet]
+        [Route("api/case")]
+        public async Task<CaseSystem> GetCaseByIdAsync([FromQuery] string _id)
+        {
+            string _userExecutorEmail = null;
+            _userExecutorEmail = GetCurrentUserEmail();
+
+            int id = 0;
+            if (String.IsNullOrEmpty(_id))
+            {
+                if (!Int32.TryParse(_id, out id))
+                {
+                    return null;
+                }
+            }
+
+            var caseSystem = await _repositoryService.GetCaseSystemByIdAsync(_userExecutorEmail, id);
+            return caseSystem;
+        }
+
+        [HttpGet]
+        [Route("api/case/create")]
+        public async Task<string> CreateCaseAsync()
+        {
+            string _userExecutorEmail = null;
+            _userExecutorEmail = GetCurrentUserEmail();
+
+            var id = await _repositoryService.CreateCaseAsync(_userExecutorEmail);
+            return id;
         }
 
         private string GetCurrentUserEmail()

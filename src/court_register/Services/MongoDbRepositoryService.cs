@@ -78,7 +78,7 @@ namespace court_register.Services
             return userSystem.current.permission.admin;
         }
 
-        public async Task<IEnumerable<User>> GetUsersAsync(string userExecutorEmail, bool active)   
+        public async Task<IEnumerable<User>> GetUsersAsync(string userExecutorEmail, bool active)
         {
             try
             {
@@ -95,7 +95,7 @@ namespace court_register.Services
                 var userSystemList = await _context.users
                         .Find(userSystem => true).ToListAsync();
 
-                var userList = userSystemList.Select(userSystem => userSystem.current).Where(user=>user.active == active);
+                var userList = userSystemList.Select(userSystem => userSystem.current).Where(user => user.active == active);
 
                 return userList;
             }
@@ -462,6 +462,60 @@ namespace court_register.Services
             }
         }
 
+        public async Task<string> CreateCaseAsync(string userExecutorEmail)
+        {
+            try
+            {
+                await CheckCurrentUserIsExistAsync(userExecutorEmail);
+
+                var isActive = await GetCurrentUserIsActiveAsync(userExecutorEmail);
+                if (!isActive)
+                    return null;
+
+                var isAdmin = await GetCurrentUserIsAdminAsync(userExecutorEmail);
+                if (!(isAdmin))
+                    return null;
+
+                var newCaseSystem = new CaseSystem();
+                var newId = 0;
+                if (await _context.cases.Find<CaseSystem>(_ => true).AnyAsync())
+                {
+                    var caseSystemList = await _context.cases.Find<CaseSystem>(_ => true).ToListAsync();
+                    newId = caseSystemList.Max(us => us.current._id ?? 0) + 1;
+                }
+                var userExecutor = (await GetUserSystemByUserEmailAsync(userExecutorEmail)).current;
+
+                newCaseSystem.current = new Case();
+                var createNumber = "1";
+                newCaseSystem.current.case_number = createNumber;
+                newCaseSystem.current._id = newId;
+                newCaseSystem.current.version = 0;
+                newCaseSystem.current.created = new Created
+                {
+                    date = DateTime.Now,
+                    userInfo = new UserInfo
+                    {
+                        email = userExecutor.email,
+                        first_name = userExecutor.first_name,
+                        second_name = userExecutor.second_name,
+                        third_name = userExecutor.third_name,
+                        version = userExecutor.version,
+                        _id = userExecutor._id,
+                        permission = userExecutor.permission
+                    }
+                };
+                newCaseSystem.current.deleted = false;
+
+                await _context.cases.InsertOneAsync(newCaseSystem);
+
+                return newId.ToString();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         private async Task CreateTypesRoleInCase(string userExecutorEmail)
         {
             try
@@ -812,6 +866,28 @@ namespace court_register.Services
                 }).ToList();
 
                 return settingsCase;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<CaseSystem> GetCaseSystemByIdAsync(string userExecutorEmail, int _id)
+        {
+            try
+            {
+                await CheckCurrentUserIsExistAsync(userExecutorEmail);
+
+                var isActive = await GetCurrentUserIsActiveAsync(userExecutorEmail);
+                if (!isActive)
+                    return null;
+
+                var caseSystemList = await _context.cases
+                        .Find(caseSystem => true).ToListAsync();
+
+                var @case = caseSystemList.Where(caseSystem => caseSystem.current._id == _id).FirstOrDefault();
+
+                return @case;
             }
             catch (Exception ex)
             {

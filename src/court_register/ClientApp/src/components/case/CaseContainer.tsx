@@ -2,7 +2,6 @@
 
 import NewCase from './NewCase';
 import formNewCase from '../../models/formNewCase';
-import Loading from '../../components/Loading';
 import { observer } from 'mobx-react';
 import { store } from '../../store';
 import { SettingsCase } from '../../models/MyClasses';
@@ -13,11 +12,16 @@ interface NewCaseContainerProps {
     loadSettingsCase(): void;
     isOpenStatus: boolean;
     toggle(): void;
+    _id: string | null;
+    loadCaseById(id: string): void
 }
 
-const NewCaseContainer = (props: NewCaseContainerProps) => {
+const CaseContainer = (props: NewCaseContainerProps) => {
     React.useEffect(() => {
         props.loadSettingsCase();
+        if (props._id) {
+            props.loadCaseById(props._id);
+        }
     }, []);
 
     if (!props.loading) {
@@ -59,10 +63,12 @@ const NewCaseContainer = (props: NewCaseContainerProps) => {
     </div>);
 };
 
-export default observer(() => <NewCaseContainer
-    settingsCase={store.new_case.settingsCase}
-    loading={store.new_case.loading}
-    loadSettingsCase={store.new_case.loadSettingsCase}
+export default observer((props: { _id: string | null; }) => <CaseContainer
+    settingsCase={store.case_edit.settingsCase}
+    loading={store.case_edit.loading}
+    loadSettingsCase={store.case_edit.loadSettingsCase}
     toggle={store.court.toggle}
     isOpenStatus={store.court.isOpenStatus}
+    _id={props._id}
+    loadCaseById={store.case_edit.loadCaseById}
 />);

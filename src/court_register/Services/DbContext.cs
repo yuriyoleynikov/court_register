@@ -14,10 +14,13 @@ namespace court_register.Services
         public DbContext(IOptions<DatabaseSettings> databaseSettings)
         {
             var client = new MongoClient(databaseSettings.Value.ConnectionString);
+            
+            //var client = new MongoClient("mongodb+srv://yuriyoleynikov:qSiHXKTtXbLe1hHt@mycluster-qxkfk.azure.mongodb.net/test?retryWrites=true&w=majority");
+
             if (client != null)
             {
                 _database = client.GetDatabase(databaseSettings.Value.DatabaseName);
-            }            
+            }
         }
 
         public IMongoCollection<UserSystem> users
@@ -25,6 +28,14 @@ namespace court_register.Services
             get
             {
                 return _database.GetCollection<UserSystem>("users");
+            }
+        }
+
+        public IMongoCollection<Object> collection
+        {
+            get
+            {
+                return _database.GetCollection<Object>("collection");
             }
         }
 

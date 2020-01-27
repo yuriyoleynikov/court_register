@@ -1,6 +1,6 @@
 ﻿import * as React from 'react';
 import { observer } from 'mobx-react';
-import { NavLink, useHistory } from 'react-router-dom';
+import { NavLink, useHistory, Redirect } from 'react-router-dom';
 
 import { store } from '../../store';
 import { Case } from '../../models/MyClasses';
@@ -18,13 +18,16 @@ import { SettingsCase } from "./../../models/MyClasses";
 import filterForCases from '../../models/filterForCases';
 import MaterialTextField from '../inputs/MaterialTextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import { CasesStore } from '../../models/CasesStore';
 
 type CasesContainerProps = {
     cases: Case[] | null;
     loading: boolean;
+    isCreateCaseLoaded: boolean;
     settingsCase: SettingsCase;
     loadCases(): void;
-    loadSettingsCase(): void
+    loadSettingsCase(): void;
+    currentId: string | null;
 
 
     reg_number: string | null;
@@ -57,6 +60,11 @@ const useStyles = makeStyles((theme: Theme) =>
 const CasesContainer = observer((props: CasesContainerProps) => {
     const classes = useStyles();
     const history = useHistory();
+
+    const createCase = () => {
+        store.case_edit.createCase();
+        store.case_edit.isCreateCaseLoaded = false;
+    }
 
     const changeUrl = (param: string, value: string | null) => {
         let newUrl = `/cases`;
@@ -167,16 +175,26 @@ const CasesContainer = observer((props: CasesContainerProps) => {
     };
     React.useEffect(() => {
         props.loadSettingsCase();
-        props.loadCases();        
-    }, [props.reg_number, props.case_number, props.court, props.unit,
-    props.type_role, props.category, props.status, props.executor]);
+        props.loadCases();
+        return () => {
+            store.cases = new CasesStore();
+            store.case_edit.currentId = null;
+            store.case_edit.isCreateCaseLoaded = false;
+        }
+    }, []);
 
     if (props.loading) {
         return <></>;
     }
 
+    if (props.isCreateCaseLoaded) {
+        return <><Redirect to={`/case?_id=${props.currentId}`} /></>;
+    }
+
     return (
         <>
+
+            <Button variant="contained" size="small" color="primary" onClick={createCase}>Добавить</Button>
             <Typography className={classes.title} variant="h6" id="tableTitle">
                 <NavLink to="/case">
                     <Fab size="small" color="secondary" aria-label="add" className={classes.margin}>
@@ -201,7 +219,7 @@ const CasesContainer = observer((props: CasesContainerProps) => {
                         </TableCell>
                         <TableCell align="left">
                             <Autocomplete
-                                id="free-solo-demo"                                
+                                id="free-solo-demo"
                                 freeSolo
                                 disableClearable={true}
                                 options={props.settingsCase && props.settingsCase.courts ?
@@ -340,9 +358,9 @@ const CasesContainer = observer((props: CasesContainerProps) => {
                 </TableHead>
                 <TableBody>
                     {props.cases ?
-                        props.cases.map((currentCase: Case, index: number = 1) =>
+                        props.cases.map((currentCase: Case, index: number) =>
                             <TableRow key={currentCase._id ? currentCase._id : 0}>
-                                <TableCell component="th" scope="row">{index++}</TableCell>
+                                <TableCell component="th" scope="row">{++index}</TableCell>
                                 <TableCell align="left">
                                     <IconButton aria-label="delete" className={classes.margin} size="small">
                                         <ArrowDownwardIcon fontSize="inherit" />
@@ -355,7 +373,8 @@ const CasesContainer = observer((props: CasesContainerProps) => {
                                 <TableCell align="left">{currentCase.category ? currentCase.category.name : null}</TableCell>
                                 <TableCell align="left">{currentCase.unit ? currentCase.unit.name : null}</TableCell>
                                 <TableCell align="left">{currentCase.executor ? currentCase.executor.full_name : null}</TableCell>
-                                <TableCell align="left">{currentCase.state ? currentCase.state.length : null}</TableCell>
+                                <TableCell align="left">{currentCase.state ? currentCase.state.map((s, i: number) =>
+                                    <div key={i}>{`${++i}(${s.short_sign})`}</div>) : null}</TableCell>
                             </TableRow>
                         ) : null}
                 </TableBody>
@@ -382,11 +401,13 @@ export default observer((props: {
         status={props.status}
         executor={props.executor}
 
-        loadSettingsCase={store.case.loadSettingsCase}
-        settingsCase={store.case.settingsCase}
-        loading={store.case.loading}
-        loadCases={store.case.loadCases}
-        cases={store.case.cases}
+        loadSettingsCase={store.cases.loadSettingsCase}
+        settingsCase={store.cases.settingsCase}
+        loading={store.cases.loading}
+        isCreateCaseLoaded={store.case_edit.isCreateCaseLoaded}
+        loadCases={store.cases.loadCases}
+        cases={store.cases.cases}
+        currentId={store.case_edit.currentId}
     />);
 
 //import React from 'react';

@@ -1,10 +1,10 @@
-import { observable, action, computed } from "mobx"
-import * as MyClasses from "./MyClasses";
+import { observable, action, computed } from "mobx";
+import { Unit } from "./MyClasses";
 
 declare var window: any;
 
 export class UnitStore {
-    @observable units: MyClasses.Unit[] | null = null;
+    @observable units: Unit[] | null = null;
     @observable loading = false;
 
     @action.bound async loadUnits() {
@@ -20,7 +20,7 @@ export class UnitStore {
         this.loading = false;
     }
 
-    @action.bound async createUnit(unit: MyClasses.Unit) {
+    @action.bound async createUnit(unit: Unit) {
         this.loading = true;
 
         let response = await fetch(`api/unit`, {

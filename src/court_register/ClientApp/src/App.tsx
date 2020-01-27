@@ -15,7 +15,7 @@ import Units from './components/settings/units/Units';
 import NewUnitContainer from './components/settings/units/NewUnitContainer';
 
 import CasesBlock from './components/cases/CasesBlock';
-import NewCaseContainer from './components/cases/NewCaseContainer';
+import CaseContainer from './components/case/CaseContainer';
 import { Button, makeStyles, Theme, createStyles, Typography, CircularProgress, Box, LinearProgress, CardContent } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -47,6 +47,13 @@ const CasesPage = () => {
     />;
 };
 
+const CasePage = () => {
+    let query = useQuery();
+    return <CaseContainer
+        _id={query.get(`_id`)}
+    />;
+};
+
 const UsersPage = () => {
     let query = useQuery();
     return <Users active={query.get(`active`)} active2={query.get(`active2`)} />;
@@ -60,7 +67,7 @@ const UserPage = () => {
 };
 
 const Loadings = observer(() => {
-    if (store.management_user.loading || store.auth.loading || store.management_user.loading || store.case.loading)
+    if (store.management_user.loading || store.auth.loading || store.management_user.loading || store.cases.loading)
         return <LinearProgress />;
     return <></>;
 });
@@ -87,7 +94,7 @@ export default observer(() => {
             {store.auth.isSignedIn && store.auth.user && store.auth.user.active ?
                 <div>
                     <Route exact path='/cases' component={CasesPage} />
-                    <Route exact path='/case' component={NewCaseContainer} />
+                    <Route exact path='/case' component={CasePage} />
 
                     <Route path='/management/users' component={UsersPage} />
                     <Route path='/management/user' component={UserPage} />

@@ -40,8 +40,8 @@
     <None Remove="ClientApp\src\models\formUser.js" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\src\components\cases\NewCourt.tsx" />
-    <TypeScriptCompile Include="ClientApp\src\components\cases\NewCase.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\case\NewCourt.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\case\NewCase.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\inputs\AutocompleteField.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\inputs\MaterialTextField.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\inputs\MaterialCheckbox.tsx" />
@@ -56,9 +56,6 @@
     <TypeScriptCompile Include="ClientApp\src\models\formUnit.js" />
     <TypeScriptCompile Include="ClientApp\src\models\formManagementUser.js" />
     <TypeScriptCompile Include="ClientApp\src\models\formUser.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ClientApp\src\components\case\" />
   </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->

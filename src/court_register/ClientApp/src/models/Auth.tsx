@@ -4,8 +4,8 @@ import { User } from './MyClasses';
 import { store } from "./../store";
 import { Admin } from "./Admin";
 import { UnitStore } from "./UnitStore";
-import { CaseStore } from "./CaseStore";
-import { NewCase } from "./NewCase";
+import { CasesStore } from "./CasesStore";
+import { CaseEditStore } from "./CaseEditStore";
 
 const loadAuth2 = () => {
     return new Promise<undefined>((resolve) => {
@@ -34,7 +34,7 @@ export class Auth {
             return;
         await loadAuth2();
         const auth = gapi.auth2.init({
-            client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID
+            client_id: "921481274837-sfba1gv0mdatog6iobno4spdrcnofsik.apps.googleusercontent.com"
         });
         await new Promise<undefined>(resolve => { auth.then(() => resolve()) });
         this.downloadedAuth2 = true;
@@ -77,7 +77,7 @@ export class Auth {
 
         store.units = new UnitStore();
         store.admin = new Admin();
-        store.case = new CaseStore();
-        store.new_case = new NewCase();
+        store.cases = new CasesStore();
+        store.case_edit = new CaseEditStore();
     }
 }

@@ -41,7 +41,7 @@ const hooks = {
         form.clear();
         store.court.isOpen = false;
 
-        store.new_case.loadSettingsCase();
+        store.case_edit.loadSettingsCase();
     },
     onError(form) {
         alert("Form has errors!");

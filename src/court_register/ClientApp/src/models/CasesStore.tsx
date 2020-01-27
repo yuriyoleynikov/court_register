@@ -14,7 +14,7 @@ class FilterForCases {
     @observable reg_number: string | null = null;
 }
 
-export class CaseStore {
+export class CasesStore {
     @observable cases: Case[] | null = null;
     @observable loading = false;    
     @observable currentSettingsCase: FilterForCases = new FilterForCases();

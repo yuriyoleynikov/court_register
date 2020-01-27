@@ -72,14 +72,14 @@ const hooks = {
         newCase.reg_number = form.values().reg_number;
         newCase.case_number = form.values().case_number;
 
-        newCase.unit = store.new_case.settingsCase.units.find(u => u.name == form.values().unit);
-        newCase.court = store.new_case.settingsCase.courts.find(u => u.name == form.values().court);
-        newCase.type_role = store.new_case.settingsCase.type_roles.find(u => u.name == form.values().type_role);
-        newCase.category = store.new_case.settingsCase.category.find(u => u.name == form.values().category);
-        newCase.state = [store.new_case.settingsCase.statuses.find(u => u.name == form.values().state)];
-        newCase.executor = store.new_case.settingsCase.executors.find(u => u.full_name == form.values().executor);
+        newCase.unit = store.case_edit.settingsCase.units.find(u => u.name == form.values().unit);
+        newCase.court = store.case_edit.settingsCase.courts.find(u => u.name == form.values().court);
+        newCase.type_role = store.case_edit.settingsCase.type_roles.find(u => u.name == form.values().type_role);
+        newCase.category = store.case_edit.settingsCase.category.find(u => u.name == form.values().category);
+        newCase.state = [store.case_edit.settingsCase.statuses.find(u => u.name == form.values().state)];
+        newCase.executor = store.case_edit.settingsCase.executors.find(u => u.full_name == form.values().executor);
 
-        store.case.createCase(newCase);
+        store.cases.createCase(newCase);
     },
     onError(form) {
         alert("Form has errors!");
