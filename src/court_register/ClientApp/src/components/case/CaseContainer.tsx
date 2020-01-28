@@ -4,7 +4,7 @@ import NewCase from './NewCase';
 import formNewCase from '../../models/formNewCase';
 import { observer } from 'mobx-react';
 import { store } from '../../store';
-import { SettingsCase } from '../../models/MyClasses';
+import { SettingsCase, Case } from '../../models/MyClasses';
 
 interface NewCaseContainerProps {
     settingsCase: SettingsCase;
@@ -13,7 +13,8 @@ interface NewCaseContainerProps {
     isOpenStatus: boolean;
     toggle(): void;
     _id: string | null;
-    loadCaseById(id: string): void
+    loadCaseById(id: string): void;
+    currentCase: Case | null;
 }
 
 const CaseContainer = (props: NewCaseContainerProps) => {
@@ -22,6 +23,7 @@ const CaseContainer = (props: NewCaseContainerProps) => {
         if (props._id) {
             props.loadCaseById(props._id);
         }
+        (window as any).form = formNewCase;
     }, []);
 
     if (!props.loading) {
@@ -49,9 +51,18 @@ const CaseContainer = (props: NewCaseContainerProps) => {
             let statusList = props.settingsCase.statuses.map(u => u.name);
             formNewCase.$('state').$extra = statusList;
         }
+        if (props.currentCase != null) {
+            formNewCase.$('reg_number').value = props.currentCase.reg_number;
+            formNewCase.$('case_number').value = props.currentCase.case_number;
+            formNewCase.$('category').$value = props.currentCase.category ? props.currentCase.category.name : undefined;
+            formNewCase.$('type_role').value = props.currentCase.type_role ? props.currentCase.type_role.name : undefined;
+            formNewCase.$('court').value = props.currentCase.court ? props.currentCase.court.name : undefined;
+            formNewCase.$('unit').value = props.currentCase.unit ? props.currentCase.unit.name : undefined;
+            formNewCase.$('executor').value = props.currentCase.executor ? props.currentCase.executor.full_name : undefined;
+            formNewCase.$('state').value = props.currentCase.state ? props.currentCase.state[0].name : undefined;
+            formNewCase.$('_id').value = props._id;
+        }
 
-        formNewCase.$('reg_number').value = null;
-        formNewCase.$('case_number').value = null;
     }
 
     if (props.loading) {
@@ -71,4 +82,5 @@ export default observer((props: { _id: string | null; }) => <CaseContainer
     isOpenStatus={store.court.isOpenStatus}
     _id={props._id}
     loadCaseById={store.case_edit.loadCaseById}
+    currentCase={store.case_edit.currentCase}
 />);

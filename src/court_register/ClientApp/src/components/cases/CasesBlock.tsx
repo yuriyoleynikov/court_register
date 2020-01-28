@@ -13,6 +13,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { Typography, Fab, IconButton, CardContent, Button, TextField } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
+
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import { SettingsCase } from "./../../models/MyClasses";
 import filterForCases from '../../models/filterForCases';
@@ -64,6 +66,10 @@ const CasesContainer = observer((props: CasesContainerProps) => {
     const createCase = () => {
         store.case_edit.createCase();
         store.case_edit.isCreateCaseLoaded = false;
+    }
+
+    const openCase = (id: number | null) => {
+        history.push(`/case?_id=${id}`);
     }
 
     const changeUrl = (param: string, value: string | null) => {
@@ -193,14 +199,14 @@ const CasesContainer = observer((props: CasesContainerProps) => {
 
     return (
         <>
-
             <Button variant="contained" size="small" color="primary" onClick={createCase}>Добавить</Button>
             <Typography className={classes.title} variant="h6" id="tableTitle">
-                <NavLink to="/case">
+                {/*<NavLink to="/case">
                     <Fab size="small" color="secondary" aria-label="add" className={classes.margin}>
                         <AddIcon />
                     </Fab>
-                </NavLink> Список дел
+                </NavLink>*/}
+                Список дел
         </Typography>
 
             <Table className={classes.table} aria-label="simple table">
@@ -363,7 +369,7 @@ const CasesContainer = observer((props: CasesContainerProps) => {
                                 <TableCell component="th" scope="row">{++index}</TableCell>
                                 <TableCell align="left">
                                     <IconButton aria-label="delete" className={classes.margin} size="small">
-                                        <ArrowDownwardIcon fontSize="inherit" />
+                                        <EditIcon fontSize="inherit" onClick={() => { openCase(currentCase._id) }} />
                                     </IconButton>
                                 </TableCell>
                                 <TableCell align="left">{currentCase.reg_number}</TableCell>
@@ -373,8 +379,8 @@ const CasesContainer = observer((props: CasesContainerProps) => {
                                 <TableCell align="left">{currentCase.category ? currentCase.category.name : null}</TableCell>
                                 <TableCell align="left">{currentCase.unit ? currentCase.unit.name : null}</TableCell>
                                 <TableCell align="left">{currentCase.executor ? currentCase.executor.full_name : null}</TableCell>
-                                <TableCell align="left">{currentCase.state ? currentCase.state.map((s, i: number) =>
-                                    <div key={i}>{`${++i}(${s.short_sign})`}</div>) : null}</TableCell>
+                                <TableCell align="left">{currentCase.state && currentCase.state[0] ? currentCase.state.map((s, i: number) =>
+                                    <div key={i}>{`${++i}(${s ? s.short_sign : ``})`}</div>) : null}</TableCell>
                             </TableRow>
                         ) : null}
                 </TableBody>

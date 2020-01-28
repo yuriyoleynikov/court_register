@@ -21,7 +21,7 @@ namespace court_register.Services
 
         Task<IEnumerable<Case>> GetCasesAsync(string userExecutorEmail);
         Task<SettingsCase> GetSettingsCaseAsync(string userExecutorEmail);
-        Task AddCaseAsync(string userExecutorEmail, Case unit);
+        Task<bool> EditCaseAsync(string userExecutorEmail, Case unit);
         Task<string> CreateCaseAsync(string userExecutorEmail);
         Task<CaseSystem> GetCaseSystemByIdAsync(string userExecutorEmail, int id);
     }

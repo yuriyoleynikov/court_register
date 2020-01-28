@@ -401,7 +401,7 @@ namespace court_register.Services
                 throw ex;
             }
         }
-        public async Task AddCaseAsync(string userExecutorEmail, Case @case)
+        public async Task<bool> EditCaseAsync(string userExecutorEmail, Case @case)
         {
             try
             {
@@ -409,51 +409,95 @@ namespace court_register.Services
 
                 var isActive = await GetCurrentUserIsActiveAsync(userExecutorEmail);
                 if (!isActive)
-                    return;
+                    return false;
 
                 var isAdmin = await GetCurrentUserIsAdminAsync(userExecutorEmail);
                 if (!(isAdmin))
-                    return;
+                    return false;
 
-                var newCaseSystem = new CaseSystem();
-                var newId = 0;
-                if (await _context.cases.Find<CaseSystem>(_ => true).AnyAsync())
+                var caseSystem = await _context.cases
+                        .Find<CaseSystem>(cSystem => cSystem.current._id == @case._id).SingleOrDefaultAsync();
+                var newChanges = new List<Case> { };
+                if (caseSystem.changes != null)
                 {
-                    var caseSystemList = await _context.cases.Find<CaseSystem>(_ => true).ToListAsync();
-                    newId = caseSystemList.Max(us => us.current._id ?? 0) + 1;
+                    newChanges = caseSystem.changes.ToList();
                 }
-                var userExecutor = (await GetUserSystemByUserEmailAsync(userExecutorEmail)).current;
 
-                newCaseSystem.current = @case;
-                newCaseSystem.current._id = newId;
-                newCaseSystem.current.version = 0;
-                newCaseSystem.current.created = new Created
+                newChanges.Add(caseSystem.current);
+
+                caseSystem.changes = newChanges;
+                var newVersion = caseSystem.current.version + 1;
+                caseSystem.current = @case;
+                var userExecutor = (await GetUserSystemByUserEmailAsync(userExecutorEmail)).current;
+                caseSystem.current.created = new Created
                 {
                     date = DateTime.Now,
                     userInfo = new UserInfo
                     {
                         email = userExecutor.email,
                         first_name = userExecutor.first_name,
+                        permission = userExecutor.permission,
                         second_name = userExecutor.second_name,
                         third_name = userExecutor.third_name,
                         version = userExecutor.version,
-                        _id = userExecutor._id,
-                        permission = userExecutor.permission
+                        _id = userExecutor._id
                     }
                 };
-                newCaseSystem.current.deleted = false;
+                caseSystem.current.version = newVersion;
 
-                var typeRoleCaseSystem = await _context.roles_in_case
-                    .Find<TypeRoleCaseSystem>(_ => _.current.name == @case.type_role.name)
-                    .SingleOrDefaultAsync();
-                newCaseSystem.current.type_role = typeRoleCaseSystem.current;
+                ReplaceOneResult actionResult
+                    = await _context.cases
+                                    .ReplaceOneAsync(c => c.current._id == @case._id
+                                            , caseSystem
+                                            , new UpdateOptions { IsUpsert = true });
+                return actionResult.IsAcknowledged
+                    && actionResult.ModifiedCount > 0;
 
-                var typeCategorySystem = await _context.category
-                    .Find<CategorySystem>(_ => _.current.name == @case.category.name)
-                    .SingleOrDefaultAsync();
-                newCaseSystem.current.category = typeCategorySystem.current;
 
-                await _context.cases.InsertOneAsync(newCaseSystem);
+
+
+                //var listCaseSystem = await _context.cases.Find<CaseSystem>(_ => true).ToListAsync();
+                //var curCaseSystem = listCaseSystem.Where(x => x.current._id == @case._id).FirstOrDefault();
+                //var curCase = curCaseSystem.current;
+                //var newCaseSystem = new CaseSystem();
+                //newCaseSystem = 
+
+                //var newCaseSystem = new CaseSystem();
+                //var newId = curCaseSystem.current._id;
+
+
+                //var userExecutor = (await GetUserSystemByUserEmailAsync(userExecutorEmail)).current;
+
+                //newCaseSystem.current = @case;
+                //newCaseSystem.current._id = newId;
+                //newCaseSystem.current.version = 0;
+                //newCaseSystem.current.created = new Created
+                //{
+                //    date = DateTime.Now,
+                //    userInfo = new UserInfo
+                //    {
+                //        email = userExecutor.email,
+                //        first_name = userExecutor.first_name,
+                //        second_name = userExecutor.second_name,
+                //        third_name = userExecutor.third_name,
+                //        version = userExecutor.version,
+                //        _id = userExecutor._id,
+                //        permission = userExecutor.permission
+                //    }
+                //};
+                //newCaseSystem.current.deleted = false;
+
+                //var typeRoleCaseSystem = await _context.roles_in_case
+                //    .Find<TypeRoleCaseSystem>(_ => _.current.name == @case.type_role.name)
+                //    .SingleOrDefaultAsync();
+                //newCaseSystem.current.type_role = typeRoleCaseSystem.current;
+
+                //var typeCategorySystem = await _context.category
+                //    .Find<CategorySystem>(_ => _.current.name == @case.category.name)
+                //    .SingleOrDefaultAsync();
+                //newCaseSystem.current.category = typeCategorySystem.current;
+
+                //await _context.cases.InsertOneAsync(newCaseSystem);
 
             }
             catch (Exception ex)
@@ -486,8 +530,7 @@ namespace court_register.Services
                 var userExecutor = (await GetUserSystemByUserEmailAsync(userExecutorEmail)).current;
 
                 newCaseSystem.current = new Case();
-                var createNumber = "1";
-                newCaseSystem.current.case_number = createNumber;
+                newCaseSystem.current.reg_number = await CreateNewRegisterNumber();
                 newCaseSystem.current._id = newId;
                 newCaseSystem.current.version = 0;
                 newCaseSystem.current.created = new Created
@@ -893,6 +936,40 @@ namespace court_register.Services
             {
                 throw ex;
             }
+        }
+
+        private async Task<string> CreateNewRegisterNumber()
+        {
+            var dataTimeNow = DateTime.UtcNow;
+
+            var year = dataTimeNow.Year.ToString();
+            var shortYear = year.Substring(year.Length - 2);
+
+            var month = dataTimeNow.Month.ToString();
+            var shortMonth = month.Length == 1 ? "0" + month : month;
+
+            var monthYear = $"/{shortMonth}/{shortYear}";
+
+            var listCase = await _context.cases.Find(c => true).ToListAsync();
+
+            var newNumber = 0;
+                        
+            if (listCase.Where(cSystem => cSystem.current != null && cSystem.current.reg_number != null &&
+            cSystem.current.reg_number.Contains(monthYear)).ToList().Any())
+            {
+                newNumber = listCase.Where(cSystem => cSystem.current != null && cSystem.current.reg_number != null &&
+            cSystem.current.reg_number.Contains(monthYear))
+                .Select(cSystem => cSystem.current.reg_number)
+                .Select(s => s.Substring(0, s.IndexOf('/')))
+                .Where(s => Int32.TryParse(s, out var i))
+                .Select(s => Int32.Parse(s))
+                .Max();
+            }
+            newNumber++;
+            var newNumberString = newNumber.ToString();
+            var result = "0000";
+            result = result.Substring(0, result.Length - newNumberString.Length) + newNumberString + monthYear;
+            return result;
         }
     }
 }

@@ -49,8 +49,8 @@ namespace court_register.Controllers
             string _userExecutorEmail = null;
             _userExecutorEmail = GetCurrentUserEmail();
 
-            await _repositoryService.AddCaseAsync(_userExecutorEmail, @case);
-            return true;
+            var result = await _repositoryService.EditCaseAsync(_userExecutorEmail, @case);
+            return result;
         }
 
         [HttpGet]
@@ -61,7 +61,7 @@ namespace court_register.Controllers
             _userExecutorEmail = GetCurrentUserEmail();
 
             int id = 0;
-            if (String.IsNullOrEmpty(_id))
+            if (!String.IsNullOrEmpty(_id))
             {
                 if (!Int32.TryParse(_id, out id))
                 {

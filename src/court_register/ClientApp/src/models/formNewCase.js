@@ -62,6 +62,10 @@ const fields = [
         placeholder: "Состояние",
         value: undefined,
         extra: []
+    },
+    {
+        name: "_id",
+        value: undefined
     }
 ];
 
@@ -78,8 +82,8 @@ const hooks = {
         newCase.category = store.case_edit.settingsCase.category.find(u => u.name == form.values().category);
         newCase.state = [store.case_edit.settingsCase.statuses.find(u => u.name == form.values().state)];
         newCase.executor = store.case_edit.settingsCase.executors.find(u => u.full_name == form.values().executor);
-
-        store.cases.createCase(newCase);
+        newCase._id = Number(form.values()._id);
+        store.cases.editCase(newCase);
     },
     onError(form) {
         alert("Form has errors!");

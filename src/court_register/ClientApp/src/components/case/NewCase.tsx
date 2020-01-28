@@ -32,7 +32,7 @@ export default observer(({ form, toggle, isOpenStatus }) => (
             </CardContent>
 
             <CardContent>
-                <Button type="submit" variant="contained" size="small" color="primary" onClick={form.onSubmit}>Добавить</Button>
+                <Button type="submit" variant="contained" size="small" color="primary" onClick={form.onSubmit}>Сохранить</Button>
             </CardContent>
             <p>{form.error}</p>
         </div>

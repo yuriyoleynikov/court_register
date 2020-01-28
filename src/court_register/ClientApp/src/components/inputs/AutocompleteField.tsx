@@ -12,6 +12,7 @@ export default observer(({
         <div>
             <Autocomplete
                 options={field.extra}
+                defaultValue={field.value}
                 //getOptionLabel={field.extra}
                 //style={{ width: 300 }}
                 id="debug"

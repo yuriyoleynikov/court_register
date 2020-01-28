@@ -34,7 +34,7 @@ export class Auth {
             return;
         await loadAuth2();
         const auth = gapi.auth2.init({
-            client_id: "921481274837-sfba1gv0mdatog6iobno4spdrcnofsik.apps.googleusercontent.com"
+            client_id: '921481274837-sfba1gv0mdatog6iobno4spdrcnofsik.apps.googleusercontent.com'
         });
         await new Promise<undefined>(resolve => { auth.then(() => resolve()) });
         this.downloadedAuth2 = true;

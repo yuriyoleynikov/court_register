@@ -26,7 +26,7 @@ const fields = [
         name: "third_name",
         label: "Отчество",
         placeholder: "Отчество",
-        rules: "required|string"
+        rules: "string"
     },
     {
         name: "email",
@@ -38,19 +38,19 @@ const fields = [
         name: "active",
         label: "Активен",
         placeholder: "Активен",
-        rules: "required|boolean"
+        rules: "boolean"
     },
     {
         name: "admin",
         label: "Администратор",
         placeholder: "Администратор",
-        rules: "required|boolean"
+        rules: "boolean"
     },
     {
         name: "unitAdmin",
         label: "Администратор подразделений",
         placeholder: "Администратор подразделений",
-        rules: "required|boolean"
+        rules: "boolean"
     }
 ];
 

@@ -35,7 +35,7 @@ export class CasesStore {
         this.loading = false;
     }
 
-    @action.bound async createCase(currentCase: Case) {
+    @action.bound async editCase(currentCase: Case) {
         this.loading = true;
         let response = await fetch(`api/case`, {
             method: 'POST',
