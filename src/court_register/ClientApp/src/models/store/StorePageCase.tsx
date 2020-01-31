@@ -1,9 +1,9 @@
 import { observable, action } from "mobx"
-import { SettingsCase, Case } from "./MyClasses";
+import { SettingsCase, Case } from "./../MyClasses";
 
 declare var window: any;
 
-export class CaseEditStore {
+export class StorePageCase {
     @observable settingsCase: SettingsCase = new SettingsCase();
     @observable loading = false;
     @observable isCreateCaseLoaded = false;

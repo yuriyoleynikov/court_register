@@ -1,9 +1,9 @@
 import { observable, action, computed } from "mobx"
-import { User } from "./MyClasses";
+import { User } from "./../MyClasses";
 
 declare var window: any;
 
-export class UserPage {
+export class StorePageUser {
     @observable user: User | null = null;
     @observable loading = false;
     @computed get search() { return window.location.search }

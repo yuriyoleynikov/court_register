@@ -33,15 +33,15 @@
     <None Remove="ClientApp\src\components\settings\profile\Profile.tsx" />
     <None Remove="ClientApp\src\components\settings\units\NewUnit.tsx" />
     <None Remove="ClientApp\src\models\FilterForCases.js" />
+    <None Remove="ClientApp\src\models\formCase.js" />
     <None Remove="ClientApp\src\models\formManagementUser.js" />
-    <None Remove="ClientApp\src\models\formNewCase.js" />
     <None Remove="ClientApp\src\models\formNewCourt.js" />
     <None Remove="ClientApp\src\models\formUnit.js" />
     <None Remove="ClientApp\src\models\formUser.js" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\components\case\NewCourt.tsx" />
-    <TypeScriptCompile Include="ClientApp\src\components\case\NewCase.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\case\ComponentCase.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\inputs\AutocompleteField.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\inputs\MaterialTextField.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\inputs\MaterialCheckbox.tsx" />
@@ -50,12 +50,11 @@
     <TypeScriptCompile Include="ClientApp\src\components\management\user\ManagementProfile.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\settings\profile\Profile.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\settings\units\NewUnit.tsx" />
-    <TypeScriptCompile Include="ClientApp\src\models\filterForCases.js" />
-    <TypeScriptCompile Include="ClientApp\src\models\formNewCourt.js" />
-    <TypeScriptCompile Include="ClientApp\src\models\formNewCase.js" />
-    <TypeScriptCompile Include="ClientApp\src\models\formUnit.js" />
-    <TypeScriptCompile Include="ClientApp\src\models\formManagementUser.js" />
-    <TypeScriptCompile Include="ClientApp\src\models\formUser.js" />
+    <TypeScriptCompile Include="ClientApp\src\models\forms\formCourt.js" />
+    <TypeScriptCompile Include="ClientApp\src\models\forms\formCase.js" />
+    <TypeScriptCompile Include="ClientApp\src\models\forms\formUnit.js" />
+    <TypeScriptCompile Include="ClientApp\src\models\forms\formUserManagement.js" />
+    <TypeScriptCompile Include="ClientApp\src\models\forms\formUser.js" />
   </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->

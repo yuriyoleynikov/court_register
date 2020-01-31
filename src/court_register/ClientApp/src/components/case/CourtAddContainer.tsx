@@ -1,10 +1,9 @@
 ﻿import * as React from 'react';
 
 import NewCourt from './NewCourt';
-import formNewCourt from '../../models/formNewCourt';
-import Loading from '../../components/Loading';
+import formCourt from '../../models/forms/formCourt';
 import { observer } from 'mobx-react';
-import { store } from '../../store';
+import { store } from '../../models/store';
 import { SettingsCase } from '../../models/MyClasses';
 
 interface NewCourtContainerProps {
@@ -33,7 +32,7 @@ const CourtAddContainer = (props: NewCourtContainerProps) => {
     //}
 
     return (<div>
-        <NewCourt form={formNewCourt} />
+        <NewCourt form={formCourt} />
     </div>);
 };
 

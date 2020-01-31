@@ -1,15 +1,14 @@
 import { observable, action, computed } from "mobx";
 
-import { User } from './MyClasses';
-import { store } from "./../store";
-import { Admin } from "./Admin";
-import { UnitStore } from "./UnitStore";
-import { CasesStore } from "./CasesStore";
-import { CaseEditStore } from "./CaseEditStore";
+import { User } from './../MyClasses';
+import { store } from "./";
+import { StorePage } from "./";
+
+const GoogleApiKey = '921481274837-sfba1gv0mdatog6iobno4spdrcnofsik.apps.googleusercontent.com';
 
 const loadAuth2 = () => {
     return new Promise<undefined>((resolve) => {
-        window.gapi.load('auth2', () => resolve(undefined));
+        gapi.load('auth2', () => resolve(undefined));
     })
 }
 
@@ -24,7 +23,7 @@ const getUserPermissions = async () => {
     return data;
 }
 
-export class Auth {
+export class StoreAuth {
     @observable user: User | null = null;
     @observable loading = false;
     @observable downloadedAuth2 = false;
@@ -34,7 +33,7 @@ export class Auth {
             return;
         await loadAuth2();
         const auth = gapi.auth2.init({
-            client_id: '921481274837-sfba1gv0mdatog6iobno4spdrcnofsik.apps.googleusercontent.com'
+            client_id: GoogleApiKey
         });
         await new Promise<undefined>(resolve => { auth.then(() => resolve()) });
         this.downloadedAuth2 = true;
@@ -75,9 +74,6 @@ export class Auth {
         store.auth.loading = false;
         store.auth.downloadedAuth2 = true;
 
-        store.units = new UnitStore();
-        store.admin = new Admin();
-        store.cases = new CasesStore();
-        store.case_edit = new CaseEditStore();
+        store.page = new StorePage();
     }
 }

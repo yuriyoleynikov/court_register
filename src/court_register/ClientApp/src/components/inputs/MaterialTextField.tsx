@@ -8,9 +8,9 @@ export default observer(({
     placeholder = null,
     validatingText = 'validating...',
 }) => (
-        <div>
-            <TextField id="standard-basic" label="Standard"
+        <span>
+            <TextField id="standard-basic" label="Standard" style={{ width: 300 }}
                 {...field.bind({ type, placeholder, validatingText })}
-            /><br />
-        </div>
+            />
+        </span>
     ));

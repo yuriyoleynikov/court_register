@@ -14,13 +14,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = require("react");
 var mobx_react_1 = require("mobx-react");
 var TextField_1 = require("@material-ui/core/TextField");
-var Autocomplete_1 = require("@material-ui/lab/Autocomplete");
 exports.default = mobx_react_1.observer(function (_a) {
     var field = _a.field, _b = _a.type, type = _b === void 0 ? 'text' : _b, _c = _a.placeholder, placeholder = _c === void 0 ? null : _c, _d = _a.validatingText, validatingText = _d === void 0 ? 'validating...' : _d;
     return (React.createElement("span", null,
-        React.createElement(Autocomplete_1.default, { options: field.extra, defaultValue: field.value, style: { width: 300 }, 
-            //getOptionLabel={field.extra}
-            //style={{ width: 300 }}
-            id: "debug", debug: true, onChange: function (event, value) { field.value = value; }, renderInput: function (params) { return (React.createElement(TextField_1.default, __assign({}, params, { label: field.label, margin: "normal", fullWidth: true }))); } })));
+        React.createElement(TextField_1.default, __assign({ id: "standard-basic", label: "Standard", style: { width: 300 } }, field.bind({ type: type, placeholder: placeholder, validatingText: validatingText })))));
 });
-//# sourceMappingURL=AutocompleteField.js.map
+//# sourceMappingURL=MaterialTextField.js.map

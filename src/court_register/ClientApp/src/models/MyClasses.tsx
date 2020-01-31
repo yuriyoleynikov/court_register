@@ -1,4 +1,4 @@
-import { observable } from "mobx"
+import { observable } from "mobx";
 
 export class SettingsCase {
     @observable units: Unit[] | null = null;
@@ -40,7 +40,7 @@ export class Created {
 }
 
 export class UserInfo {
-    @observable version: number | null = null;
+    @observable version: number | null = null;  
     @observable _id: number | null = null;
     @observable email: string | null = null;
 
@@ -67,15 +67,71 @@ export class Case {
     @observable version: number | null = null;
     @observable _id: number | null = null;
 
-    @observable reg_number: string | null = null;
-    @observable case_number: string | undefined = undefined;
+    @observable reg_number: string | null = null;    
+    
+    @observable sides: Sides | null = null;
 
-    @observable court: Court | null = null;
+    @observable case_move: CaseMove[] | null = null;
     @observable type_role: TypeRoleCase | null = null;
     @observable category: Category | null = null;
     @observable unit: Unit | null = null;
     @observable executor: Executor | null = null;
-    @observable state: Status[] | null = null;
+    
+    @observable deleted: boolean | null = null;
+
+    @observable created: Created | null = null;
+}
+
+export class Sides {
+    @observable plaintiff: Person | null = null;
+    @observable defendant: Person | null = null;
+    @observable third_side: Person | null = null;
+}
+
+export class Person {
+    @observable _type: string | null = null;
+    @observable address: string | null = null;
+
+    @observable individual: Individual | null = null;
+    @observable entity: Entity | null = null;
+    @observable administration: Administration | null = null;
+}
+
+export class Individual {
+    @observable version: number | null = null;
+    @observable _id: number | null = null;
+
+    @observable first_name: string | null = null;
+    @observable second_name: string | null = null;
+    @observable third_name: string | null = null;
+    @observable address: string | null = null;
+
+    @observable deleted: boolean | null = null;
+
+    @observable created: Created | null = null;
+}
+
+export class Entity {
+    @observable version: number | null = null;
+    @observable _id: number | null = null;
+
+    @observable inn: string | null = null;
+    @observable name: string | null = null;
+
+    @observable address: string | null = null;
+
+    @observable deleted: boolean | null = null;
+
+    @observable created: Created | null = null;
+}
+
+export class Administration {
+    @observable version: number | null = null;
+    @observable _id: number | null = null;
+
+    @observable name: string | null = null;
+
+    @observable address: string | null = null;
 
     @observable deleted: boolean | null = null;
 
@@ -143,4 +199,19 @@ export class Status {
     @observable deleted: boolean | null = null;
 
     @observable created: Created | null = null;
+}
+
+export class CaseMove {
+    @observable round: number | null = null;
+    @observable case_number: string | undefined = undefined;
+    @observable court: Court | null = null;
+    @observable state: Status | null = null;
+    @observable date: Date | null = null;
+    @observable documents: TextDocument[] | null = null;
+}
+
+export class TextDocument {
+    @observable name: string | null = null;
+    @observable num: number | null = null;
+    @observable text: Court | null = null;
 }

@@ -2,7 +2,7 @@
 import { observer } from 'mobx-react';
 import { NavLink, useHistory, Redirect } from 'react-router-dom';
 
-import { store } from '../../store';
+import { store } from '../../models/store';
 import { Case } from '../../models/MyClasses';
 
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
@@ -17,10 +17,10 @@ import EditIcon from '@material-ui/icons/Edit';
 
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import { SettingsCase } from "./../../models/MyClasses";
-import filterForCases from '../../models/filterForCases';
 import MaterialTextField from '../inputs/MaterialTextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { CasesStore } from '../../models/CasesStore';
+import { StorePageCases } from '../../models/store/StorePageCases';
+import Loading from '../Loading';
 
 type CasesContainerProps = {
     cases: Case[] | null;
@@ -59,13 +59,13 @@ const useStyles = makeStyles((theme: Theme) =>
         }
     }));
 
-const CasesContainer = observer((props: CasesContainerProps) => {
+const CasesContainer = (props: CasesContainerProps) => {
     const classes = useStyles();
     const history = useHistory();
 
     const createCase = () => {
-        store.case_edit.createCase();
-        store.case_edit.isCreateCaseLoaded = false;
+        store.page.case.createCase();
+        store.page.case.isCreateCaseLoaded = false;
     }
 
     const openCase = (id: number | null) => {
@@ -179,22 +179,23 @@ const CasesContainer = observer((props: CasesContainerProps) => {
 
         console.log(param, value, newUrl);
     };
+
     React.useEffect(() => {
         props.loadSettingsCase();
         props.loadCases();
         return () => {
-            store.cases = new CasesStore();
-            store.case_edit.currentId = null;
-            store.case_edit.isCreateCaseLoaded = false;
+            store.page.cases = new StorePageCases();
+            store.page.case.currentId = null;
+            store.page.case.isCreateCaseLoaded = false;
         }
     }, []);
 
-    if (props.loading) {
-        return <></>;
-    }
-
     if (props.isCreateCaseLoaded) {
         return <><Redirect to={`/case?_id=${props.currentId}`} /></>;
+    }
+
+    if (props.loading) {
+        return <Loading />;
     }
 
     return (
@@ -364,8 +365,9 @@ const CasesContainer = observer((props: CasesContainerProps) => {
                 </TableHead>
                 <TableBody>
                     {props.cases ?
-                        props.cases.map((currentCase: Case, index: number) =>
+                        props.cases.map((currentCase: Case, index: number) => 
                             <TableRow key={currentCase._id ? currentCase._id : 0}>
+                                
                                 <TableCell component="th" scope="row">{++index}</TableCell>
                                 <TableCell align="left">
                                     <IconButton aria-label="delete" className={classes.margin} size="small">
@@ -373,20 +375,29 @@ const CasesContainer = observer((props: CasesContainerProps) => {
                                     </IconButton>
                                 </TableCell>
                                 <TableCell align="left">{currentCase.reg_number}</TableCell>
-                                <TableCell align="left">{currentCase.court ? currentCase.court.name : null}</TableCell>
-                                <TableCell align="left">{currentCase.case_number}</TableCell>
+                                <TableCell align="left">{currentCase.case_move && currentCase.case_move.length > 0 &&
+                                    currentCase.case_move[0] && currentCase.case_move[0].court &&
+                                    currentCase.case_move[0].court.name ? 
+                                    currentCase.case_move[0].court.name :
+                                    null}</TableCell>
+                                <TableCell align="left">{currentCase.case_move && currentCase.case_move.length > 0 ?
+                                    currentCase.case_move[currentCase.case_move.length - 1].case_number :
+                                    null}</TableCell>
                                 <TableCell align="left">{currentCase.type_role ? currentCase.type_role.name : null}</TableCell>
                                 <TableCell align="left">{currentCase.category ? currentCase.category.name : null}</TableCell>
                                 <TableCell align="left">{currentCase.unit ? currentCase.unit.name : null}</TableCell>
                                 <TableCell align="left">{currentCase.executor ? currentCase.executor.full_name : null}</TableCell>
-                                <TableCell align="left">{currentCase.state && currentCase.state[0] ? currentCase.state.map((s, i: number) =>
-                                    <div key={i}>{`${++i}(${s ? s.short_sign : ``})`}</div>) : null}</TableCell>
+                                <TableCell align="left">{currentCase.case_move && currentCase.case_move.length > 0 ?
+                                    currentCase.case_move.sort((c) => c.round ? c.round : 0).map((c) =>
+                                        <div key={`${currentCase._id ? currentCase._id.toString() : ''}_${c.round}`}>
+                                            {`${c && c.round ? c.round : ''}(${c && c.state && c.state.short_sign ?
+                                                c.state.short_sign : ``})`}</div>) : null}</TableCell>
                             </TableRow>
                         ) : null}
                 </TableBody>
             </Table>
         </>);
-});
+};
 
 export default observer((props: {
     reg_number: string | null;
@@ -407,13 +418,13 @@ export default observer((props: {
         status={props.status}
         executor={props.executor}
 
-        loadSettingsCase={store.cases.loadSettingsCase}
-        settingsCase={store.cases.settingsCase}
-        loading={store.cases.loading}
-        isCreateCaseLoaded={store.case_edit.isCreateCaseLoaded}
-        loadCases={store.cases.loadCases}
-        cases={store.cases.cases}
-        currentId={store.case_edit.currentId}
+        loadSettingsCase={store.page.cases.loadSettingsCase}
+        settingsCase={store.page.cases.settingsCase}
+        loading={store.page.cases.loading}
+        isCreateCaseLoaded={store.page.case.isCreateCaseLoaded}
+        loadCases={store.page.cases.loadCases}
+        cases={store.page.cases.cases}
+        currentId={store.page.case.currentId}
     />);
 
 //import React from 'react';

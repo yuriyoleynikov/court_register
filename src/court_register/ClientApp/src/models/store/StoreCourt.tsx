@@ -1,9 +1,9 @@
 import { observable, action, computed } from "mobx"
-import { Court } from "./MyClasses";
+import { Court } from "./../MyClasses";
 
 declare var window: any;
 
-export class CourtStore {
+export class StoreCourt {
     @observable isOpen: boolean = false;
     @observable loading: boolean = false;
 

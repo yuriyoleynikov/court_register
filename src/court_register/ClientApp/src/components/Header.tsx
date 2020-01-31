@@ -2,7 +2,7 @@
 import { NavLink, Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 
-import { store } from '../store';
+import { store } from '../models/store';
 import { Button, makeStyles, Theme, createStyles, Typography, CardActions, CardContent, LinearProgress } from '@material-ui/core';
 import { GoogleLoginButton } from './GoogleLoginButton';
 

@@ -1,9 +1,8 @@
 ﻿import * as React from 'react';
 import { observer } from 'mobx-react';
 
-import { store } from '../../../store';
+import { store } from '../../../models/store';
 import { User } from '../../../models/MyClasses';
-import Loading from '../../../components/Loading';
 import { NavLink } from 'react-router-dom';
 import * as queryString from 'query-string'
 

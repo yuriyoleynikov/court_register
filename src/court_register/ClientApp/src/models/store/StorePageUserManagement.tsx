@@ -1,9 +1,9 @@
 import { observable, action, computed } from "mobx";
-import { User } from "./MyClasses";
+import { User } from "./../MyClasses";
 
 declare var window: any;
 
-export class ManagementUser {
+export class StorePageUserManagement {
     @observable user: User | null = null;
     @observable loading = false;
     @observable userMap = new Map<string, User>();

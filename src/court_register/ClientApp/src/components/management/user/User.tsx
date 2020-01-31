@@ -1,38 +1,35 @@
 ﻿import * as React from 'react';
 
 import ManagementProfile from './ManagementProfile';
-import formManagementUser from '../../../models/formManagementUser';
-import { store } from '../../../store';
-import { User } from '../../../models/MyClasses';
-import Loading from '../../../components/Loading';
+import formUserManagement from '../../../models/forms/formUserManagement';
+import { store } from '../../../models/store';
 import { observer } from 'mobx-react';
-import { LinearProgress, CardContent } from '@material-ui/core';
 
 const ProfileContainer = observer((props: UserProps) => {
     React.useEffect(() => {
-        store.management_user.loadUser(props.email);
+        store.page.userManagement.loadUser(props.email);
         return () => {
         }
     }, []);
 
-    if (!store.management_user.loading) {
-        formManagementUser.$('first_name').value = store.management_user.user ? store.management_user.user.first_name : null;
-        formManagementUser.$('second_name').value = store.management_user.user ? store.management_user.user.second_name : null;
-        formManagementUser.$('third_name').value = store.management_user.user ? store.management_user.user.third_name : null;
-        formManagementUser.$('email').value = store.management_user.user ? store.management_user.user.email : null;
-        formManagementUser.$('active').value = store.management_user.user ? store.management_user.user.active : null;
-        formManagementUser.$('admin').value = store.management_user.user && store.management_user.user.permission ?
-            store.management_user.user.permission.admin : null;
+    if (!store.page.userManagement.loading) {
+        formUserManagement.$('first_name').value = store.page.userManagement.user ? store.page.userManagement.user.first_name : null;
+        formUserManagement.$('second_name').value = store.page.userManagement.user ? store.page.userManagement.user.second_name : null;
+        formUserManagement.$('third_name').value = store.page.userManagement.user ? store.page.userManagement.user.third_name : null;
+        formUserManagement.$('email').value = store.page.userManagement.user ? store.page.userManagement.user.email : null;
+        formUserManagement.$('active').value = store.page.userManagement.user ? store.page.userManagement.user.active : null;
+        formUserManagement.$('admin').value = store.page.userManagement.user && store.page.userManagement.user.permission ?
+            store.page.userManagement.user.permission.admin : null;
         //formManagementUser.$('unitAdmin').value = store.management_user.user && store.management_user.user.permission ?
         //    store.management_user.user.permission.admin : null;
     }
 
-    if (store.management_user.loading) {
+    if (store.page.userManagement.loading) {
         return <></>;
     }
 
     return (<div>
-        <ManagementProfile form={formManagementUser} />
+        <ManagementProfile form={formUserManagement} />
     </div>);
 });
 

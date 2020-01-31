@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { Route, Redirect } from 'react-router';
 import { BrowserRouter, useLocation } from 'react-router-dom';
 
-import { store } from './store';
+import { store } from './models/store';
 
 import Header from './components/Header';
 
@@ -14,9 +14,13 @@ import SettingsBlock from './components/settings/SettingsBlock';
 import Units from './components/settings/units/Units';
 import NewUnitContainer from './components/settings/units/NewUnitContainer';
 
-import CasesBlock from './components/cases/CasesBlock';
+import CasesContainer from './components/cases/CasesContainer';
 import CaseContainer from './components/case/CaseContainer';
-import { Button, makeStyles, Theme, createStyles, Typography, CircularProgress, Box, LinearProgress, CardContent } from '@material-ui/core';
+import {
+    Button, makeStyles, Theme, createStyles,
+    Typography, CircularProgress, Box, LinearProgress, CardContent
+} from '@material-ui/core';
+import Loading from './components/Loading';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -25,7 +29,8 @@ const useStyles = makeStyles((theme: Theme) =>
             '& > * + *': {
                 marginLeft: theme.spacing(2),
             },
-        },
+
+        }
     }),
 );
 
@@ -34,8 +39,8 @@ const useQuery = () => {
 };
 
 const CasesPage = () => {
-    let query = useQuery();    
-    return <CasesBlock
+    let query = useQuery();
+    return <CasesContainer
         reg_number={query.get(`reg_number`)}
         case_number={query.get(`case_number`)}
         court={query.get(`court`)}
@@ -67,8 +72,8 @@ const UserPage = () => {
 };
 
 const Loadings = observer(() => {
-    if (store.management_user.loading || store.auth.loading || store.management_user.loading || store.cases.loading)
-        return <LinearProgress />;
+    if (store.page.userManagement.loading || store.auth.loading || store.page.userManagement.loading || store.page.cases.loading)
+        return <Loading />;
     return <></>;
 });
 
@@ -77,15 +82,19 @@ export default observer(() => {
     React.useEffect(() => { store.auth.loadAuth2(); }, []);
 
     if (!store.auth.downloadedAuth2) {
-        return <LinearProgress />;
+        return <Loading />;
     }
 
     return (
         <BrowserRouter>
-            <Loadings />
+            {store.isLoading ? <Loading /> : null}
             <Header />
 
-            {!store.auth.isSignedIn || !(store.auth.user && store.auth.user.active) ? <Redirect to='/' /> : null}
+            {//!store.auth.isSignedIn || !(store.auth.user && store.auth.user.active) ? <Redirect to='/' /> : null
+            }
+
+            {!store.auth.isSignedIn ? <Redirect to='/' /> : null
+            }
 
             <Route exact path='/'>
                 {store.auth.isSignedIn && store.auth.user && store.auth.user.active ? <Redirect to='/cases' /> : null}

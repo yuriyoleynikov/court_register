@@ -2,7 +2,7 @@
 import dvr from "mobx-react-form/lib/validators/DVR";
 import validatorjs from "validatorjs";
 import { store } from './../store';
-import { Case, Status } from './MyClasses'
+import { Case, Status } from './../MyClasses';
 
 const plugins = {
     dvr: dvr(validatorjs)
@@ -74,16 +74,16 @@ const hooks = {
         let newCase = new Case();
 
         newCase.reg_number = form.values().reg_number;
-        newCase.case_number = form.values().case_number;
+        //newCase.case_number = form.values().case_number;
 
-        newCase.unit = store.case_edit.settingsCase.units.find(u => u.name == form.values().unit);
-        newCase.court = store.case_edit.settingsCase.courts.find(u => u.name == form.values().court);
-        newCase.type_role = store.case_edit.settingsCase.type_roles.find(u => u.name == form.values().type_role);
-        newCase.category = store.case_edit.settingsCase.category.find(u => u.name == form.values().category);
-        newCase.state = [store.case_edit.settingsCase.statuses.find(u => u.name == form.values().state)];
-        newCase.executor = store.case_edit.settingsCase.executors.find(u => u.full_name == form.values().executor);
+        //newCase.unit = store.page.case.settingsCase.units.find(u => u.name == form.values().unit);
+        //newCase.court = store.page.case.settingsCase.courts.find(u => u.name == form.values().court);
+        //newCase.type_role = store.page.case.settingsCase.type_roles.find(u => u.name == form.values().type_role);
+        //newCase.category = store.page.case.settingsCase.category.find(u => u.name == form.values().category);
+        //newCase.state = [store.page.case.settingsCase.statuses.find(u => u.name == form.values().state)];
+        //newCase.executor = store.page.case.settingsCase.executors.find(u => u.full_name == form.values().executor);
         newCase._id = Number(form.values()._id);
-        store.cases.editCase(newCase);
+        store.page.cases.editCase(newCase);
     },
     onError(form) {
         alert("Form has errors!");

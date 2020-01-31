@@ -3,7 +3,7 @@ import dvr from "mobx-react-form/lib/validators/DVR";
 import validatorjs from "validatorjs";
 
 import { store } from './../store';
-import { User } from './MyClasses'
+import { User } from './../MyClasses';
 
 const plugins = {
     dvr: dvr(validatorjs)

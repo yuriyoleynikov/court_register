@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { store } from '../store';
+import { store } from '../models/store';
 
 async function attachButton(element: Element) {
     await store.auth.loadAuth2();

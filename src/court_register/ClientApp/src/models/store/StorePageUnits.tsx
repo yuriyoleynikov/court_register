@@ -1,9 +1,9 @@
 import { observable, action, computed } from "mobx";
-import { Unit } from "./MyClasses";
+import { Unit } from "./../MyClasses";
 
 declare var window: any;
 
-export class UnitStore {
+export class StorePageUnits {
     @observable units: Unit[] | null = null;
     @observable loading = false;
 

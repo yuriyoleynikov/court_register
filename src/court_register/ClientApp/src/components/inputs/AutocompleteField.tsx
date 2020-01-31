@@ -9,10 +9,11 @@ export default observer(({
     placeholder = null,
     validatingText = 'validating...',
 }) => (
-        <div>
+        <span>
             <Autocomplete
                 options={field.extra}
                 defaultValue={field.value}
+                style={{ width: 300 }}
                 //getOptionLabel={field.extra}
                 //style={{ width: 300 }}
                 id="debug"
@@ -22,5 +23,5 @@ export default observer(({
                     <TextField {...params} label={field.label} margin="normal" fullWidth />
                 )}
             />
-        </div>
+        </span>
     ));

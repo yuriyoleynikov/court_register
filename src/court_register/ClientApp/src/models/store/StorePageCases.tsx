@@ -1,5 +1,5 @@
 import { observable, action } from "mobx"
-import { Case, SettingsCase } from "./MyClasses";
+import { Case, SettingsCase } from "./../MyClasses";
 import * as queryString from 'query-string'
 
 declare var window: any;
@@ -14,9 +14,9 @@ class FilterForCases {
     @observable reg_number: string | null = null;
 }
 
-export class CasesStore {
+export class StorePageCases {
     @observable cases: Case[] | null = null;
-    @observable loading = false;    
+    @observable loading = false;
     @observable currentSettingsCase: FilterForCases = new FilterForCases();
     @observable settingsCase: SettingsCase = new SettingsCase();
 

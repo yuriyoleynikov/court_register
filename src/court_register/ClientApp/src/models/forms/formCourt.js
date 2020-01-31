@@ -2,7 +2,7 @@ import MobxReactForm from "mobx-react-form";
 import dvr from "mobx-react-form/lib/validators/DVR";
 import validatorjs from "validatorjs";
 import { store } from './../store';
-import { Court } from './MyClasses'
+import { Court } from './../MyClasses';
 
 const plugins = {
     dvr: dvr(validatorjs)
@@ -41,7 +41,7 @@ const hooks = {
         form.clear();
         store.court.isOpen = false;
 
-        store.case_edit.loadSettingsCase();
+        store.pageCase.loadSettingsCase();
     },
     onError(form) {
         alert("Form has errors!");

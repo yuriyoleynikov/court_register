@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import NewUnit from './NewUnit';
-import formUnit from '../../../models/formUnit';
+import formUnit from '../../../models/forms/formUnit';
 
 const NewUnitContainer = () => {
     return (<div>

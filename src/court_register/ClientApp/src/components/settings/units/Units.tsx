@@ -2,7 +2,7 @@
 import { observer } from 'mobx-react';
 import { Link, NavLink } from 'react-router-dom';
 
-import { store } from '../../../store'
+import { store } from '../../../models/store'
 import { Unit } from '../../../models/MyClasses';
 import Loading from '../../../components/Loading';
 
@@ -13,15 +13,15 @@ type UnitsProps = {
     loadUnits(): void;
 }
 
-const $btn = 'f6 link dim bn br2 ph3 pv2 mr2 dib white bg-dark-blue';
 const Units = (props: UnitsProps) => {
-    React.useEffect(() => { props.loadUnits(); console.log('loadUnits ok'); }, [])
+    React.useEffect(() => { props.loadUnits(); }, [])
     
     if (props.loading) {
         return <div>
             <Loading />
         </div>;
     }
+
     return (
         <div>
             <NavLink className="text-dark" to="/settings/units/new">- Создать новое подразделение</NavLink>
@@ -49,7 +49,7 @@ const Units = (props: UnitsProps) => {
 };
 
 export default observer(() => <Units
-    units={store.units.units}
-    loading={store.units.loading}
-    loadUnits={store.units.loadUnits}
+    units={store.page.units.units}
+    loading={store.page.units.loading}
+    loadUnits={store.page.units.loadUnits}
 />);
