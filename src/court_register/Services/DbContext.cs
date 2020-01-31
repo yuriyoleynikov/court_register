@@ -14,8 +14,6 @@ namespace court_register.Services
         public DbContext(IOptions<DatabaseSettings> databaseSettings)
         {
             var client = new MongoClient(databaseSettings.Value.ConnectionString);
-            
-            //var client = new MongoClient("mongodb+srv://yuriyoleynikov:qSiHXKTtXbLe1hHt@mycluster-qxkfk.azure.mongodb.net/test?retryWrites=true&w=majority");
 
             if (client != null)
             {

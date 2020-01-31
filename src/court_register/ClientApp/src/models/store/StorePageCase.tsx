@@ -1,5 +1,5 @@
-import { observable, action } from "mobx"
-import { SettingsCase, Case } from "./../MyClasses";
+import { observable, action } from 'mobx';
+import { SettingsCase, Case } from '../';
 
 declare var window: any;
 

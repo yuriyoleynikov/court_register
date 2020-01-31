@@ -2,7 +2,7 @@
 import { observer } from 'mobx-react';
 
 import { store } from '../../../models/store';
-import { User } from '../../../models/MyClasses';
+import { User } from '../../../models';
 import { NavLink } from 'react-router-dom';
 import * as queryString from 'query-string'
 

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { NavLink, useHistory, Redirect } from 'react-router-dom';
 
 import { store } from '../../models/store';
-import { Case } from '../../models/MyClasses';
+import { Case, SettingsCase } from '../../models';
 
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -16,7 +16,6 @@ import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import { SettingsCase } from "./../../models/MyClasses";
 import MaterialTextField from '../inputs/MaterialTextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { StorePageCases } from '../../models/store/StorePageCases';

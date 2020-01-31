@@ -4,7 +4,7 @@ import NewCourt from './NewCourt';
 import formCourt from '../../models/forms/formCourt';
 import { observer } from 'mobx-react';
 import { store } from '../../models/store';
-import { SettingsCase } from '../../models/MyClasses';
+import { SettingsCase } from '../../models';
 
 interface NewCourtContainerProps {
     //settingsCase: SettingsCase;

@@ -2,7 +2,7 @@
 import { observer } from 'mobx-react';
 import { Button } from '@material-ui/core';
 
-import MaterialTextField from './../inputs/MaterialTextField';
+import MaterialTextField from '../inputs/MaterialTextField';
 
 export default observer(({ form }) => (
     <form onSubmit={form.onSubmit}>

@@ -4,7 +4,7 @@ import ComponentCase from './ComponentCase';
 import formCase from '../../models/forms/formCase';
 import { observer } from 'mobx-react';
 import { store } from '../../models/store';
-import { SettingsCase, Case } from '../../models/MyClasses';
+import { SettingsCase, Case } from '../../models';
 
 interface NewCaseContainerProps {
     settingsCase: SettingsCase;

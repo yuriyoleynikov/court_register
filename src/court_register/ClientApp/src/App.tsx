@@ -16,10 +16,7 @@ import NewUnitContainer from './components/settings/units/NewUnitContainer';
 
 import CasesContainer from './components/cases/CasesContainer';
 import CaseContainer from './components/case/CaseContainer';
-import {
-    Button, makeStyles, Theme, createStyles,
-    Typography, CircularProgress, Box, LinearProgress, CardContent
-} from '@material-ui/core';
+import { makeStyles, Theme, createStyles, } from '@material-ui/core';
 import Loading from './components/Loading';
 
 const useStyles = makeStyles((theme: Theme) =>

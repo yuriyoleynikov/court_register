@@ -1,8 +1,6 @@
-import { observable, action, computed } from "mobx";
-
-import { User } from './../MyClasses';
-import { store } from "./";
-import { StorePage } from "./";
+import { observable, action, computed } from 'mobx';
+import { store, StorePage } from './';
+import { User } from '../';
 
 const GoogleApiKey = '921481274837-sfba1gv0mdatog6iobno4spdrcnofsik.apps.googleusercontent.com';
 

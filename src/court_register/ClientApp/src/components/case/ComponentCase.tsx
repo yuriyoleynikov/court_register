@@ -2,8 +2,8 @@
 import { observer } from 'mobx-react';
 import { Button, CardContent, Typography } from '@material-ui/core';
 
-import MaterialTextField from './../inputs/MaterialTextField';
-import AutocompleteField from './../inputs/AutocompleteField';
+import MaterialTextField from '../inputs/MaterialTextField';
+import AutocompleteField from '../inputs/AutocompleteField';
 
 //import CourtAddContainer from './CourtAddContainer';
 

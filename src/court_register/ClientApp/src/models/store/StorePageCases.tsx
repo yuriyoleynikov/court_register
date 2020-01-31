@@ -1,6 +1,6 @@
-import { observable, action } from "mobx"
-import { Case, SettingsCase } from "./../MyClasses";
-import * as queryString from 'query-string'
+import { observable, action } from 'mobx';
+import { Case, SettingsCase } from '../';
+import * as queryString from 'query-string';
 
 declare var window: any;
 

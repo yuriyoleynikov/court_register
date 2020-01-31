@@ -1,8 +1,8 @@
-import MobxReactForm from "mobx-react-form";
-import dvr from "mobx-react-form/lib/validators/DVR";
+import MobxReactForm from 'mobx-react-form';
+import dvr from 'mobx-react-form/lib/validators/DVR';
 import validatorjs from "validatorjs";
-import { store } from './../store';
-import * as MyClasses from './../MyClasses';
+import { store } from '../store';
+import { Unit } from '../';
 
 const plugins = {
     dvr: dvr(validatorjs)
@@ -30,7 +30,7 @@ const hooks = {
         //console.log("Form Values!", form.values());
         //console.log("Form Values!", form.values().password);
 
-        let newUnit = new MyClasses.Unit();
+        let newUnit = new Unit();
 
         newUnit.name = form.values().name;
         newUnit.full_name = form.values().full_name;

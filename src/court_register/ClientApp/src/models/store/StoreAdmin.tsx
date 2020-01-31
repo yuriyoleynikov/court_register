@@ -1,5 +1,5 @@
-import { observable, action, computed } from "mobx"
-import { User } from "./../MyClasses";
+import { observable, action, computed } from 'mobx';
+import { User } from '../';
 
 declare var window: any;
 

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react';
 import { Link, NavLink } from 'react-router-dom';
 
 import { store } from '../../../models/store'
-import { Unit } from '../../../models/MyClasses';
+import { Unit } from '../../../models';
 import Loading from '../../../components/Loading';
 
 
