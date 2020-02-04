@@ -47,10 +47,10 @@ const CaseContainer = (props: NewCaseContainerProps) => {
             let executorList = props.settingsCase.executors.map(u => u.full_name);
             formCase.$('executor').$extra = executorList;
         }
-        if (props.settingsCase.statuses != null) {
-            let statusList = props.settingsCase.statuses.map(u => u.name);
-            formCase.$('state').$extra = statusList;
-        }
+        //if (props.settingsCase.statuses != null) {
+        //    let statusList = props.settingsCase.statuses.map(u => u.name);
+        //    formCase.$('state').$extra = statusList;
+        //}
         if (props.currentCase != null) {
             formCase.$('reg_number').value = props.currentCase.reg_number;
             //formCase.$('case_number').value = props.currentCase.case_number;

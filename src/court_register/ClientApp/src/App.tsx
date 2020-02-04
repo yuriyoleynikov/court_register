@@ -1,43 +1,22 @@
 ﻿import * as React from 'react';
 import { observer } from 'mobx-react';
-import { Route, Redirect } from 'react-router';
-import { BrowserRouter, useLocation } from 'react-router-dom';
-
+import { Route, Redirect, useHistory } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { store } from './models/store';
-
+import { useQuery } from './models'
 import Header from './components/Header';
-
-import ProfileContainer from './components/settings/profile/ProfileContainer';
-import Users from './components/management/users/Users';
+import Management from './components/management';
+import Users from './components/management/users';
 import User from './components/management/user/User';
-import SettingsBlock from './components/settings/SettingsBlock';
-import Units from './components/settings/units/Units';
-import NewUnitContainer from './components/settings/units/NewUnitContainer';
-
-import CasesContainer from './components/cases/CasesContainer';
+import Units from './components/management/units';
+import UnitContainer from './components/management/unit';
+import Cases from './components/cases';
 import CaseContainer from './components/case/CaseContainer';
-import { makeStyles, Theme, createStyles, } from '@material-ui/core';
 import Loading from './components/Loading';
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            display: 'flex',
-            '& > * + *': {
-                marginLeft: theme.spacing(2),
-            },
-
-        }
-    }),
-);
-
-const useQuery = () => {
-    return new URLSearchParams(useLocation().search);
-};
 
 const CasesPage = () => {
     let query = useQuery();
-    return <CasesContainer
+    return <Cases
         reg_number={query.get(`reg_number`)}
         case_number={query.get(`case_number`)}
         court={query.get(`court`)}
@@ -56,6 +35,13 @@ const CasePage = () => {
     />;
 };
 
+const UnitPage = () => {
+    let query = useQuery();
+    return <UnitContainer
+        _id={query.get(`_id`)}
+    />;
+};
+
 const UsersPage = () => {
     let query = useQuery();
     return <Users active={query.get(`active`)} active2={query.get(`active2`)} />;
@@ -68,16 +54,8 @@ const UserPage = () => {
     return <User email={email} />;
 };
 
-const Loadings = observer(() => {
-    if (store.page.userManagement.loading || store.auth.loading || store.page.userManagement.loading || store.page.cases.loading)
-        return <Loading />;
-    return <></>;
-});
-
 export default observer(() => {
-    const classes = useStyles();
     React.useEffect(() => { store.auth.loadAuth2(); }, []);
-
     if (!store.auth.downloadedAuth2) {
         return <Loading />;
     }
@@ -90,7 +68,7 @@ export default observer(() => {
             {//!store.auth.isSignedIn || !(store.auth.user && store.auth.user.active) ? <Redirect to='/' /> : null
             }
 
-            {!store.auth.isSignedIn ? <Redirect to='/' /> : null
+            {//!store.auth.isSignedIn ? <Redirect to='/' /> : null
             }
 
             <Route exact path='/'>
@@ -102,15 +80,12 @@ export default observer(() => {
                     <Route exact path='/cases' component={CasesPage} />
                     <Route exact path='/case' component={CasePage} />
 
-                    <Route path='/management/users' component={UsersPage} />
+                    <Route path='/management' component={Management} />
                     <Route path='/management/user' component={UserPage} />
-
-                    <Route path='/settings' component={SettingsBlock} />
-
-                    <Route path='/settings/units' component={Units} />
-                    <Route path='/settings/units/new' component={NewUnitContainer} />
-
-                    <Route path='/settings/profile' component={ProfileContainer} />
+                    <Route path='/management/users' component={UsersPage} />
+                    <Route path='/management/units' component={Units} />
+                    <Route path='/management/unit' component={UnitPage} />
+                    
                 </div> :
                 null
             }

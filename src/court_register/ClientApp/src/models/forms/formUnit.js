@@ -1,4 +1,4 @@
-import MobxReactForm from 'mobx-react-form';
+﻿import MobxReactForm from 'mobx-react-form';
 import dvr from 'mobx-react-form/lib/validators/DVR';
 import validatorjs from "validatorjs";
 import { store } from '../store';
@@ -11,39 +11,33 @@ const plugins = {
 const fields = [
     {
         name: "name",
-        label: "name",
-        placeholder: "name",
-        rules: "required|string"
+        label: "Название",
+        placeholder: "Название",
+        rules: "string"
     },
     {
         name: "full_name",
-        label: "full_name",
-        placeholder: "full_name",
-        rules: "required|string"
+        label: "Полное название",
+        placeholder: "Полное название",
+        rules: "string"
+    },
+    {
+        name: "_id",
+        value: undefined
     }
 ];
 
 const hooks = {
     onSuccess(form) {
-        //alert("Form is valid! Send the request here.");
-
-        //console.log("Form Values!", form.values());
-        //console.log("Form Values!", form.values().password);
-
         let newUnit = new Unit();
-
+        newUnit = store.page.unit.unit;
         newUnit.name = form.values().name;
         newUnit.full_name = form.values().full_name;
 
-        store.pageUnits.createUnit(newUnit);
+        store.page.unit.updateUnit(newUnit);
     },
     onError(form) {
-        alert("Form has errors!");
-        // get all form errors
-        console.log("All form errors", form.errors());
     }
 };
 
-const formUnit = new MobxReactForm({ fields }, { plugins, hooks });
-window.formUnit = formUnit;
-export default formUnit;
+export default new MobxReactForm({ fields }, { plugins, hooks });

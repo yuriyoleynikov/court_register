@@ -1,11 +1,8 @@
 ﻿import * as React from 'react';
 import { observer } from 'mobx-react';
 import { NavLink, useHistory, Redirect } from 'react-router-dom';
-
 import { store } from '../../models/store';
 import { Case, SettingsCase } from '../../models';
-
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -14,12 +11,12 @@ import TableRow from '@material-ui/core/TableRow';
 import { Typography, Fab, IconButton, CardContent, Button, TextField } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
-
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import MaterialTextField from '../inputs/MaterialTextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { StorePageCases } from '../../models/store/StorePageCases';
 import Loading from '../Loading';
+import useStyles from '../../models/useStyles';
 
 type CasesContainerProps = {
     cases: Case[] | null;
@@ -29,7 +26,6 @@ type CasesContainerProps = {
     loadCases(): void;
     loadSettingsCase(): void;
     currentId: string | null;
-
 
     reg_number: string | null;
     case_number: string | null;
@@ -41,24 +37,7 @@ type CasesContainerProps = {
     executor: string | null;
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            width: '100%',
-            overflowX: 'auto',
-        },
-        table: {
-            minWidth: 650,
-        },
-        title: {
-            flex: '1 1 100%',
-        },
-        margin: {
-            margin: theme.spacing(1),
-        }
-    }));
-
-const CasesContainer = (props: CasesContainerProps) => {
+const Cases = (props: CasesContainerProps) => {
     const classes = useStyles();
     const history = useHistory();
 
@@ -407,7 +386,7 @@ export default observer((props: {
     category: string | null;
     status: string | null;
     executor: string | null;
-}) => <CasesContainer
+}) => <Cases
         reg_number={props.reg_number}
         case_number={props.case_number}
         court={props.court}

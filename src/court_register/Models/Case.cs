@@ -13,25 +13,43 @@ namespace court_register.Models
         public Case current { get; set; }
         public IEnumerable<Case> changes { get; set; }
     }
+
+    public class CaseMove
+    {
+        public int round { get; set; }
+        public string case_number { get; set; }
+        public Court? court { get; set; }
+        public Status? status { get; set; }
+        public DateTime? date { get; set; }
+        public IEnumerable<TextDocument> documents { get; set; }
+    }
+
+    public class TextDocument
+    {
+        public int num { get; set; }
+        public string name { get; set; }
+        public string text { get; set; }
+    }
+
     public class Case
     {
         public int? version { get; set; }
         public int? _id { get; set; }
-        public string? reg_number { get; set; }
-        public string? case_number { get; set; }
-        public Court court { get; set; }
+        public string reg_number { get; set; }
+        public IEnumerable<CaseMove> case_move { get; set; }
+
         public TypeRoleCase type_role { get; set; }
         public Category category { get; set; }
         public Unit unit { get; set; }
         public Executor executor { get; set; }
-        public List<Status> state { get; set; }
-        
+
+
         public bool? deleted { get; set; } = false;
         public Created created { get; set; }
     }
     public class SettingsCase
     {
-        public IEnumerable<Court>  courts { get; set; }
+        public IEnumerable<Court> courts { get; set; }
         public IEnumerable<TypeRoleCase> type_roles { get; set; }
         public IEnumerable<Category> category { get; set; }
         public IEnumerable<Unit> units { get; set; }

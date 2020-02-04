@@ -5,17 +5,7 @@ import { observer } from 'mobx-react';
 import { store } from '../models/store';
 import { Button, makeStyles, Theme, createStyles, Typography, CardActions, CardContent, LinearProgress } from '@material-ui/core';
 import { GoogleLoginButton } from './GoogleLoginButton';
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            display: 'flex',
-            '& > * + *': {
-                marginLeft: theme.spacing(2),
-            }
-        },
-    }),
-);
+import useStyles from '../models/useStyles';
 
 export default observer(() => {
     const classes = useStyles();
@@ -76,16 +66,26 @@ export default observer(() => {
                 <CardContent>
                     <Typography variant="body2" component="p">
                         Здравствуйте {`${store.auth.user.first_name} ${store.auth.user.second_name}! Email: ${store.auth.user.email}`}, <
-                            NavLink to={`/`} onClick={logout}>Выход</NavLink>, <
-                                NavLink to={`/management/user?email=${store.auth.user.email}`}>Редактировать</NavLink>.
+                            NavLink
+                            to={`/`}
+                            onClick={logout}>выход</NavLink>
                         </Typography>
                 </CardContent>
                 <CardContent>
                     <Typography variant="body2" component="p">
-                        <NavLink type="button" color="inherit" to="/cases">Реестр судебных дел</NavLink> / <
-                            NavLink className="text-dark" to={`/management/users?active=true`}>Пользователи</NavLink> / <
-                            NavLink className="text-dark" to={`/settings/units`}>Подразделения</NavLink> / <
-                            NavLink className="text-dark" to={`/statistic`}>Статистика</NavLink>
+                        <NavLink
+                            activeClassName={classes.active}
+                            type="button"
+                            color="inherit"
+                            to={`/cases`}>Реестр судебных дел</NavLink> / <
+                            NavLink
+                            activeClassName={classes.active}
+                            to={`/management/user?email=${store.auth.user.email}`}
+                        >Управление</NavLink> / <
+                            NavLink
+                            activeClassName={classes.active}
+                            className="text-dark"
+                            to={`/statistic`}>Статистика</NavLink>
                     </Typography>
                 </CardContent>
             </div> :

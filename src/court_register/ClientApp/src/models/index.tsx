@@ -1,4 +1,9 @@
 import { observable } from 'mobx';
+import { useLocation } from 'react-router';
+
+export const useQuery = () => {
+    return new URLSearchParams(useLocation().search);
+};
 
 export class SettingsCase {
     @observable units: Unit[] | null = null;
@@ -89,52 +94,33 @@ export class Sides {
 }
 
 export class Person {
+    @observable _id: number | null = null;
+    @observable version: number | null = null;
     @observable _type: string | null = null;
     @observable address: string | null = null;
 
     @observable individual: Individual | null = null;
     @observable entity: Entity | null = null;
     @observable administration: Administration | null = null;
+
+    @observable deleted: boolean | null = null;
+    @observable created: Created | null = null;
 }
 
 export class Individual {
-    @observable version: number | null = null;
-    @observable _id: number | null = null;
-
     @observable first_name: string | null = null;
     @observable second_name: string | null = null;
     @observable third_name: string | null = null;
-    @observable address: string | null = null;
-
-    @observable deleted: boolean | null = null;
-
-    @observable created: Created | null = null;
 }
 
 export class Entity {
-    @observable version: number | null = null;
-    @observable _id: number | null = null;
-
     @observable inn: string | null = null;
     @observable name: string | null = null;
-
-    @observable address: string | null = null;
-
-    @observable deleted: boolean | null = null;
-
-    @observable created: Created | null = null;
 }
 
 export class Administration {
-    @observable version: number | null = null;
-    @observable _id: number | null = null;
-
     @observable name: string | null = null;
-
-    @observable address: string | null = null;
-
     @observable deleted: boolean | null = null;
-
     @observable created: Created | null = null;
 }
 
@@ -213,5 +199,5 @@ export class CaseMove {
 export class TextDocument {
     @observable name: string | null = null;
     @observable num: number | null = null;
-    @observable text: Court | null = null;
+    @observable text: string | null = null;
 }

@@ -36,6 +36,22 @@ const fields = [
         extra: []
     },
     {
+        name: "case_move",
+        label: "Движение дела"
+    },    
+    {
+        name: "case_move[].round",
+        label: "Инстанция",
+        placeholder: "Инстанция",
+        value: undefined,
+    },
+    {
+        name: "case_move[].case_number",
+        label: "Номер дела",
+        placeholder: "Номер дела",
+        value: undefined
+    },
+    {
         name: "type_role",
         label: "Роль",
         placeholder: "Роль",
@@ -57,13 +73,6 @@ const fields = [
         extra: []
     },
     {
-        name: "state",
-        label: "Состояние",
-        placeholder: "Состояние",
-        value: undefined,
-        extra: []
-    },
-    {
         name: "_id",
         value: undefined
     }
@@ -76,12 +85,10 @@ const hooks = {
         newCase.reg_number = form.values().reg_number;
         //newCase.case_number = form.values().case_number;
 
-        //newCase.unit = store.page.case.settingsCase.units.find(u => u.name == form.values().unit);
-        //newCase.court = store.page.case.settingsCase.courts.find(u => u.name == form.values().court);
-        //newCase.type_role = store.page.case.settingsCase.type_roles.find(u => u.name == form.values().type_role);
-        //newCase.category = store.page.case.settingsCase.category.find(u => u.name == form.values().category);
-        //newCase.state = [store.page.case.settingsCase.statuses.find(u => u.name == form.values().state)];
-        //newCase.executor = store.page.case.settingsCase.executors.find(u => u.full_name == form.values().executor);
+        newCase.unit = store.page.case.settingsCase.units.find(u => u.name == form.values().unit);
+        newCase.type_role = store.page.case.settingsCase.type_roles.find(u => u.name == form.values().type_role);
+        newCase.category = store.page.case.settingsCase.category.find(u => u.name == form.values().category);
+        newCase.executor = store.page.case.settingsCase.executors.find(u => u.full_name == form.values().executor);
         newCase._id = Number(form.values()._id);
         store.page.cases.editCase(newCase);
     },

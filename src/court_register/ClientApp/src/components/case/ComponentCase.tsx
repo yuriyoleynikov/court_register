@@ -5,9 +5,7 @@ import { Button, CardContent, Typography } from '@material-ui/core';
 import MaterialTextField from '../inputs/MaterialTextField';
 import AutocompleteField from '../inputs/AutocompleteField';
 
-//import CourtAddContainer from './CourtAddContainer';
-
-export default observer(({ form /*, toggle, isOpenStatus*/ }) => (
+export default observer(({ form }) => (
     <form onSubmit={form.onSubmit}>
         <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
@@ -20,8 +18,6 @@ export default observer(({ form /*, toggle, isOpenStatus*/ }) => (
                 <AutocompleteField field={form.$('unit')} />
                 <AutocompleteField field={form.$('executor')} />
                 <AutocompleteField field={form.$('type_role')} />
-
-                <MaterialTextField field={form.$('case_number')} />
                 <AutocompleteField field={form.$('category')} />
             </Typography>
 
@@ -30,8 +26,10 @@ export default observer(({ form /*, toggle, isOpenStatus*/ }) => (
             </Typography>
 
             <Typography variant="body2" component="p">
-                <AutocompleteField field={form.$('state')} />
+                <MaterialTextField field={form.$('case_move')} />
+                <MaterialTextField field={form.$('case_number')} />
                 <AutocompleteField field={form.$('court')} />
+                <Button onClick={() => { console.log('test'); }}>Добавить новую инстанцию</Button>
             </Typography>
         </CardContent>
 

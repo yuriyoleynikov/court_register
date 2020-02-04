@@ -25,6 +25,7 @@
     "validatorjs": "^3.17.1"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-optional-chaining": "^7.8.3",
     "@types/gapi.auth2": "0.0.51",
     "@types/history": "4.7.3",
     "@types/jest": "23.3.11",
