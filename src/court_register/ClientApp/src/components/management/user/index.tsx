@@ -1,35 +1,34 @@
 ﻿import * as React from 'react';
-
-import ManagementProfile from './ManagementProfile';
-import formUserManagement from '../../../models/forms/formUserManagement';
+import UserContainer from './UserContainer';
+import formUser from '../../../models/forms/formUser';
 import { store } from '../../../models/store';
 import { observer } from 'mobx-react';
 
-const ProfileContainer = observer((props: UserProps) => {
+const User = observer((props: UserProps) => {
     React.useEffect(() => {
-        store.page.userManagement.loadUser(props.email);
+        store.page.user.loadUser(props.email);
         return () => {
         }
     }, []);
 
-    if (!store.page.userManagement.loading) {
-        formUserManagement.$('first_name').value = store.page.userManagement.user ? store.page.userManagement.user.first_name : null;
-        formUserManagement.$('second_name').value = store.page.userManagement.user ? store.page.userManagement.user.second_name : null;
-        formUserManagement.$('third_name').value = store.page.userManagement.user ? store.page.userManagement.user.third_name : null;
-        formUserManagement.$('email').value = store.page.userManagement.user ? store.page.userManagement.user.email : null;
-        formUserManagement.$('active').value = store.page.userManagement.user ? store.page.userManagement.user.active : null;
-        formUserManagement.$('admin').value = store.page.userManagement.user && store.page.userManagement.user.permission ?
-            store.page.userManagement.user.permission.admin : null;
+    if (!store.page.users.loading) {
+        formUser.$('first_name').value = store.page.user.user ? store.page.user.user.first_name : null;
+        formUser.$('second_name').value = store.page.user.user ? store.page.user.user.second_name : null;
+        formUser.$('third_name').value = store.page.user.user ? store.page.user.user.third_name : null;
+        formUser.$('email').value = store.page.user.user ? store.page.user.user.email : null;
+        formUser.$('active').value = store.page.user.user ? store.page.user.user.active : null;
+        formUser.$('admin').value = store.page.user.user && store.page.user.user.permission ?
+            store.page.user.user.permission.admin : null;
         //formManagementUser.$('unitAdmin').value = store.management_user.user && store.management_user.user.permission ?
         //    store.management_user.user.permission.admin : null;
     }
 
-    if (store.page.userManagement.loading) {
+    if (store.page.user.loading) {
         return <></>;
     }
 
     return (<div>
-        <ManagementProfile form={formUserManagement} />
+        <UserContainer form={formUser} />
     </div>);
 });
 
@@ -68,7 +67,7 @@ const ProfileContainer = observer((props: UserProps) => {
 //export default observer((props: { email: string; }) => <UserEditorContainer
 //    email={props.email}
 ///>);
-export default observer((props: { email: string; }) => <ProfileContainer
+export default observer((props: { email: string; }) => <User
     email={props.email}
 />);
 

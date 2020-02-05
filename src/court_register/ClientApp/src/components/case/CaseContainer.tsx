@@ -1,89 +1,41 @@
 ﻿import * as React from 'react';
-
-import ComponentCase from './ComponentCase';
-import formCase from '../../models/forms/formCase';
 import { observer } from 'mobx-react';
-import { store } from '../../models/store';
-import { SettingsCase, Case } from '../../models';
+import { Button, CardContent, Typography } from '@material-ui/core';
 
-interface NewCaseContainerProps {
-    settingsCase: SettingsCase;
-    loading: boolean;
-    loadSettingsCase(): void;
-    //isOpenStatus: boolean;
-    //toggle(): void;
-    _id: string | null;
-    loadCaseById(id: string): void;
-    currentCase: Case | null;
-}
+import MaterialTextField from '../inputs/MaterialTextField';
+import AutocompleteField from '../inputs/AutocompleteField';
 
-const CaseContainer = (props: NewCaseContainerProps) => {
-    React.useEffect(() => {
-        props.loadSettingsCase();
-        if (props._id) {
-            props.loadCaseById(props._id);
-        }
-        (window as any).form = formCase;
-    }, []);
+export default observer(({ form }) => (
+    <form onSubmit={form.onSubmit}>
+        <CardContent>
+            <Typography gutterBottom variant="h5" component="h2">
+                Дело
+                </Typography>
+        </CardContent>
+        <CardContent>
+            <Typography variant="body2" component="p">
+                <MaterialTextField field={form.$('reg_number')} />
+                <AutocompleteField field={form.$('unit')} />
+                <AutocompleteField field={form.$('executor')} />
+                <AutocompleteField field={form.$('type_role')} />
+                <AutocompleteField field={form.$('category')} />
+            </Typography>
 
-    if (!props.loading) {
-        if (props.settingsCase.units != null) {
-            let nameUnitsList = props.settingsCase.units.map(u => u.name);
-            formCase.$('unit').$extra = nameUnitsList;
-        }
-        if (props.settingsCase.courts != null) {
-            let nameCourtList = props.settingsCase.courts.map(u => u.name);
-            formCase.$('court').$extra = nameCourtList;
-        }
-        if (props.settingsCase.type_roles != null) {
-            let roleList = props.settingsCase.type_roles.map(u => u.name);
-            formCase.$('type_role').$extra = roleList;
-        }
-        if (props.settingsCase.category != null) {
-            let categoryList = props.settingsCase.category.map(u => u.name);
-            formCase.$('category').$extra = categoryList;
-        }
-        if (props.settingsCase.executors != null) {
-            let executorList = props.settingsCase.executors.map(u => u.full_name);
-            formCase.$('executor').$extra = executorList;
-        }
-        //if (props.settingsCase.statuses != null) {
-        //    let statusList = props.settingsCase.statuses.map(u => u.name);
-        //    formCase.$('state').$extra = statusList;
-        //}
-        if (props.currentCase != null) {
-            formCase.$('reg_number').value = props.currentCase.reg_number;
-            //formCase.$('case_number').value = props.currentCase.case_number;
-            //formCase.$('category').$value = props.currentCase.category ? props.currentCase.category.name : undefined;
-            //formCase.$('type_role').value = props.currentCase.type_role ? props.currentCase.type_role.name : undefined;
-            //formCase.$('court').value = props.currentCase.court ? props.currentCase.court.name : undefined;
-            //formCase.$('unit').value = props.currentCase.unit ? props.currentCase.unit.name : undefined;
-            //formCase.$('executor').value = props.currentCase.executor ? props.currentCase.executor.full_name : undefined;
-            //formCase.$('state').value = props.currentCase.state && props.currentCase.state[0] ?
-            //    props.currentCase.state[0].name : undefined;
-            //formCase.$('_id').value = props._id;
-        }
+            <Typography variant="h6" component="p">
+                <div>Движение дела</div>
+            </Typography>
 
-    }
+            <Typography variant="body2" component="p">
+                <MaterialTextField field={form.$('case_move')} />
+                <MaterialTextField field={form.$('case_number')} />
+                <AutocompleteField field={form.$('court')} />
+                <Button onClick={() => { console.log('test'); }}>Добавить новую инстанцию</Button>
+            </Typography>
+        </CardContent>
 
-    if (props.loading) {
-        return <></>;
-    }
-
-    return (<div>
-        <ComponentCase form={formCase}
-            //toggle={props.toggle} isOpenStatus={props.isOpenStatus}
-        />
-    </div>);
-};
-
-export default observer((props: { _id: string | null; }) => <CaseContainer
-    settingsCase={store.page.case.settingsCase}
-    loading={store.page.case.loading}
-    loadSettingsCase={store.page.case.loadSettingsCase}
-    //toggle={store.court.toggle}
-    //isOpenStatus={store.court.isOpenStatus}
-    _id={props._id}
-    loadCaseById={store.page.case.loadCaseById}
-    currentCase={store.page.case.currentCase}
-/>);
+        <CardContent>
+            <Button type="submit" variant="contained" size="small" color="primary" onClick={form.onSubmit}>Сохранить</Button>
+        </CardContent>
+        <p>{form.error}</p>
+    </form>
+));

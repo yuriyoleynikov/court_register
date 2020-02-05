@@ -1,15 +1,16 @@
 ﻿import * as React from 'react';
 import { observer } from 'mobx-react';
-import { Route, Redirect, useHistory } from 'react-router';
-import { BrowserRouter } from 'react-router-dom';
+import { Route, Redirect } from 'react-router';
 import { store } from './models/store';
-import { useQuery } from './models'
+import { useQuery } from './models';
 import Header from './components/Header';
 import Management from './components/management';
 import Users from './components/management/users';
-import User from './components/management/user/User';
+import User from './components/management/user';
 import Units from './components/management/units';
-import UnitContainer from './components/management/unit';
+import Courts from './components/management/courts';
+import Unit from './components/management/unit';
+import Court from './components/management/courts/Court';
 import Cases from './components/cases';
 import CaseContainer from './components/case/CaseContainer';
 import Loading from './components/Loading';
@@ -37,14 +38,21 @@ const CasePage = () => {
 
 const UnitPage = () => {
     let query = useQuery();
-    return <UnitContainer
+    return <Unit
+        _id={query.get(`_id`)}
+    />;
+};
+
+const CourtPage = () => {
+    let query = useQuery();
+    return <Court
         _id={query.get(`_id`)}
     />;
 };
 
 const UsersPage = () => {
     let query = useQuery();
-    return <Users active={query.get(`active`)} active2={query.get(`active2`)} />;
+    return <Users active={query.get(`active`)} />;
 };
 
 const UserPage = () => {
@@ -56,39 +64,43 @@ const UserPage = () => {
 
 export default observer(() => {
     React.useEffect(() => { store.auth.loadAuth2(); }, []);
+
     if (!store.auth.downloadedAuth2) {
         return <Loading />;
     }
 
-    return (
-        <BrowserRouter>
-            {store.isLoading ? <Loading /> : null}
-            <Header />
+    return (<>
+        {store.isLoading ? <Loading /> : null}
+        <Header />
 
-            {//!store.auth.isSignedIn || !(store.auth.user && store.auth.user.active) ? <Redirect to='/' /> : null
-            }
+        {//!store.auth.isSignedIn || !(store.auth.user && store.auth.user.active) ? <Redirect to='/' /> : null
+        }
 
-            {//!store.auth.isSignedIn ? <Redirect to='/' /> : null
-            }
+        {//!store.auth.isSignedIn ? <Redirect to='/' /> : null
+        }
 
-            <Route exact path='/'>
-                {store.auth.isSignedIn && store.auth.user && store.auth.user.active ? <Redirect to='/cases' /> : null}
-            </Route>
+        <Route exact path='/'>
+            {store.auth.isSignedIn && store.auth.user && store.auth.user.active ? <Redirect to='/cases' /> : null}
+        </Route>
 
-            {store.auth.isSignedIn && store.auth.user && store.auth.user.active ?
-                <div>
-                    <Route exact path='/cases' component={CasesPage} />
-                    <Route exact path='/case' component={CasePage} />
+        {store.auth.isSignedIn && store.auth.user && store.auth.user.active ?
+            <>
+                <Route exact path='/cases' component={CasesPage} />
+                <Route exact path='/case' component={CasePage} />
 
-                    <Route path='/management' component={Management} />
-                    <Route path='/management/user' component={UserPage} />
-                    <Route path='/management/users' component={UsersPage} />
-                    <Route path='/management/units' component={Units} />
-                    <Route path='/management/unit' component={UnitPage} />
-                    
-                </div> :
-                null
-            }
-        </BrowserRouter>
-    );
+                <Route path='/management' component={Management} />
+
+                <Route path='/management/users' component={UsersPage} />
+                <Route path='/management/user' component={UserPage} />
+
+                <Route path='/management/units' component={Units} />
+                <Route path='/management/unit' component={UnitPage} />
+
+                <Route path='/management/courts' component={Courts} />
+                <Route path='/management/court' component={CourtPage} />
+
+            </> :
+            null
+        }
+    </>);
 });

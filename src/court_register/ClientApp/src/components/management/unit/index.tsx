@@ -2,21 +2,21 @@
 import { Unit } from '../../../models';
 import { store } from '../../../models/store';
 import { observer } from 'mobx-react';
-import ComponentUnit from './ComponentUnit';
+import UnitContainer from './UnitContainer';
 import formUnit from '../../../models/forms/formUnit';
 
-type UnitProps = {
+type UnitComponentProps = {
+    _id: string | null;
     unit: Unit | null;
     loading: boolean;
-    _id: string | null;
     loadUnitById(id: string | null): void;
 }
 
-const UnitComponent = (props: UnitProps) => {
+const UnitComponent = (props: UnitComponentProps) => {
     React.useEffect(() => { props.loadUnitById(props._id); }, [])
-    
+
     if (!props.loading) {
-        formUnit.$('name').value = props.unit && props.unit.name ? props.unit.name : null;
+        formUnit.$('name').value = props.unit && props.unit.name ? props.unit.name : null;        
         formUnit.$('full_name').value = props.unit && props.unit.full_name ? props.unit.full_name : null;
         formUnit.$('_id').value = props._id;
     }
@@ -26,13 +26,14 @@ const UnitComponent = (props: UnitProps) => {
     }
 
     return (<>
-        <ComponentUnit form={formUnit} />
+        <UnitContainer form={formUnit} />
     </>);
 };
 
 export default observer((props: { _id: string | null; }) => <UnitComponent
+    _id={props._id}
+
     unit={store.page.unit.unit}
     loading={store.page.unit.loading}
     loadUnitById={store.page.unit.loadUnitById}
-    _id={props._id}
 />);

@@ -13,7 +13,6 @@ namespace court_register.Models
         public Case current { get; set; }
         public IEnumerable<Case> changes { get; set; }
     }
-
     public class CaseMove
     {
         public int round { get; set; }
@@ -23,14 +22,12 @@ namespace court_register.Models
         public DateTime? date { get; set; }
         public IEnumerable<TextDocument> documents { get; set; }
     }
-
     public class TextDocument
     {
         public int num { get; set; }
         public string name { get; set; }
         public string text { get; set; }
     }
-
     public class Case
     {
         public int? version { get; set; }
@@ -69,7 +66,7 @@ namespace court_register.Models
         public int? _id { get; set; }
         public string? name { get; set; }
         public string? full_name { get; set; }
-        public string? adress { get; set; }
+        public string? address { get; set; }
         public bool? deleted { get; set; } = false;
         public Created created { get; set; }
     }

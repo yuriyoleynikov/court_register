@@ -40,4 +40,6 @@ const hooks = {
     }
 };
 
-export default new MobxReactForm({ fields }, { plugins, hooks });
+const formUnit = new MobxReactForm({ fields }, { plugins, hooks });
+export default formUnit;
+window.form = formUnit;

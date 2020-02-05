@@ -1,30 +1,24 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action } from 'mobx';
 import { User } from '../';
 
-export class StorePageUser {
-    @observable user: User | null = null;
+export class StorePageUsers {
+    @observable users: User[] | null = null;
     @observable loading = false;
-    @observable userMap = new Map<string, User>();
 
-    @action.bound async loadUser(email: string | null) {
+    @action.bound async loadUsers(active: boolean) {
         this.loading = true;
-        let response = await fetch(`api/user/${email}`, {
+        let response = await fetch(`api/users?active=${active}`, {
             credentials: 'include',
             headers: {
                 Authorization: 'Bearer ' + gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
             }
         });
 
-        let userSystem = await response.json();
-        this.user = userSystem.current;
+        this.users = await response.json();
         this.loading = false;
     }
 
-    @action.bound async loadUser2(email: string) {
-        let user = this.userMap.get(email);
-        if (user)
-            return user;
-
+    @action.bound async getUserByEmail(email: string) {
         let response = await fetch(`api/user/${email}`, {
             credentials: 'include',
             headers: {
@@ -33,17 +27,25 @@ export class StorePageUser {
         });
 
         let userSystem = await response.json();
-        user = new User();
-        user.first_name = userSystem.current.first_name;
-
-        this.userMap.set(email, user);
-
-        return user;
+        return userSystem.current;
     }
 
-    @action.bound async changePersonal(user: User) {
-        console.log(user);
+    @action.bound async changePersonalUser(user: User) {
         let response = await fetch(`api/user`, {
+            method: 'PUT',
+            body: JSON.stringify(user),
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
+            }
+        });
+
+        await response.json();
+    }
+
+    @action.bound async changeUserByEmail(email: string, user: User) {
+        let response = await fetch(`api/user/${email}`, {
             method: 'PUT',
             body: JSON.stringify(user),
             credentials: 'include',
@@ -66,7 +68,7 @@ export class StorePageUser {
         });
 
         await response.json();
-        this.loadUser(null);
+        this.loadUsers(true);
         this.loading = false;
     }
 
@@ -80,7 +82,7 @@ export class StorePageUser {
         });
 
         await response.json();
-        this.loadUser(null);
+        this.loadUsers(true);
         this.loading = false;
     }
 }

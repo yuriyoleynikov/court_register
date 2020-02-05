@@ -1,6 +1,5 @@
 ﻿import * as React from 'react';
 import { observer } from 'mobx-react';
-import { NavLink, useHistory, Redirect } from 'react-router-dom';
 import { store } from '../../models/store';
 import { Case, SettingsCase } from '../../models';
 import Table from '@material-ui/core/Table';
@@ -11,21 +10,19 @@ import TableRow from '@material-ui/core/TableRow';
 import { Typography, Fab, IconButton, CardContent, Button, TextField } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import MaterialTextField from '../inputs/MaterialTextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { StorePageCases } from '../../models/store/StorePageCases';
 import Loading from '../Loading';
 import useStyles from '../../models/useStyles';
+import { history } from '../../router';
 
 type CasesContainerProps = {
     cases: Case[] | null;
     loading: boolean;
-    isCreateCaseLoaded: boolean;
     settingsCase: SettingsCase;
     loadCases(): void;
     loadSettingsCase(): void;
-    currentId: string | null;
+    createCase(): void;
 
     reg_number: string | null;
     case_number: string | null;
@@ -39,11 +36,9 @@ type CasesContainerProps = {
 
 const Cases = (props: CasesContainerProps) => {
     const classes = useStyles();
-    const history = useHistory();
 
     const createCase = () => {
-        store.page.case.createCase();
-        store.page.case.isCreateCaseLoaded = false;
+        props.createCase();
     }
 
     const openCase = (id: number | null) => {
@@ -163,14 +158,8 @@ const Cases = (props: CasesContainerProps) => {
         props.loadCases();
         return () => {
             store.page.cases = new StorePageCases();
-            store.page.case.currentId = null;
-            store.page.case.isCreateCaseLoaded = false;
         }
     }, []);
-
-    if (props.isCreateCaseLoaded) {
-        return <><Redirect to={`/case?_id=${props.currentId}`} /></>;
-    }
 
     if (props.loading) {
         return <Loading />;
@@ -178,26 +167,31 @@ const Cases = (props: CasesContainerProps) => {
 
     return (
         <>
-            <Button variant="contained" size="small" color="primary" onClick={createCase}>Добавить</Button>
-            <Typography className={classes.title} variant="h6" id="tableTitle">
-                {/*<NavLink to="/case">
-                    <Fab size="small" color="secondary" aria-label="add" className={classes.margin}>
-                        <AddIcon />
-                    </Fab>
-                </NavLink>*/}
-                Список дел
-        </Typography>
-
             <Table className={classes.table} aria-label="simple table">
+                <TableHead>
+                    <TableRow>
+                        <TableCell colSpan={2}>
+                            <Fab color="primary" aria-label="add" onClick={createCase}>
+                                <AddIcon />
+                            </Fab>
+                        </TableCell>
+                        <TableCell align="left" style={{ width: 100 }}>N Рег</TableCell>
+                        <TableCell align="left">Суд</TableCell>
+                        <TableCell align="left" style={{ width: 100 }}>N Дела</TableCell>
+                        <TableCell align="left">Роль</TableCell>
+                        <TableCell align="left">Категория</TableCell>
+                        <TableCell align="left">Ответственный</TableCell>
+                        <TableCell align="left">Исполнитель</TableCell>
+                        <TableCell align="left">Состояние</TableCell>
+                    </TableRow>
+                </TableHead>
                 <TableHead>
                     <TableRow>
                         <TableCell></TableCell>
                         <TableCell></TableCell>
                         <TableCell align="left">
                             <TextField
-                                id="outlined-basic"
-                                label="N Рег."
-                                variant="outlined"
+                                id="standard-basic"
                                 defaultValue={props.reg_number ? props.reg_number : undefined}
                                 onChange={(event) => { changeUrl(`reg_number`, event.target.value); }}
                             />
@@ -212,9 +206,7 @@ const Cases = (props: CasesContainerProps) => {
                                 renderInput={params => (
                                     <TextField
                                         {...params}
-                                        label="Суд"
-                                        margin="normal"
-                                        variant="outlined"
+                                        id="standard-basic"
                                         fullWidth
                                     />
                                 )}
@@ -225,7 +217,6 @@ const Cases = (props: CasesContainerProps) => {
                         <TableCell align="left">
                             <TextField
                                 id="outlined-basic"
-                                variant="outlined"
                                 defaultValue={props.case_number ? props.case_number : undefined}
                                 onChange={(event) => { changeUrl(`case_number`, event.target.value); }}
                             />
@@ -240,8 +231,7 @@ const Cases = (props: CasesContainerProps) => {
                                 renderInput={params => (
                                     <TextField
                                         {...params}
-                                        margin="normal"
-                                        variant="outlined"
+                                        id="standard-basic"
                                         fullWidth
                                     />
                                 )}
@@ -259,8 +249,6 @@ const Cases = (props: CasesContainerProps) => {
                                 renderInput={params => (
                                     <TextField
                                         {...params}
-                                        margin="normal"
-                                        variant="outlined"
                                         fullWidth
                                     />
                                 )}
@@ -278,8 +266,6 @@ const Cases = (props: CasesContainerProps) => {
                                 renderInput={params => (
                                     <TextField
                                         {...params}
-                                        margin="normal"
-                                        variant="outlined"
                                         fullWidth
                                     />
                                 )}
@@ -297,8 +283,6 @@ const Cases = (props: CasesContainerProps) => {
                                 renderInput={params => (
                                     <TextField
                                         {...params}
-                                        margin="normal"
-                                        variant="outlined"
                                         fullWidth
                                     />
                                 )}
@@ -316,8 +300,6 @@ const Cases = (props: CasesContainerProps) => {
                                 renderInput={params => (
                                     <TextField
                                         {...params}
-                                        margin="normal"
-                                        variant="outlined"
                                         fullWidth
                                     />
                                 )}
@@ -327,25 +309,12 @@ const Cases = (props: CasesContainerProps) => {
                         </TableCell>
                     </TableRow>
                 </TableHead>
-                <TableHead>
-                    <TableRow>
-                        <TableCell><b>N</b></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell align="left"><b>N Рег.</b></TableCell>
-                        <TableCell align="left"><b>Суд</b></TableCell>
-                        <TableCell align="left"><b>N Дела</b></TableCell>
-                        <TableCell align="left"><b>Роль</b></TableCell>
-                        <TableCell align="left"><b>Категория</b></TableCell>
-                        <TableCell align="left"><b>Ответственный</b></TableCell>
-                        <TableCell align="left"><b>Исполнитель</b></TableCell>
-                        <TableCell align="left"><b>Состояние</b></TableCell>
-                    </TableRow>
-                </TableHead>
+
                 <TableBody>
                     {props.cases ?
-                        props.cases.map((currentCase: Case, index: number) => 
+                        props.cases.map((currentCase: Case, index: number) =>
                             <TableRow key={currentCase._id ? currentCase._id : 0}>
-                                
+
                                 <TableCell component="th" scope="row">{++index}</TableCell>
                                 <TableCell align="left">
                                     <IconButton aria-label="delete" className={classes.margin} size="small">
@@ -355,7 +324,7 @@ const Cases = (props: CasesContainerProps) => {
                                 <TableCell align="left">{currentCase.reg_number}</TableCell>
                                 <TableCell align="left">{currentCase.case_move && currentCase.case_move.length > 0 &&
                                     currentCase.case_move[0] && currentCase.case_move[0].court &&
-                                    currentCase.case_move[0].court.name ? 
+                                    currentCase.case_move[0].court.name ?
                                     currentCase.case_move[0].court.name :
                                     null}</TableCell>
                                 <TableCell align="left">{currentCase.case_move && currentCase.case_move.length > 0 ?
@@ -399,10 +368,9 @@ export default observer((props: {
         loadSettingsCase={store.page.cases.loadSettingsCase}
         settingsCase={store.page.cases.settingsCase}
         loading={store.page.cases.loading}
-        isCreateCaseLoaded={store.page.case.isCreateCaseLoaded}
         loadCases={store.page.cases.loadCases}
         cases={store.page.cases.cases}
-        currentId={store.page.case.currentId}
+        createCase={store.page.cases.createCase}
     />);
 
 //import React from 'react';

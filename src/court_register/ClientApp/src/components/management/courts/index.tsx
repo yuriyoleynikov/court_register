@@ -1,7 +1,7 @@
 ﻿import * as React from 'react';
 import { observer } from 'mobx-react';
 import { store } from '../../../models/store';
-import { Unit } from '../../../models';
+import { Court } from '../../../models';
 import useStyles from '../../../models/useStyles';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -11,29 +11,29 @@ import DialogActions from '@material-ui/core/DialogActions';
 import AddIcon from '@material-ui/icons/Add';
 import { history } from '../../../router';
 
-type UnitsProps = {
+type CourtsProps = {
     loading: boolean;
-    loadUnits(): void;
-    units: Unit[] | null;
+    loadCourts(): void;
+    courts: Court[] | null;
 
-    createUnit(): void;
+    createCourt(): void;
 
-    deleteUnitById(id: number | null): void;
+    deleteCourtById(id: number | null): void;
     deletedId: number | null;
     setDeletedId(id: number | null): void;
 }
 
-const Units = (props: UnitsProps) => {
-    React.useEffect(() => { props.loadUnits(); }, [])
+const Courts = (props: CourtsProps) => {
+    React.useEffect(() => { props.loadCourts(); }, [])
 
     const classes = useStyles();
 
-    const CreateUnit = () => {
-        props.createUnit();
+    const CreateCourt = () => {
+        props.createCourt();
     };
 
-    const openUnit = (_id: number | null) => {
-        history.push(`/management/unit?_id=${_id}`);
+    const openCourt = (_id: number | null) => {
+        history.push(`/management/court?_id=${_id}`);
     };
 
     const handleClickOpenDeleteModal = (id: number | null) => {
@@ -45,7 +45,7 @@ const Units = (props: UnitsProps) => {
     };
 
     const handleDelete = () => {
-        props.deleteUnitById(props.deletedId);
+        props.deleteCourtById(props.deletedId);
     };
 
     return (
@@ -54,30 +54,32 @@ const Units = (props: UnitsProps) => {
                 <TableHead>
                     <TableRow>
                         <TableCell>
-                            <Fab color="primary" aria-label="add" onClick={CreateUnit}>
+                            <Fab color="primary" aria-label="add" onClick={CreateCourt}>
                                 <AddIcon />
                             </Fab>
                         </TableCell>
                         <TableCell>Id</TableCell>
                         <TableCell>Название</TableCell>
                         <TableCell>Полное название</TableCell>
+                        <TableCell>Адрес</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {props.units ?
-                        props.units.map((unit: Unit) =>
-                            <TableRow key={unit._id ? unit._id : undefined}>
+                    {props.courts ?
+                        props.courts.map((court: Court) =>
+                            <TableRow key={court._id ? court._id : undefined}>
                                 <TableCell align="left">
                                     <IconButton aria-label="delete" className={classes.margin} size="small">
-                                        <EditIcon fontSize="inherit" onClick={() => { openUnit(unit._id) }} />
+                                        <EditIcon fontSize="inherit" onClick={() => { openCourt(court._id) }} />
                                     </IconButton>
                                     <IconButton aria-label="delete" className={classes.margin} size="small">
-                                        <DeleteIcon fontSize="inherit" onClick={() => { handleClickOpenDeleteModal(unit._id) }} />
+                                        <DeleteIcon fontSize="inherit" onClick={() => { handleClickOpenDeleteModal(court._id) }} />
                                     </IconButton>
                                 </TableCell>
-                                <TableCell>{unit._id}</TableCell>
-                                <TableCell>{unit.name}</TableCell>
-                                <TableCell>{unit.full_name}</TableCell>
+                                <TableCell>{court._id}</TableCell>
+                                <TableCell>{court.name}</TableCell>
+                                <TableCell>{court.full_name}</TableCell>
+                                <TableCell>{court.address}</TableCell>
                             </TableRow>
                         ) : null}
                 </TableBody>
@@ -95,7 +97,7 @@ const Units = (props: UnitsProps) => {
                                 Подтвердите действие
                             </Typography>
                             <Typography variant="body2" component="p">
-                                Вы действительно хотите удалить подразделение Id: {props.deletedId}?
+                                Вы действительно хотите удалить суд Id: {props.deletedId}?
                             </Typography>
                         </CardContent>
                     </div>
@@ -110,12 +112,12 @@ const Units = (props: UnitsProps) => {
     );
 };
 
-export default observer(() => <Units
-    units={store.page.units.units}
-    loading={store.page.units.loading}
-    loadUnits={store.page.units.loadUnits}
-    createUnit={store.page.units.createUnit}
-    deletedId={store.page.units.deletedId}
-    setDeletedId={store.page.units.setDeletedId}
-    deleteUnitById={store.page.units.deleteUnitById}
+export default observer(() => <Courts
+    courts={store.page.courts.courts}
+    loading={store.page.courts.loading}
+    loadCourts={store.page.courts.loadCourts}
+    createCourt={store.page.courts.createCourt}
+    deletedId={store.page.courts.deletedId}
+    setDeletedId={store.page.courts.setDeletedId}
+    deleteCourtById={store.page.courts.deleteCourtById}
 />);

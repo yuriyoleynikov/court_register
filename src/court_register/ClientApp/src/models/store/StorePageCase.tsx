@@ -4,11 +4,9 @@ import { SettingsCase, Case } from '../';
 declare var window: any;
 
 export class StorePageCase {
-    @observable settingsCase: SettingsCase = new SettingsCase();
+    @observable currentCase: Case | null = null;
     @observable loading = false;
-    @observable isCreateCaseLoaded = false;
-    @observable currentId: string| null = null;
-    @observable currentCase: Case| null = null;
+    @observable settingsCase: SettingsCase = new SettingsCase();
 
     @action.bound async loadSettingsCase() {
         this.loading = true;
@@ -21,20 +19,6 @@ export class StorePageCase {
 
         this.settingsCase = await response.json();
         this.loading = false;
-    }
-
-    @action.bound async createCase() {
-        this.loading = true;
-        let response = await fetch(`api/case/create`, {
-            credentials: 'include',
-            headers: {
-                Authorization: 'Bearer ' + window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
-            }
-        });
-
-        this.currentId = await response.json();
-        this.loading = false;
-        this.isCreateCaseLoaded = true;
     }
 
     @action.bound async loadCaseById(_id: string) {

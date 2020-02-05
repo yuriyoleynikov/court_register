@@ -1,4 +1,4 @@
-import MobxReactForm from 'mobx-react-form';
+﻿import MobxReactForm from 'mobx-react-form';
 import dvr from 'mobx-react-form/lib/validators/DVR';
 import validatorjs from 'validatorjs';
 import { store } from '../store';
@@ -11,37 +11,37 @@ const plugins = {
 const fields = [
     {
         name: "name",
-        label: "name",
-        placeholder: "name",
+        label: "Название",
+        placeholder: "Название",
         rules: "required|string"
     },
     {
         name: "full_name",
-        label: "full_name",
-        placeholder: "full_name",
-        rules: "required|string"
+        label: "Полное название",
+        placeholder: "Полное название",
+        rules: "string"
     },
     {
-        name: "adress",
-        label: "adress",
-        placeholder: "adress",
+        name: "address",
+        label: "Адрес",
+        placeholder: "Адрес",
         rules: "string"
+    },
+    {
+        name: "_id",
+        value: undefined
     }
 ];
 
 const hooks = {
     onSuccess(form) {
         let newCourt = new Court();
-
+        newCourt = store.page.court.court;
         newCourt.name = form.values().name;
         newCourt.full_name = form.values().full_name;
-        newCourt.adress = form.values().adress;
+        newCourt.address = form.values().address;
 
-        store.court.createNewCourt(newCourt);
-        form.clear();
-        store.court.isOpen = false;
-
-        store.pageCase.loadSettingsCase();
+        store.page.court.updateCourt(newCourt);
     },
     onError(form) {
         alert("Form has errors!");

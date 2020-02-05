@@ -1,8 +1,8 @@
 import { observable, action } from 'mobx';
 import { Case, SettingsCase } from '../';
 import * as queryString from 'query-string';
+import { history } from '../.././router';
 
-declare var window: any;
 
 class FilterForCases {
     @observable unit: string | null = null;
@@ -28,7 +28,7 @@ export class StorePageCases {
         let response = await fetch(url, {
             credentials: 'include',
             headers: {
-                Authorization: 'Bearer ' + window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
+                Authorization: 'Bearer ' + gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
             }
         });
         this.cases = await response.json();
@@ -43,7 +43,7 @@ export class StorePageCases {
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
+                'Authorization': 'Bearer ' + gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
             }
         });
 
@@ -56,11 +56,26 @@ export class StorePageCases {
         let response = await fetch(`api/case/settings`, {
             credentials: 'include',
             headers: {
-                Authorization: 'Bearer ' + window.gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
+                Authorization: 'Bearer ' + gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
             }
         });
 
         this.settingsCase = await response.json();
         this.loading = false;
+    }
+
+    @action.bound async createCase() {
+        this.loading = true;
+        let response = await fetch(`api/case/create`, {
+            credentials: 'include',
+            headers: {
+                Authorization: 'Bearer ' + gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
+            }
+        });
+
+        let _id: number | null = await response.json();
+        this.loading = false;
+
+        history.push(`/case?_id=${_id}`);
     }
 }

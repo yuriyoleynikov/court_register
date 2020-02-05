@@ -596,7 +596,7 @@ namespace court_register.Services
                 var unitSystemList = await _context.units
                         .Find(unitSystem => true).ToListAsync();
 
-                var unitList = unitSystemList.Select(userSystem => userSystem.current);
+                var unitList = unitSystemList.Select(userSystem => userSystem.current).Where(u => !(u.deleted ?? false));
 
                 return unitList;
             }
@@ -797,7 +797,7 @@ namespace court_register.Services
         #endregion UNITS
 
         #region COURTS
-        public async Task AddCourtAsync(string userExecutorEmail, Court court)
+        public async Task<bool> UpdateCourtAsync(string userExecutorEmail, Court court)
         {
             try
             {
@@ -805,18 +805,99 @@ namespace court_register.Services
 
                 var isActive = await GetCurrentUserIsActiveAsync(userExecutorEmail);
                 if (!isActive)
-                    return;
+                    return false;
+
+                var courtSystem = await _context.courts
+                        .Find<CourtSystem>(cSystem => cSystem.current._id == court._id).SingleOrDefaultAsync();
+                var newChanges = new List<Court> { };
+                if (courtSystem.changes != null)
+                {
+                    newChanges = courtSystem.changes.ToList();
+                }
+
+                newChanges.Add(courtSystem.current);
+
+                courtSystem.changes = newChanges;
+                var newVersion = courtSystem.current.version + 1;
+                courtSystem.current = court;
+                var userExecutor = (await GetUserSystemByUserEmailAsync(userExecutorEmail)).current;
+                courtSystem.current.created = new Created
+                {
+                    date = DateTime.Now,
+                    userInfo = new UserInfo
+                    {
+                        email = userExecutor.email,
+                        first_name = userExecutor.first_name,
+                        permission = userExecutor.permission,
+                        second_name = userExecutor.second_name,
+                        third_name = userExecutor.third_name,
+                        version = userExecutor.version,
+                        _id = userExecutor._id
+                    }
+                };
+                courtSystem.current.version = newVersion;
+
+                ReplaceOneResult actionResult
+                    = await _context.courts
+                                    .ReplaceOneAsync(u => u.current._id == court._id
+                                            , courtSystem
+                                            , new UpdateOptions { IsUpsert = true });
+                return actionResult.IsAcknowledged
+                    && actionResult.ModifiedCount > 0;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<IEnumerable<Court>> GetCourtsAsync(string userExecutorEmail)
+        {
+            try
+            {
+                await CheckCurrentUserIsExistAsync(userExecutorEmail);
+
+                var isActive = await GetCurrentUserIsActiveAsync(userExecutorEmail);
+                if (!isActive)
+                    return null;
+
+                var courtSystemList = await _context.courts
+                        .Find(unitSystem => true).ToListAsync();
+
+                var courtList = courtSystemList.Select(courtSystem => courtSystem.current).Where(c => !(c.deleted ?? false));
+
+                return courtList;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<string> CreateCourtAsync(string userExecutorEmail)
+        {
+            try
+            {
+                await CheckCurrentUserIsExistAsync(userExecutorEmail);
+
+                var isActive = await GetCurrentUserIsActiveAsync(userExecutorEmail);
+                if (!isActive)
+                    return null;
+
+                var isAdmin = await GetCurrentUserIsAdminAsync(userExecutorEmail);
+                if (!(isAdmin))
+                    return null;
 
                 var newCourtSystem = new CourtSystem();
                 var newId = 0;
                 if (await _context.courts.Find<CourtSystem>(_ => true).AnyAsync())
                 {
                     var courtSystemList = await _context.courts.Find<CourtSystem>(_ => true).ToListAsync();
-                    newId = courtSystemList.Max(us => us.current._id ?? 0) + 1;
+                    newId = courtSystemList.Max(cs => cs.current._id ?? 0) + 1;
                 }
                 var userExecutor = (await GetUserSystemByUserEmailAsync(userExecutorEmail)).current;
 
-                newCourtSystem.current = court;
+                newCourtSystem.current = new Court();
+
                 newCourtSystem.current._id = newId;
                 newCourtSystem.current.version = 0;
                 newCourtSystem.current.created = new Created
@@ -836,6 +917,86 @@ namespace court_register.Services
                 newCourtSystem.current.deleted = false;
 
                 await _context.courts.InsertOneAsync(newCourtSystem);
+                return newId.ToString();
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<CourtSystem> GetCourtSystemByIdAsync(string userExecutorEmail, int _id)
+        {
+            try
+            {
+                await CheckCurrentUserIsExistAsync(userExecutorEmail);
+
+                var isActive = await GetCurrentUserIsActiveAsync(userExecutorEmail);
+                if (!isActive)
+                    return null;
+
+                var courtSystemList = await _context.courts
+                        .Find(caseSystem => true).ToListAsync();
+
+                var courtSys = courtSystemList.Where(courtSystem => courtSystem.current._id == _id).FirstOrDefault();
+
+                return courtSys;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<bool> DeleteCourtByIdAsync(string userExecutorEmail, int _id)
+        {
+            try
+            {
+                await CheckCurrentUserIsExistAsync(userExecutorEmail);
+
+                var isActive = await GetCurrentUserIsActiveAsync(userExecutorEmail);
+                if (!isActive)
+                    return false;
+
+                var isAdmin = await GetCurrentUserIsAdminAsync(userExecutorEmail);
+                if (!(isAdmin))
+                    return false;
+
+                var courtSystem = await _context.courts
+                        .Find<CourtSystem>(cSystem => cSystem.current._id == _id).SingleOrDefaultAsync();
+                var newChanges = new List<Court> { };
+                if (courtSystem.changes != null)
+                {
+                    newChanges = courtSystem.changes.ToList();
+                }
+
+                newChanges.Add(courtSystem.current);
+
+                courtSystem.changes = newChanges;
+                courtSystem.current.deleted = true;
+                ++courtSystem.current.version;
+                var userExecutor = (await GetUserSystemByUserEmailAsync(userExecutorEmail)).current;
+                courtSystem.current.created = new Created
+                {
+                    date = DateTime.Now,
+                    userInfo = new UserInfo
+                    {
+                        email = userExecutor.email,
+                        first_name = userExecutor.first_name,
+                        permission = userExecutor.permission,
+                        second_name = userExecutor.second_name,
+                        third_name = userExecutor.third_name,
+                        version = userExecutor.version,
+                        _id = userExecutor._id
+                    }
+                };
+
+                ReplaceOneResult actionResult
+                    = await _context.courts
+                                    .ReplaceOneAsync(c => c.current._id == _id
+                                            , courtSystem
+                                            , new UpdateOptions { IsUpsert = true });
+                return actionResult.IsAcknowledged
+                    && actionResult.ModifiedCount > 0;
 
             }
             catch (Exception ex)

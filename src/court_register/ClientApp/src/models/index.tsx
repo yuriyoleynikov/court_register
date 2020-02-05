@@ -130,7 +130,7 @@ export class Court {
 
     @observable name: string | null = null;
     @observable full_name: string | null = null;
-    @observable adress: string | null = null;
+    @observable address: string | null = null;
 
     @observable deleted: boolean | null = null;
 

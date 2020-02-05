@@ -29,8 +29,7 @@
     <None Remove="ClientApp\src\components\inputs\MaterialTextField.tsx" />
     <None Remove="ClientApp\src\components\inputs\SimpleInput.txt" />
     <None Remove="ClientApp\src\components\inputs\WidgetDropdownList.txt" />
-    <None Remove="ClientApp\src\components\management\user\ManagementProfile.tsx" />
-    <None Remove="ClientApp\src\components\management\units\NewUnit.tsx" />
+    <None Remove="ClientApp\src\components\management\user\UserContainer.tsx" />
     <None Remove="ClientApp\src\models\FilterForCases.js" />
     <None Remove="ClientApp\src\models\formCase.js" />
     <None Remove="ClientApp\src\models\formManagementUser.js" />
@@ -39,18 +38,16 @@
     <None Remove="ClientApp\src\models\formUser.js" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\src\components\case\ComponentCase.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\case\CaseContainer.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\inputs\AutocompleteField.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\inputs\MaterialTextField.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\inputs\MaterialCheckbox.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\inputs\WidgetDropdownList.txt" />
     <TypeScriptCompile Include="ClientApp\src\components\inputs\SimpleInput.txt" />
-    <TypeScriptCompile Include="ClientApp\src\components\management\user\ManagementProfile.tsx" />
-    <TypeScriptCompile Include="ClientApp\src\components\management\units\NewUnit.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\management\user\UserContainer.tsx" />
     <TypeScriptCompile Include="ClientApp\src\models\forms\formCourt.js" />
     <TypeScriptCompile Include="ClientApp\src\models\forms\formCase.js" />
     <TypeScriptCompile Include="ClientApp\src\models\forms\formUnit.js" />
-    <TypeScriptCompile Include="ClientApp\src\models\forms\formUserManagement.js" />
     <TypeScriptCompile Include="ClientApp\src\models\forms\formUser.js" />
   </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

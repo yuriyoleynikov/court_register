@@ -25,7 +25,11 @@ namespace court_register.Services
         #endregion UNITS
 
         #region COURTS
-        Task AddCourtAsync(string userExecutorEmail, Court court);
+        Task<IEnumerable<Court>> GetCourtsAsync(string userExecutorEmail);
+        Task<bool> UpdateCourtAsync(string userExecutorEmail, Court court);        
+        Task<string> CreateCourtAsync(string userExecutorEmail);
+        Task<CourtSystem> GetCourtSystemByIdAsync(string userExecutorEmail, int id);
+        Task<bool> DeleteCourtByIdAsync(string userExecutorEmail, int _id);
         #endregion COURTS
 
         #region CASES

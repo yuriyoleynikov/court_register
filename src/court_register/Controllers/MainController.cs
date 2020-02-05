@@ -21,17 +21,82 @@ namespace court_register.Controllers
         }
 
         #region API/COURTS
-        [HttpPost]
-        [Route("api/court")]
-        public async Task<bool> AddCourtAsync([FromBody]Court court)
+        [HttpGet]
+        [Route("api/courts")]
+        public async Task<IEnumerable<Court>> GetCourtListAsync()
         {
             string _userExecutorEmail = null;
             _userExecutorEmail = GetCurrentUserEmail();
 
-            await _repositoryService.AddCourtAsync(_userExecutorEmail, court);
-
-            return true;
+            var courtList = await _repositoryService.GetCourtsAsync(_userExecutorEmail);
+            return courtList;
         }
+
+        [HttpPost]
+        [Route("api/court")]
+        public async Task<bool> UpdateCourtAsync([FromBody]Court court)
+        {
+            string _userExecutorEmail = null;
+            _userExecutorEmail = GetCurrentUserEmail();
+
+            var result = await _repositoryService.UpdateCourtAsync(_userExecutorEmail, court);
+
+            return result;
+        }
+
+        [HttpGet]
+        [Route("api/court/create")]
+        public async Task<string> CreateCourtAsync()
+        {
+            string _userExecutorEmail = null;
+            _userExecutorEmail = GetCurrentUserEmail();
+
+            var result = await _repositoryService.CreateCourtAsync(_userExecutorEmail);
+
+            return result;
+        }
+
+        [HttpGet]
+        [Route("api/court")]
+        public async Task<CourtSystem> GetCourtByIdAsync([FromQuery] string _id)
+        {
+            string _userExecutorEmail = null;
+            _userExecutorEmail = GetCurrentUserEmail();
+
+            int id = 0;
+            if (!String.IsNullOrEmpty(_id))
+            {
+                if (!Int32.TryParse(_id, out id))
+                {
+                    return null;
+                }
+            }
+
+            var courtSystem = await _repositoryService.GetCourtSystemByIdAsync(_userExecutorEmail, id);
+            return courtSystem;
+        }
+
+        [HttpGet]
+        [Route("api/court/delete")]
+        public async Task<bool> DeleteCourtByIdAsync([FromQuery] string _id)
+        {
+            string _userExecutorEmail = null;
+            _userExecutorEmail = GetCurrentUserEmail();
+
+            int id = 0;
+            if (!String.IsNullOrEmpty(_id))
+            {
+                if (!Int32.TryParse(_id, out id))
+                {
+                    return false;
+                }
+            }
+
+            var result = await _repositoryService.DeleteCourtByIdAsync(_userExecutorEmail, id);
+            return result;
+        }
+
+
         #endregion API/COURTS
 
         #region API/UNITS

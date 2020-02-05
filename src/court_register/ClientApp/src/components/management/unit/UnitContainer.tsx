@@ -7,13 +7,15 @@ export default observer(({ form }) => (
     <form onSubmit={form.onSubmit}>
         <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
-                Подразделение
+                Подразделение, Id: {form.$('_id').value}
                 </Typography>
         </CardContent>
         <CardContent>
             <Typography variant="body2" component="p">
-                <MaterialTextField field={form.$('name')} />
-                <MaterialTextField field={form.$('full_name')} />
+                <div><MaterialTextField field={form.$('name')} /></div>
+                <div><MaterialTextField field={form.$('full_name')} /></div>
+                
+                
             </Typography>
         </CardContent>
 

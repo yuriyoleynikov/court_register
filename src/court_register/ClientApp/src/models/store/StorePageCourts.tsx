@@ -1,9 +1,9 @@
-import { observable, action, computed } from 'mobx';
-import { Unit } from '../';
+import { observable, action } from 'mobx';
+import { Court } from '../';
 import { history } from '../.././router';
 
-export class StorePageUnits {
-    @observable units: Unit[] | null = null;
+export class StorePageCourts {
+    @observable courts: Court[] | null = null;
     @observable loading = false;
     @observable deletedId: number | null = null;
 
@@ -11,9 +11,9 @@ export class StorePageUnits {
         this.deletedId = id;
     }
 
-    @action.bound async createUnit() {
+    @action.bound async createCourt() {
         this.loading = true;
-        let response = await fetch(`api/unit/create`, {
+        let response = await fetch(`api/court/create`, {
             credentials: 'include',
             headers: {
                 Authorization: 'Bearer ' + gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
@@ -23,13 +23,13 @@ export class StorePageUnits {
         let _id: number | null = await response.json();
         this.loading = false;
 
-        history.push(`/management/unit?_id=${_id}`);
+        history.push(`/management/court?_id=${_id}`);
     }
 
-    @action.bound async deleteUnitById(id: number | null) {
+    @action.bound async deleteCourtById(id: number | null) {
         this.loading = true;
         this.deletedId = null;
-        let response = await fetch(`api/unit/delete?_id=${id}`, {
+        let response = await fetch(`api/court/delete?_id=${id}`, {
             credentials: 'include',
             headers: {
                 Authorization: 'Bearer ' + gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
@@ -37,19 +37,19 @@ export class StorePageUnits {
         });
 
         await response.json();
-        this.loadUnits();
+        this.loadCourts();
     }
 
-    @action.bound async loadUnits() {
+    @action.bound async loadCourts() {
         this.loading = true;
-        let response = await fetch(`api/units`, {
+        let response = await fetch(`api/courts`, {
             credentials: 'include',
             headers: {
                 Authorization: 'Bearer ' + gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().id_token
             }
         });
 
-        this.units = await response.json();
+        this.courts = await response.json();
         this.loading = false;
     }
 }
