@@ -29,10 +29,11 @@ const CaseComponent = (props: CaseComponentProps) => {
             let nameUnitsList = props.settingsCase.units.map(u => u.name);
             formCase.$('unit').$extra = nameUnitsList;
         }
-        if (props.settingsCase.courts != null) {
-            let nameCourtList = props.settingsCase.courts.map(u => u.name);
-            formCase.$('court').$extra = nameCourtList;
-        }
+
+        //if (props.settingsCase.courts != null) {
+        //    let nameCourtList = props.settingsCase.courts.map(u => u.name);
+        //    formCase.$('court').$extra = nameCourtList;
+        //}
         if (props.settingsCase.type_roles != null) {
             let roleList = props.settingsCase.type_roles.map(u => u.name);
             formCase.$('type_role').$extra = roleList;
@@ -51,6 +52,7 @@ const CaseComponent = (props: CaseComponentProps) => {
         //}
         if (props.currentCase != null) {
             formCase.$('reg_number').value = props.currentCase.reg_number;
+            formCase.$('sides').value = props.currentCase.sides;
             //formCase.$('case_number').value = props.currentCase.case_number;
             //formCase.$('category').$value = props.currentCase.category ? props.currentCase.category.name : undefined;
             //formCase.$('type_role').value = props.currentCase.type_role ? props.currentCase.type_role.name : undefined;
@@ -70,7 +72,6 @@ const CaseComponent = (props: CaseComponentProps) => {
 
     return (<div>
         <CaseContainer form={formCase}
-            //toggle={props.toggle} isOpenStatus={props.isOpenStatus}
         />
     </div>);
 };

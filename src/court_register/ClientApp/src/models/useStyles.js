@@ -1,7 +1,8 @@
-import { makeStyles, Theme, createStyles } from '@material-ui/core';
-
-export default makeStyles((theme: Theme) =>
-    createStyles({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = require("@material-ui/core");
+exports.default = core_1.makeStyles(function (theme) {
+    return core_1.createStyles({
         root: {
             display: 'flex',
             '& > * + *': {
@@ -38,5 +39,6 @@ export default makeStyles((theme: Theme) =>
             textAlign: 'center',
             color: theme.palette.text.secondary,
         },
-    }),
-);
+    });
+});
+//# sourceMappingURL=useStyles.js.map

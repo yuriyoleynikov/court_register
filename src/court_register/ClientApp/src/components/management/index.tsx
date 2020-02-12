@@ -22,6 +22,10 @@ export default observer(() => {
                         >Подразделения</NavLink> / <
                             NavLink
                             activeClassName={classes.active}
+                            to={`/management/persons?_type=ul`}
+                        >Стороны процесса</NavLink> / <
+                            NavLink
+                            activeClassName={classes.active}
                             to={`/management/courts`}
                         >Суды</NavLink>
                     </Typography>

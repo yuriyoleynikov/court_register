@@ -1006,6 +1006,219 @@ namespace court_register.Services
         }
         #endregion COURTS
 
+        #region PERSONS
+        public async Task<bool> UpdatePersonAsync(string userExecutorEmail, Person person)
+        {
+            try
+            {
+                await CheckCurrentUserIsExistAsync(userExecutorEmail);
+
+                var isActive = await GetCurrentUserIsActiveAsync(userExecutorEmail);
+                if (!isActive)
+                    return false;
+
+                var personSystem = await _context.persons
+                        .Find<PersonSystem>(pSystem => pSystem.current._id == person._id).SingleOrDefaultAsync();
+                var newChanges = new List<Person> { };
+                if (personSystem.changes != null)
+                {
+                    newChanges = personSystem.changes.ToList();
+                }
+
+                newChanges.Add(personSystem.current);
+
+                personSystem.changes = newChanges;
+                var newVersion = personSystem.current.version + 1;
+                personSystem.current = person;
+                var userExecutor = (await GetUserSystemByUserEmailAsync(userExecutorEmail)).current;
+                personSystem.current.created = new Created
+                {
+                    date = DateTime.Now,
+                    userInfo = new UserInfo
+                    {
+                        email = userExecutor.email,
+                        first_name = userExecutor.first_name,
+                        permission = userExecutor.permission,
+                        second_name = userExecutor.second_name,
+                        third_name = userExecutor.third_name,
+                        version = userExecutor.version,
+                        _id = userExecutor._id
+                    }
+                };
+                personSystem.current.version = newVersion;
+
+                ReplaceOneResult actionResult
+                    = await _context.persons
+                                    .ReplaceOneAsync(p => p.current._id == person._id
+                                            , personSystem
+                                            , new UpdateOptions { IsUpsert = true });
+                return actionResult.IsAcknowledged
+                    && actionResult.ModifiedCount > 0;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<IEnumerable<Person>> GetPersonsAsync(string userExecutorEmail, string _type)
+        {
+            try
+            {
+                await CheckCurrentUserIsExistAsync(userExecutorEmail);
+
+                var isActive = await GetCurrentUserIsActiveAsync(userExecutorEmail);
+                if (!isActive)
+                    return null;
+
+                var personSystemList = await _context.persons
+                        .Find(unitSystem => true).ToListAsync();
+
+                var personList = personSystemList.Select(personSystem => personSystem.current)
+                    .Where(p=>p._type==_type)
+                    .Where(p => !(p.deleted ?? false));
+
+                return personList;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<string> CreatePersonAsync(string userExecutorEmail, string _type)
+        {
+            try
+            {
+                await CheckCurrentUserIsExistAsync(userExecutorEmail);
+
+                var isActive = await GetCurrentUserIsActiveAsync(userExecutorEmail);
+                if (!isActive)
+                    return null;
+
+                var isAdmin = await GetCurrentUserIsAdminAsync(userExecutorEmail);
+                if (!(isAdmin))
+                    return null;
+
+                var newPersonSystem = new PersonSystem();
+                var newId = 0;
+                if (await _context.persons.Find<PersonSystem>(_ => true).AnyAsync())
+                {
+                    var personSystemList = await _context.persons.Find<PersonSystem>(_ => true).ToListAsync();
+                    newId = personSystemList.Max(ps => ps.current._id ?? 0) + 1;
+                }
+                var userExecutor = (await GetUserSystemByUserEmailAsync(userExecutorEmail)).current;
+
+                newPersonSystem.current = new Person();
+
+                newPersonSystem.current._id = newId;
+                newPersonSystem.current._type = _type;
+                newPersonSystem.current.version = 0;
+                newPersonSystem.current.created = new Created
+                {
+                    date = DateTime.Now,
+                    userInfo = new UserInfo
+                    {
+                        email = userExecutor.email,
+                        first_name = userExecutor.first_name,
+                        second_name = userExecutor.second_name,
+                        third_name = userExecutor.third_name,
+                        version = userExecutor.version,
+                        _id = userExecutor._id,
+                        permission = userExecutor.permission
+                    }
+                };
+                newPersonSystem.current.deleted = false;
+
+                await _context.persons.InsertOneAsync(newPersonSystem);
+                return newId.ToString();
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<PersonSystem> GetPersonSystemByIdAsync(string userExecutorEmail, int _id)
+        {
+            try
+            {
+                await CheckCurrentUserIsExistAsync(userExecutorEmail);
+
+                var isActive = await GetCurrentUserIsActiveAsync(userExecutorEmail);
+                if (!isActive)
+                    return null;
+
+                var personSystemList = await _context.persons
+                        .Find(caseSystem => true).ToListAsync();
+
+                var personSys = personSystemList.Where(personSystem => personSystem.current._id == _id).FirstOrDefault();
+
+                return personSys;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<bool> DeletePersonByIdAsync(string userExecutorEmail, int _id)
+        {
+            try
+            {
+                await CheckCurrentUserIsExistAsync(userExecutorEmail);
+
+                var isActive = await GetCurrentUserIsActiveAsync(userExecutorEmail);
+                if (!isActive)
+                    return false;
+
+                var isAdmin = await GetCurrentUserIsAdminAsync(userExecutorEmail);
+                if (!(isAdmin))
+                    return false;
+
+                var personSystem = await _context.persons
+                        .Find<PersonSystem>(pSystem => pSystem.current._id == _id).SingleOrDefaultAsync();
+                var newChanges = new List<Person> { };
+                if (personSystem.changes != null)
+                {
+                    newChanges = personSystem.changes.ToList();
+                }
+
+                newChanges.Add(personSystem.current);
+
+                personSystem.changes = newChanges;
+                personSystem.current.deleted = true;
+                ++personSystem.current.version;
+                var userExecutor = (await GetUserSystemByUserEmailAsync(userExecutorEmail)).current;
+                personSystem.current.created = new Created
+                {
+                    date = DateTime.Now,
+                    userInfo = new UserInfo
+                    {
+                        email = userExecutor.email,
+                        first_name = userExecutor.first_name,
+                        permission = userExecutor.permission,
+                        second_name = userExecutor.second_name,
+                        third_name = userExecutor.third_name,
+                        version = userExecutor.version,
+                        _id = userExecutor._id
+                    }
+                };
+
+                ReplaceOneResult actionResult
+                    = await _context.persons
+                                    .ReplaceOneAsync(p => p.current._id == _id
+                                            , personSystem
+                                            , new UpdateOptions { IsUpsert = true });
+                return actionResult.IsAcknowledged
+                    && actionResult.ModifiedCount > 0;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        #endregion PERSONS
+
         #region CASES
         public async Task<IEnumerable<Case>> GetCasesAsync(string userExecutorEmail)
         {
@@ -1157,6 +1370,10 @@ namespace court_register.Services
                 var userExecutor = (await GetUserSystemByUserEmailAsync(userExecutorEmail)).current;
 
                 newCaseSystem.current = new Case();
+                newCaseSystem.current.sides = new Sides();
+                newCaseSystem.current.sides.plaintiffs = new List<Person> { new Person() };
+                newCaseSystem.current.sides.defendants = new List<Person> { };
+                newCaseSystem.current.sides.third_sides = new List<Person> { };
                 newCaseSystem.current.case_move = new List<CaseMove> { new CaseMove { round = 1 } };
                 newCaseSystem.current.reg_number = await CreateNewRegisterNumber();
                 newCaseSystem.current._id = newId;

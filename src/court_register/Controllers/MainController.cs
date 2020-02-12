@@ -99,6 +99,83 @@ namespace court_register.Controllers
 
         #endregion API/COURTS
 
+        #region API/PERSONS
+        [HttpGet]
+        [Route("api/persons")]
+        public async Task<IEnumerable<Person>> GetPersonListAsync([FromQuery] string _type)
+        {
+            string _userExecutorEmail = null;
+            _userExecutorEmail = GetCurrentUserEmail();
+
+            var personList = await _repositoryService.GetPersonsAsync(_userExecutorEmail, _type);
+            return personList;
+        }
+
+        [HttpPost]
+        [Route("api/person")]
+        public async Task<bool> UpdatePersonAsync([FromBody]Person person)
+        {
+            string _userExecutorEmail = null;
+            _userExecutorEmail = GetCurrentUserEmail();
+
+            var result = await _repositoryService.UpdatePersonAsync(_userExecutorEmail, person);
+
+            return result;
+        }
+
+        [HttpGet]
+        [Route("api/person/create")]
+        public async Task<string> CreatePersonAsync([FromQuery] string _type)
+        {
+            string _userExecutorEmail = null;
+            _userExecutorEmail = GetCurrentUserEmail();
+
+            var result = await _repositoryService.CreatePersonAsync(_userExecutorEmail, _type);
+
+            return result;
+        }
+
+        [HttpGet]
+        [Route("api/person")]
+        public async Task<PersonSystem> GetPersonByIdAsync([FromQuery] string _id)
+        {
+            string _userExecutorEmail = null;
+            _userExecutorEmail = GetCurrentUserEmail();
+
+            int id = 0;
+            if (!String.IsNullOrEmpty(_id))
+            {
+                if (!Int32.TryParse(_id, out id))
+                {
+                    return null;
+                }
+            }
+
+            var personSystem = await _repositoryService.GetPersonSystemByIdAsync(_userExecutorEmail, id);
+            return personSystem;
+        }
+
+        [HttpGet]
+        [Route("api/person/delete")]
+        public async Task<bool> DeletePersonByIdAsync([FromQuery] string _id)
+        {
+            string _userExecutorEmail = null;
+            _userExecutorEmail = GetCurrentUserEmail();
+
+            int id = 0;
+            if (!String.IsNullOrEmpty(_id))
+            {
+                if (!Int32.TryParse(_id, out id))
+                {
+                    return false;
+                }
+            }
+
+            var result = await _repositoryService.DeletePersonByIdAsync(_userExecutorEmail, id);
+            return result;
+        }
+        #endregion API/PERSONS
+
         #region API/UNITS
         [HttpGet]
         [Route("api/units")]

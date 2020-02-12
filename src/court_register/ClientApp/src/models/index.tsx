@@ -88,9 +88,9 @@ export class Case {
 }
 
 export class Sides {
-    @observable plaintiff: Person | null = null;
-    @observable defendant: Person | null = null;
-    @observable third_side: Person | null = null;
+    @observable plaintiffs: Person[] | null = null;
+    @observable defendants: Person[] | null = null;
+    @observable third_sides: Person[] | null = null;
 }
 
 export class Person {
@@ -120,8 +120,6 @@ export class Entity {
 
 export class Administration {
     @observable name: string | null = null;
-    @observable deleted: boolean | null = null;
-    @observable created: Created | null = null;
 }
 
 export class Court {

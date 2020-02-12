@@ -24,31 +24,44 @@
   <ItemGroup>
     <None Remove="ClientApp\src\components\cases\NewCase.tsx" />
     <None Remove="ClientApp\src\components\cases\NewCourt.tsx" />
+    <None Remove="ClientApp\src\components\cases\PlaintiffFieldset.tsx" />
+    <None Remove="ClientApp\src\components\cases\PlaintiffsFieldset.tsx" />
+    <None Remove="ClientApp\src\components\cases\SidesFieldset.tsx" />
     <None Remove="ClientApp\src\components\inputs\AutocompleteField.tsx" />
     <None Remove="ClientApp\src\components\inputs\MaterialCheckbox.tsx" />
     <None Remove="ClientApp\src\components\inputs\MaterialTextField.tsx" />
     <None Remove="ClientApp\src\components\inputs\SimpleInput.txt" />
     <None Remove="ClientApp\src\components\inputs\WidgetDropdownList.txt" />
-    <None Remove="ClientApp\src\components\management\user\UserContainer.tsx" />
     <None Remove="ClientApp\src\models\FilterForCases.js" />
     <None Remove="ClientApp\src\models\formCase.js" />
     <None Remove="ClientApp\src\models\formManagementUser.js" />
     <None Remove="ClientApp\src\models\formNewCourt.js" />
+    <None Remove="ClientApp\src\models\forms\formCase.js" />
+    <None Remove="ClientApp\src\models\forms\formPerson.js" />
     <None Remove="ClientApp\src\models\formUnit.js" />
     <None Remove="ClientApp\src\models\formUser.js" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\src\components\case\CaseContainer.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\cases\PlaintiffFieldset.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\cases\SidesFieldset.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\cases\PlaintiffsFieldset.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\cases\CaseContainer.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\inputs\AutocompleteField.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\inputs\MaterialTextField.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\inputs\MaterialCheckbox.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\inputs\WidgetDropdownList.txt" />
     <TypeScriptCompile Include="ClientApp\src\components\inputs\SimpleInput.txt" />
-    <TypeScriptCompile Include="ClientApp\src\components\management\user\UserContainer.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\management\users\UserContainer.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\models\forms\formPerson.js" />
     <TypeScriptCompile Include="ClientApp\src\models\forms\formCourt.js" />
     <TypeScriptCompile Include="ClientApp\src\models\forms\formCase.js" />
     <TypeScriptCompile Include="ClientApp\src\models\forms\formUnit.js" />
     <TypeScriptCompile Include="ClientApp\src\models\forms\formUser.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="ClientApp\src\components\cases\SidesFieldset.js">
+      <DependentUpon>SidesFieldset.tsx</DependentUpon>
+    </None>
   </ItemGroup>
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->

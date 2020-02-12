@@ -32,6 +32,14 @@ namespace court_register.Services
         Task<bool> DeleteCourtByIdAsync(string userExecutorEmail, int _id);
         #endregion COURTS
 
+        #region PERSONS
+        Task<IEnumerable<Person>> GetPersonsAsync(string userExecutorEmail, string _type);
+        Task<bool> UpdatePersonAsync(string userExecutorEmail, Person person);
+        Task<string> CreatePersonAsync(string userExecutorEmail, string _type);
+        Task<PersonSystem> GetPersonSystemByIdAsync(string userExecutorEmail, int id);
+        Task<bool> DeletePersonByIdAsync(string userExecutorEmail, int _id);
+        #endregion PERSONS
+
         #region CASES
         Task<IEnumerable<Case>> GetCasesAsync(string userExecutorEmail);
         Task<SettingsCase> GetSettingsCaseAsync(string userExecutorEmail);

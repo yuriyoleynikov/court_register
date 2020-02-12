@@ -1,13 +1,21 @@
-﻿import MobxReactForm from 'mobx-react-form'
+﻿import MobxReactForm from 'mobx-react-form';
 import dvr from 'mobx-react-form/lib/validators/DVR';
 import validatorjs from 'validatorjs';
 import { store } from '../store';
-import { Case, Status } from '../';
+import { Case } from '../';
 
 const plugins = {
     dvr: dvr(validatorjs)
 };
-
+const fields2 = [
+    'club.name',
+    'club.city',
+    'members',
+    'members[].firstname',
+    'members[].lastname',
+    'members[].hobbies',
+    'members[].hobbies[]',
+];
 const fields = [
     {
         name: "reg_number",
@@ -16,40 +24,11 @@ const fields = [
         rules: "required|string"
     },
     {
-        name: "case_number",
-        label: "Номер дела",
-        placeholder: "Номер дела",
-        rules: "string"
-    },
-    {
         name: "unit",
         label: "Подразделение",
         placeholder: "Подразделение",
         value: undefined,
         extra: []
-    },
-    {
-        name: "court",
-        label: "Суд",
-        placeholder: "Суд",
-        value: undefined,
-        extra: []
-    },
-    {
-        name: "case_move",
-        label: "Движение дела"
-    },    
-    {
-        name: "case_move[].round",
-        label: "Инстанция",
-        placeholder: "Инстанция",
-        value: undefined,
-    },
-    {
-        name: "case_move[].case_number",
-        label: "Номер дела",
-        placeholder: "Номер дела",
-        value: undefined
     },
     {
         name: "type_role",
@@ -69,6 +48,69 @@ const fields = [
         name: "executor",
         label: "Исполнитель",
         placeholder: "Исполнитель",
+        value: undefined,
+        extra: []
+    },
+    {
+        name: "sides"
+    },
+    {
+        name: "sides.plaintiffs"
+    },
+    {
+        name: "sides.plaintiffs[]._type",
+        label: "Тип",
+        placeholder: "Тип"
+    },
+    {
+        name: "sides.plaintiffs[]._id"
+    },
+    {
+        name: "sides.plaintiffs[]._name"
+    },
+    {
+        name: "sides.defendants"
+    },
+    {
+        name: "sides.defendants[]._type"
+    },
+    {
+        name: "sides.defendants[]._id"
+    },
+    {
+        name: "sides.defendants[]._name"
+    },
+    {
+        name: "sides.third_sides"
+    },
+    {
+        name: "sides.third_sides[]._type"
+    },
+    {
+        name: "sides.third_sides[]._id"
+    },
+    {
+        name: "sides.third_sides[]._name"
+    },
+    {
+        name: "case_move"
+    },    
+    {
+        name: "case_move[].round",
+        label: "Инстанция",
+        placeholder: "Инстанция",
+        value: undefined,
+    },
+    {
+        name: "case_move[].case_number",
+        label: "Номер дела",
+        placeholder: "Номер дела",
+        value: undefined
+    },
+    {
+        name: "case_move[].court",
+        label: "Суд",
+        placeholder: "Суд",
         value: undefined,
         extra: []
     },

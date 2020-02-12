@@ -83,7 +83,7 @@ const Units = (props: UnitsProps) => {
                 </TableBody>
             </Table>
             <Dialog
-                open={!!props.deletedId}
+                open={!(props.deletedId === null)}
                 onClose={handleClose}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"

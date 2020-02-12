@@ -178,11 +178,11 @@ const Cases = (props: CasesContainerProps) => {
                         <TableCell align="left" style={{ width: 100 }}>N Рег</TableCell>
                         <TableCell align="left">Суд</TableCell>
                         <TableCell align="left" style={{ width: 100 }}>N Дела</TableCell>
-                        <TableCell align="left">Роль</TableCell>
+                        <TableCell align="left" style={{ width: 150 }}>Роль</TableCell>
                         <TableCell align="left">Категория</TableCell>
                         <TableCell align="left">Ответственный</TableCell>
-                        <TableCell align="left">Исполнитель</TableCell>
-                        <TableCell align="left">Состояние</TableCell>
+                        <TableCell align="left" style={{ width: 200 }}>Исполнитель</TableCell>
+                        <TableCell align="left" style={{ width: 150 }}>Состояние</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableHead>

@@ -6,13 +6,15 @@ import { useQuery } from './models';
 import Header from './components/Header';
 import Management from './components/management';
 import Users from './components/management/users';
-import User from './components/management/user';
+import User from './components/management/users/User';
 import Units from './components/management/units';
+import Unit from './components/management/units/Unit';
 import Courts from './components/management/courts';
-import Unit from './components/management/unit';
 import Court from './components/management/courts/Court';
+import Persons from './components/management/persons';
+import Person from './components/management/persons/Person';
 import Cases from './components/cases';
-import CaseContainer from './components/case/CaseContainer';
+import Case from './components/cases/Case';
 import Loading from './components/Loading';
 
 const CasesPage = () => {
@@ -28,33 +30,40 @@ const CasesPage = () => {
         executor={query.get(`executor`)}
     />;
 };
-
 const CasePage = () => {
     let query = useQuery();
-    return <CaseContainer
+    return <Case
         _id={query.get(`_id`)}
     />;
 };
-
 const UnitPage = () => {
     let query = useQuery();
     return <Unit
         _id={query.get(`_id`)}
     />;
 };
-
 const CourtPage = () => {
     let query = useQuery();
     return <Court
         _id={query.get(`_id`)}
     />;
 };
-
+const PersonsPage = () => {
+    let query = useQuery();
+    return <Persons
+        _type={query.get(`_type`)}
+    />;
+};
+const PersonPage = () => {
+    let query = useQuery();
+    return <Person
+        _id={query.get(`_id`)}
+    />;
+};
 const UsersPage = () => {
     let query = useQuery();
     return <Users active={query.get(`active`)} />;
 };
-
 const UserPage = () => {
     let query = useQuery();
     const email = query.get(`email`);
@@ -72,12 +81,6 @@ export default observer(() => {
     return (<>
         {store.isLoading ? <Loading /> : null}
         <Header />
-
-        {//!store.auth.isSignedIn || !(store.auth.user && store.auth.user.active) ? <Redirect to='/' /> : null
-        }
-
-        {//!store.auth.isSignedIn ? <Redirect to='/' /> : null
-        }
 
         <Route exact path='/'>
             {store.auth.isSignedIn && store.auth.user && store.auth.user.active ? <Redirect to='/cases' /> : null}
@@ -98,6 +101,9 @@ export default observer(() => {
 
                 <Route path='/management/courts' component={Courts} />
                 <Route path='/management/court' component={CourtPage} />
+
+                <Route path='/management/persons' component={PersonsPage} />
+                <Route path='/management/person' component={PersonPage} />
 
             </> :
             null

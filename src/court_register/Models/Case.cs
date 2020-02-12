@@ -39,10 +39,16 @@ namespace court_register.Models
         public Category category { get; set; }
         public Unit unit { get; set; }
         public Executor executor { get; set; }
-
+        public Sides sides { get; set; }
 
         public bool? deleted { get; set; } = false;
         public Created created { get; set; }
+    }
+    public class Sides
+    {
+        public IEnumerable<Person> plaintiffs { get; set; }
+        public IEnumerable<Person> defendants { get; set; }
+        public IEnumerable<Person> third_sides { get; set; }
     }
     public class SettingsCase
     {
@@ -162,5 +168,40 @@ namespace court_register.Models
         public string? full_name { get; set; }
         public bool? deleted { get; set; } = false;
         public Created created { get; set; }
+    }
+    public class PersonSystem
+    {
+        [BsonId]
+        public ObjectId _id { get; set; }
+        public Person current { get; set; }
+        public List<Person> changes { get; set; }
+    }
+    public class Person
+    {
+        public int? version { get; set; }
+        public int? _id { get; set; }
+
+        public string? _type { get; set; }
+        public string? address { get; set; }
+        public Individual individual { get; set; }
+        public Entity entity { get; set; }        
+        public Administration administration { get; set; }
+        public bool? deleted { get; set; } = false;
+        public Created created { get; set; }
+    }
+    public class Individual
+    {
+        public string? first_name { get; set; }
+        public string? second_name { get; set; }
+        public string? third_name { get; set; }
+    }
+    public class Entity
+    {
+        public string? inn { get; set; }
+        public string? name { get; set; }
+    }
+    public class Administration
+    {
+        public string? name { get; set; }
     }
 }
