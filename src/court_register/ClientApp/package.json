@@ -10,7 +10,7 @@
     "globalize": "^1.4.2",
     "history": "4.7.2",
     "jquery": "^3.4.1",
-    "merge": "1.2.1",
+    "merge": "2.1.1",
     "mobx": "^5.15.0",
     "mobx-react": "^6.1.4",
     "mobx-react-form": "^2.0.8",
